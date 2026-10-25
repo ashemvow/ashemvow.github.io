@@ -17,10 +17,10 @@ window.SITE = {
   /* Andamento: o que já existe, o que está em produção e o que é planejado. Seja honesto: só coloque em "no teste" o que já roda. */
   andamento: [
     { titulo: "Já no jogo (versão 8)", itens: [
-      {"data": "23/10/2026", "img": "assets/print-passe.webp", "legenda": "Passe de Catedral: 30 níveis, trilha grátis e Premium"},
-      {"data": "23/10/2026", "img": "assets/print-roleta.webp", "legenda": "Roleta da Catedral: 1 giro grátis por dia"},
-      {"data": "23/10/2026", "img": "assets/print-heroi-passe.webp", "legenda": "Banner do Irmão Brasa, exclusivo do Passe (nível 15)"},
-      {"data": "23/10/2026", "img": "assets/print-heroi-loja.webp", "legenda": "Banner do Sombras das Cinzas na Loja"},
+      {"data": "25/10/2026", "img": "assets/print-passe.webp", "legenda": "Passe de Catedral: 30 níveis, trilha grátis e Premium"},
+      {"data": "25/10/2026", "img": "assets/print-roleta.webp", "legenda": "Roleta da Catedral: 1 giro grátis por dia"},
+      {"data": "25/10/2026", "img": "assets/print-heroi-passe.webp", "legenda": "Banner do Irmão Brasa, exclusivo do Passe (nível 15)"},
+      {"data": "25/10/2026", "img": "assets/print-heroi-loja.webp", "legenda": "Banner do Sombras das Cinzas na Loja"},
       "8 heróis com habilidade própria, banner e retrato oficiais (5 liberados com cinzas, 1 na loja e 2 exclusivos do Passe)",
       "Passe de Catedral com 30 níveis, trilha grátis e Premium",
       "Perfil de jogador com banner, avatar, moldura e título",
@@ -35,7 +35,9 @@ window.SITE = {
       "8 poções temporárias, escolhidas antes da partida",
       "Recompensa diária de 7 dias (faltar um dia só pausa a sequência)",
       "Loja, aba de novidades, trilha e vozes em volumes separados",
-      "Anúncios opcionais para ganhar recompensas"
+      "Anúncios opcionais para ganhar recompensas",
+      "Login com conta Google, apelido escolhido no primeiro acesso e progresso salvo na nuvem",
+      "Opção de sair da conta ou excluir a conta e os dados dentro do jogo"
     ]},
     { titulo: "Em produção", itens: [
       "Conectar compras e anúncios reais do Google Play",
@@ -52,6 +54,7 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "25/10/2026", titulo: "Login com Google e progresso na nuvem", texto: "O jogo agora tem conta: você entra com o Google, escolhe seu apelido e o progresso fica salvo na nuvem, então dá para trocar de celular sem perder nada. Dentro das Opções existem sair da conta e excluir a conta, que apaga login, progresso e ranking. Veja os detalhes na política de privacidade." },
     { data: "25/10/2026", titulo: "Versão 8: só criaturas voadoras e 18 chefes", texto: "Todas as criaturas agora voam, e cada cenário tem espécies únicas, desenhadas nas cores do próprio chão da fase. Cada fase ganhou três chefes, 18 no total, que aparecem em ciclo a cada 3 minutos, cada um mais forte que o anterior. Veja o novo bestiário na seção Criaturas." },
     { data: "25/10/2026", titulo: "Ataques mais justos e habilidades mais bonitas", texto: "Os ataques dos inimigos foram reequilibrados para as fases ficarem difíceis, mas possíveis: tiros mais lentos, avisos antes dos mergulhos e chefes com disparos menos pesados. As habilidades duram mais e ficam visíveis até o fim, e explosões, itens e armas agora são efeitos desenhados em detalhe, sem imagens prontas." },
     { data: "25/10/2026", titulo: "Teste no celular e preparação para a Google Play", texto: "O jogo já foi exportado e testado em um celular Android real. A página da loja e a política de privacidade estão sendo preparadas para o lançamento." },
@@ -95,20 +98,26 @@ window.SITE = {
   projeto: {
     intro: "Prints do jogo, folhas de arte e conceitos de Ashem Vow. Tudo em andamento e sujeito a mudanças.",
     itens: [
-      {"data": "23/10/2026", "img": "assets/print-jogo_garrick.webp", "legenda": "Garrick no Campo de Cinzas, com botões de habilidade"},
-      {"data": "23/10/2026", "img": "assets/print-jogo_yurinn.webp", "legenda": "Yurinn na Floresta Morta"},
-      {"data": "23/10/2026", "img": "assets/print-jogo_brann.webp", "legenda": "Brann na Catedral em Ruínas"},
-      {"data": "23/10/2026", "img": "assets/print-jogo_selka.webp", "legenda": "Selka no Pântano de Sangue"},
-      {"data": "23/10/2026", "img": "assets/print-jogo_orun.webp", "legenda": "Orun na Geleira dos Esquecidos"},
-      {"data": "23/10/2026", "img": "assets/print-home.webp", "legenda": "Tela inicial, com Roleta e Passe"},
-      {"data": "23/10/2026", "img": "assets/print-loja.webp", "legenda": "Loja de heróis por dinheiro real"},
-      {"data": "23/10/2026", "img": "assets/print-herois.webp", "legenda": "Escolha de heróis"},
-      {"data": "23/10/2026", "img": "assets/print-perfil.webp", "legenda": "Perfil do jogador"},
-      {"data": "23/10/2026", "img": "assets/print-banner.webp", "legenda": "Escolha do banner do perfil"},
-      {"data": "23/10/2026", "img": "assets/print-preparar.webp", "legenda": "Preparar partida: fase e poções"},
-      
-      {"data": "23/10/2026", "img": "assets/print-diario.webp", "legenda": "Recompensa diária"},
-      {"data": "23/10/2026", "img": "assets/print-novidades.webp", "legenda": "Aba de novidades dentro do jogo"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_garrick.webp", "legenda": "Garrick no Campo de Cinzas, enfrentando criaturas voadoras"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_yurinn.webp", "legenda": "Yurinn na Floresta Morta"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_brann.webp", "legenda": "Brann na Catedral em Ruínas"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_selka.webp", "legenda": "Selka no Pântano de Sangue"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_orun.webp", "legenda": "Orun na Geleira dos Esquecidos"},
+      {"data": "25/10/2026", "img": "assets/print-jogo_sombras.webp", "legenda": "Sombras das Cinzas no Abismo de Brasas"},
+      {"data": "25/10/2026", "img": "assets/print-boss_campo.webp", "legenda": "Chefe do Campo de Cinzas: Arauto das Cinzas"},
+      {"data": "25/10/2026", "img": "assets/print-boss_floresta.webp", "legenda": "Chefe da Floresta Morta: Mãe das Raízes"},
+      {"data": "25/10/2026", "img": "assets/print-boss_ruinas.webp", "legenda": "Chefe da Catedral em Ruínas: Bispo Sem Rosto"},
+      {"data": "25/10/2026", "img": "assets/print-boss_pantano.webp", "legenda": "Chefe do Pântano de Sangue: Rei do Lodo"},
+      {"data": "25/10/2026", "img": "assets/print-boss_gelo.webp", "legenda": "Chefe da Geleira dos Esquecidos: Wyrm da Nevasca"},
+      {"data": "25/10/2026", "img": "assets/print-boss_vulcanica.webp", "legenda": "Chefe do Abismo de Brasas: Fênix Negra"},
+      {"data": "25/10/2026", "img": "assets/print-home.webp", "legenda": "Tela inicial, com Roleta e Passe"},
+      {"data": "25/10/2026", "img": "assets/print-loja.webp", "legenda": "Loja de heróis por dinheiro real"},
+      {"data": "25/10/2026", "img": "assets/print-herois.webp", "legenda": "Escolha de heróis"},
+      {"data": "25/10/2026", "img": "assets/print-perfil.webp", "legenda": "Perfil do jogador"},
+      {"data": "25/10/2026", "img": "assets/print-banner.webp", "legenda": "Escolha do banner do perfil"},
+      {"data": "25/10/2026", "img": "assets/print-preparar.webp", "legenda": "Preparar partida: fase e poções"},
+      {"data": "25/10/2026", "img": "assets/print-diario.webp", "legenda": "Recompensa diária"},
+      {"data": "25/10/2026", "img": "assets/print-novidades.webp", "legenda": "Aba de novidades dentro do jogo"},
       { data: "17/10/2026", img: "assets/bestiario-campo.webp", legenda: "Bestiário do Campo de Cinzas, versão de trabalho" },
       { data: "16/10/2026", img: "assets/bestiario.webp", legenda: "Bestiário de monstros terrestres e voadores" }
     ]

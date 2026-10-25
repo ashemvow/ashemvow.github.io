@@ -79,7 +79,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
 }
 
 /* Veja o jogo: carrossel de prints */
-const pr = (S.projeto.itens || []).filter(i => /print-jogo|print-herois|print-preparar|print-loja|print-diario/.test(i.img));
+const pr = (S.projeto.itens || []).filter(i => /print-jogo|print-boss|print-herois|print-preparar|print-loja|print-diario/.test(i.img));
 $("prints").append(...pr.map(i => { const f = el("figure", "", `<img src="${esc(i.img)}" alt="${esc(i.legenda)}" loading="lazy"><figcaption>${esc(i.legenda)}</figcaption>`); f.onclick = () => zoom(i.img); const im = f.querySelector("img"); im.onload = () => { if (im.naturalWidth > im.naturalHeight) f.classList.add("land"); }; return f; }));
 
 /* Menu móvel, barra de progresso, link ativo e revelar ao rolar */
