@@ -7,7 +7,7 @@ const mkNews = n => el("article", "reveal", `<time>${esc(n.data)}</time><h3>${es
 const SHOW = 5, nb = $("news"), nm = $("news-more");
 nb.append(...S.novidades.slice(0, SHOW).map(mkNews));
 if (S.novidades.length > SHOW) { nm.hidden = false; nm.onclick = () => { nb.append(...S.novidades.slice(SHOW).map(mkNews)); nm.hidden = true; observe(); }; }
-$("stats").append(...[[S.personagens.length,"heróis"],[S.cenarios.length,"cenários"],[S.criaturas.length*10,"criaturas"],[8,"poções"]].map(([n,t]) => el("li","",`<b>${n}</b><span>${t}</span>`)));
+$("stats").append(...[[S.personagens.length,"heróis"],[S.cenarios.length,"cenários"],[S.criaturas.reduce((n,f)=>n+f.criaturas.length,0),"criaturas e chefes"],[8,"poções"]].map(([n,t]) => el("li","",`<b>${n}</b><span>${t}</span>`)));
 $("andamento-itens").append(...S.andamento.map(g => el("div", "", `<h3>${esc(g.titulo)}</h3><ul>${g.itens.map(i => `<li>${esc(i)}</li>`).join("")}</ul>`)));
 $("recursos").append(...S.recursos.map(r => el("div", "", `<h3>${esc(r.t)}</h3><p>${esc(r.d)}</p>`)));
 
@@ -33,7 +33,7 @@ const abas = (idAbas, idBox, lista, render) => {
   lista.forEach((f, i) => { const b = el("button", i ? "" : "on", esc(f.fase)); b.onclick = () => { ab.querySelectorAll("button").forEach(x => x.classList.remove("on")); b.classList.add("on"); bx.replaceChildren(...render(f)); }; ab.append(b); });
   bx.replaceChildren(...render(lista[0]));
 };
-abas("criaturas-abas", "criaturas-itens", S.criaturas, f => f.criaturas.map(c => { const e = el("figure", "", `<img src="${esc(c.img)}" alt="${esc(c.nome)}" loading="lazy"><figcaption>${esc(c.nome)}</figcaption>`); e.onclick = () => zoom(c.img); return e; }));
+abas("criaturas-abas", "criaturas-itens", S.criaturas, f => f.criaturas.map(c => { const e = el("figure", c.chefe ? "boss" : "", `<img src="${esc(c.img)}" alt="${esc(c.nome)}" loading="lazy"><figcaption>${esc(c.nome)}</figcaption>`); e.onclick = () => zoom(c.img); return e; }));
 abas("cenarios-abas", "cenarios-itens", S.cenarios, f => [el("figure", "chao", `<img src="${esc(f.chao)}" alt="Chão de ${esc(f.fase)}" loading="lazy"><figcaption>Chão</figcaption>`), ...f.objetos.map(o => { const e = el("figure", "", `<img src="${esc(o)}" alt="Objeto de cenário" loading="lazy">`); e.onclick = () => zoom(o); return e; })]);
 $("galeria-itens").append(...S.galeria.map(card));
 $("projeto-intro").textContent = S.projeto.intro;

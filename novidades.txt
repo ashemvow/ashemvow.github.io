@@ -1,3 +1,17 @@
+VERSÃO 8 · CRIATURAS VOADORAS E 18 CHEFES
+
+NOVO: SÓ CRIATURAS VOADORAS
+Nenhuma criatura anda mais no chão. Cada cenário tem espécies únicas, nas cores do próprio cenário, e cada uma ataca de um jeito: espirais, mergulhos, enxames, flechas e mais.
+
+NOVO: 18 CHEFES
+Três chefes por fase, que aparecem em ciclo a cada 3 minutos. O segundo e o terceiro são mais fortes que o primeiro. Os nomes aparecem na tela de preparar partida.
+
+MELHORIA: EQUILÍBRIO
+Tiros inimigos mais lentos, avisos antes dos mergulhos e chefes com disparos menos pesados. As fases continuam difíceis, mas possíveis.
+
+MELHORIA: EFEITOS E HABILIDADES
+As habilidades duram mais e ficam visíveis até o fim da animação. Explosões, itens e armas agora têm efeitos desenhados em detalhe. O Garrick ganhou um golpe novo mais fluido.
+
 VERSÃO 7 · PASSE, ROLETA E FRAGMENTOS
 
 NOVO: ROLETA DA CATEDRAL
