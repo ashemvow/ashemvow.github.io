@@ -132,8 +132,7 @@ window.SITE = {
     email: "ashemvow@gmail.com"
   },
   instagram: "https://www.instagram.com/ashemvow",
-  pix: { chave: "luam.fabiooo@gmail.com", tipo: "E-mail" },
-  livepix: "https://widget.livepix.gg/embed/a1b0d7d2-c4c8-4188-8626-e40d5bfd5896",
+  pix: { chave: "b8cbf0f8-07a7-4ac1-b5cc-1da4d78b6cd6", tipo: "Chave aleatória" },
   /* Anúncios: preencha com os dados do Google AdSense quando aprovado. Vazio = espaço reservado. */
   anuncios: { client: "ca-pub-4655197030235579", slot: "" }
 };

@@ -40,7 +40,6 @@ $("projeto-intro").textContent = S.projeto.intro;
 $("projeto-itens").append(...(S.projeto.itens.length ? S.projeto.itens.map(card) : [el("p", "lead", "Fotos do projeto em breve.")]));
 
 $("pix-tipo").textContent = S.pix.tipo; $("pix-chave").textContent = S.pix.chave;
-$("livepix").src = S.livepix;
 $("copiar").onclick = async () => {
   try { await navigator.clipboard.writeText(S.pix.chave); $("copiado").textContent = "Chave copiada. Obrigado pelo apoio!"; }
   catch { $("copiado").textContent = "Não foi possível copiar. Selecione a chave manualmente."; }

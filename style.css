@@ -152,3 +152,5 @@ footer a{color:var(--ember);text-decoration:none}footer a:hover{text-decoration:
   .sec h2{font-size:2.6rem}body{font-size:18px}.prints figure{flex-basis:200px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+.qr{display:block;width:240px;max-width:100%;height:auto;margin:8px auto 0;background:#fff;padding:10px;border-radius:8px;image-rendering:pixelated}
