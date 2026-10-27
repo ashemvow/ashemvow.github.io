@@ -58,7 +58,7 @@ window.SITE = {
       "Opção de sair da conta ou excluir a conta e os dados dentro do jogo"
     ]},
     { titulo: "Em produção", itens: [
-      "Recompensas raras do site com login Google opcional (página de conta pronta, em teste), com insígnias exclusivas e, em breve, banners",
+      "Recompensas raras do site com login Google opcional (página de conta pronta, em teste), com banners e insígnias exclusivos",
       "4 heróis novos (Ysolde, Kaelor, Mordrek e Lyra) com visual e animações prontos, a caminho do jogo",
       "Animações novas de correr e atacar do Sombras das Cinzas, do Irmão Brasa e da Vesper, e de parado do Irmão Brasa e da Vesper",
       "Conectar compras e anúncios reais do Google Play",

@@ -3,6 +3,7 @@ const SB_URL = "https://vokffayvytyoojsysqyq.supabase.co";
 const SB_KEY = "sb_publishable_oBEi0zH9jANY1WYMamRmSg_C4Wm7BHo"; // chave pública (anon), segura para ficar no site
 // Mesmos ids do jogo (data.gd) e do SQL (recompensas_site.sql)
 const REWARDS = [
+  { id: "banner_brasa", tipo: "Banner de perfil", nome: "Deserto de Ossos", desc: "Alcance a maestria máxima com um herói.", img: "assets/rw-banner_brasa.webp" },
   { id: "banner_lua", tipo: "Banner de perfil", nome: "Firmamento Partido", desc: "Vença as 6 fases do jogo.", img: "assets/rw-banner_lua.webp" },
   { id: "badge_ceifador", tipo: "Insígnia", nome: "Ceifador de Mil Almas", desc: "Abata 10000 inimigos no total.", img: "assets/rw-badge_ceifador.webp", ic: true },
   { id: "badge_maldito", tipo: "Insígnia", nome: "Selo do Maldito", desc: "Vença 5 partidas com a Maldição do dia.", img: "assets/rw-badge_maldito.webp", ic: true }
