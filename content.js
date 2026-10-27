@@ -3,11 +3,14 @@
    Salve, faça commit no GitHub e o Netlify atualiza sozinho.
    ============================================================ */
 window.SITE = {
-  status: "Em desenvolvimento · versão de teste 9 · Android em breve",
+  status: "Em desenvolvimento · versão de teste 10 · Android em breve",
   frase: "Um juramento forjado em cinzas.",
   sobre: "Ashem Vow é um game 2D de ação em pixel art, ambientado num mundo sombrio de guerra, sacrifício e vingança. Escolha entre oito heróis, todos com visual e animações refeitos e uma habilidade única cada, e sobreviva a hordas de criaturas voadoras em seis cenários dark fantasy sob uma lua vermelha, com três chefes por fase. A história, Juramento de Cinzas, é contada em cenas narradas e termina com uma escolha sua.",
   recursos: [
     { t: "Oito heróis, visual refeito", d: "Garrick, Yurinn, Brann, Selka, Orun, Sombras das Cinzas, Vesper e Irmão Brasa, agora com novo design de corpo inteiro, banner e avatares, e animações desenhadas quadro a quadro. Cada um tem uma habilidade só dele." },
+    { t: "Missões, maldição e maestria", d: "Missões diárias e semanais, uma Maldição do dia que dá mais cinzas a quem topa o desafio, maestria que deixa cada herói mais forte conforme você joga com ele e um baú no fim da partida." },
+    { t: "Desafios e insígnias", d: "Complete desafios para liberar banners e avatares e colecione 46 insígnias para exibir no perfil. Heróis que você ainda não tem não aparecem nas listas." },
+    { t: "Magos e arqueira atiram", d: "Os heróis que usam magia lançam projéteis que acertam o inimigo mais próximo e perfuram. Lyra dispara flechas e Orun mistura golpes de perto com almas arremessadas." },
     { t: "Passe, roleta e fragmentos", d: "Passe de Catedral com 30 níveis, uma roleta diária e os fragmentos de vitral, a moeda rara que abre novos heróis." },
     { t: "Seis cenários", d: "Cada fase tem chão, objetos, música, 9 criaturas voadoras e 3 chefes próprios." },
     { t: "Só criaturas voadoras", d: "Nenhuma criatura anda no chão. Cada cenário tem espécies únicas, nas cores do próprio cenário, e cada uma ataca de um jeito: espirais, mergulhos, enxames, flechas e mais." },
@@ -16,7 +19,16 @@ window.SITE = {
   ],
   /* Andamento: o que já existe, o que está em produção e o que é planejado. Seja honesto: só coloque em "no teste" o que já roda. */
   andamento: [
-    { titulo: "Já no jogo (versão 9)", itens: [
+    { titulo: "Já no jogo (versão 10)", itens: [
+      "Missões diárias (3) e semanais (3), com cinzas, fragmentos e XP do Passe, e indicador no menu quando há recompensa para resgatar",
+      "Maldição do dia: um efeito novo por dia (horda, inimigos mais fortes, mais rápidos, sem cura ou herói mais frágil) que rende 75% a mais de cinzas, ligado por você em Preparar",
+      "Maestria de herói: 5 níveis por herói, com bônus exclusivo de cada um, mostrados na tela de Heróis",
+      "Fim de partida com Baú de Bronze, Prata ou Ouro e o aviso Quase lá, que mostra a insígnia ou missão mais perto de ser concluída",
+      "Desafios para liberar banners e avatares, com cartões, filtros e Resgatar tudo (só na sua conta)",
+      "46 insígnias para colecionar e exibir até 5 no perfil, vistas também por outros jogadores",
+      "Perfil com banner inteiro e botão Ocultar painel",
+      "Heróis de magia lançam projéteis automáticos que perfuram; Lyra atira flechas e Orun mistura golpe corpo a corpo com almas",
+      "Velocidade das animações de correr, atacar e parado acertada herói por herói, e tela de Opções corrigida",
       "Reforma visual dos heróis: novo design de corpo inteiro, banners de perfil e 3 avatares por herói (o primeiro com máscara nos heróis que usam uma)",
       "Animações novas de parado, correr e atacar do Garrick, da Yurinn, do Brann e do Orun, e parado novo do Sombras das Cinzas",
       "Correr e atacar separados: a animação de ataque só toca quando você ataca (botão, botão segurado ou ataque automático)",
@@ -62,6 +74,11 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "27/10/2026", titulo: "Versão 10: missões, maldição do dia e maestria", texto: "Três missões diárias e três semanais renovam sozinhas e pagam cinzas, fragmentos e XP do Passe. Cada dia traz uma Maldição nova (mais inimigos, mais vida, mais dano, mais velocidade, sem cura ou você mais frágil): ligue em Preparar e ganhe 75% a mais de cinzas. Cada herói também tem maestria de 5 níveis, com um bônus só dele, que sobe conforme você abate com ele." },
+    { data: "27/10/2026", titulo: "Baú no fim da partida e o aviso Quase lá", texto: "Toda partida termina com um baú de bronze, prata ou ouro, de acordo com o seu desempenho, com cinzas, fragmentos ou XP do Passe. O jogo também mostra a insígnia ou missão que está mais perto de ser concluída, para você saber o que falta." },
+    { data: "27/10/2026", titulo: "Desafios, banners e insígnias", texto: "Uma tela nova de Desafios libera banners e avatares ao cumprir metas, como vencer uma fase ou abater inimigos com um herói. Há também 46 insígnias para colecionar, com até 5 expostas no perfil. Heróis que você ainda não tem não aparecem nas listas, e a tela de desafios é só da sua conta. Veja os prints na seção Do projeto." },
+    { data: "27/10/2026", titulo: "Magos e arqueira atiram de longe", texto: "Os heróis de magia agora lançam projéteis que buscam o inimigo mais próximo e atravessam quem estiver na frente, e ficam mais fortes conforme você sobe de nível. Lyra dispara flechas e Orun mistura golpes corpo a corpo com almas arremessadas. A velocidade das animações foi ajustada herói por herói." },
+    { data: "27/10/2026", titulo: "Perfil: banner inteiro e Ocultar painel", texto: "O banner do perfil agora mostra o herói do lado certo, e um botão Ocultar painel esconde a caixa central para você ver o banner todo. A tela de Opções também foi corrigida para caber em qualquer celular." },
     { data: "27/10/2026", titulo: "Versão 9: reforma visual dos heróis e novas animações", texto: "Os heróis ganharam um novo design de corpo inteiro, com mais detalhe em armaduras, capas, armas e rostos, além de banners e três avatares refeitos. Garrick, Yurinn, Brann e Orun também têm animações novas de parado, correr e atacar, desenhadas quadro a quadro, e o Sombras das Cinzas ganhou um parado novo. Os outros heróis recebem as deles nas próximas versões." },
     { data: "27/10/2026", titulo: "Correr e atacar agora são animações separadas", texto: "Enquanto você só move o analógico, o herói corre. A animação de ataque aparece apenas quando você ataca: no botão, segurando o botão ou com o ataque automático ligado. Ao ser derrotado, o herói cai para trás e fica no chão." },
     { data: "27/10/2026", titulo: "Correções: analógico e rolagem dos menus", texto: "O analógico não trava mais para um lado durante a partida, mesmo ao pausar ou soltar o dedo sobre um botão. Nos menus, dá para arrastar a tela para ver o Passe, os avatares, o ranking e as outras listas mesmo começando o arrasto em cima de um botão." },
@@ -110,6 +127,12 @@ window.SITE = {
   projeto: {
     intro: "Prints do jogo, folhas de arte e conceitos de Ashem Vow. Tudo em andamento e sujeito a mudanças.",
     itens: [
+      {"data": "27/10/2026", "img": "assets/print-missoes.webp", "legenda": "Missões diárias e semanais, com a Maldição do dia"},
+      {"data": "27/10/2026", "img": "assets/print-fim.webp", "legenda": "Fim de partida: Maldição ativa, Quase lá e Baú de Prata"},
+      {"data": "27/10/2026", "img": "assets/print-maestria.webp", "legenda": "Maestria do herói na tela de Heróis"},
+      {"data": "27/10/2026", "img": "assets/print-desafios.webp", "legenda": "Desafios: banners e avatares para liberar"},
+      {"data": "27/10/2026", "img": "assets/print-insignias.webp", "legenda": "Insígnias para colecionar e exibir no perfil"},
+      {"data": "27/10/2026", "img": "assets/insignias-todas.webp", "legenda": "As 46 insígnias do jogo"},
       {"data": "27/10/2026", "img": "assets/b-ysolde.webp", "legenda": "Em breve: Ysolde, a Bruxa da Geleira"},
       {"data": "27/10/2026", "img": "assets/b-kaelor.webp", "legenda": "Em breve: Kaelor, o Caçador de Espinhos"},
       {"data": "27/10/2026", "img": "assets/b-mordrek.webp", "legenda": "Em breve: Mordrek, o Alquimista da Peste"},

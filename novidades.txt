@@ -1,3 +1,23 @@
+VERSÃO 10 · MISSÕES, MALDIÇÃO E MAESTRIA
+
+NOVO: MISSÕES DIÁRIAS E SEMANAIS
+Três missões por dia e três por semana, com cinzas, fragmentos e XP do Passe. O botão Missões no menu mostra uma bolinha vermelha quando há recompensa.
+
+NOVO: MALDIÇÃO DO DIA
+Um efeito diferente por dia. Ligue em Preparar e ganhe 75% a mais de cinzas na partida.
+
+NOVO: MAESTRIA DE HERÓI
+Cada herói tem 5 níveis de maestria, com um bônus só dele, que sobem conforme seus abates.
+
+NOVO: BAÚ E QUASE LÁ
+No fim da partida, abra um baú de bronze, prata ou ouro e veja o que está mais perto de ser concluído.
+
+NOVO: DESAFIOS E INSÍGNIAS
+Libere banners e avatares cumprindo desafios e colecione 46 insígnias para mostrar no perfil.
+
+MUDANÇA: MAGOS E ARQUEIRA
+Os heróis de magia lançam projéteis automáticos que perfuram. Lyra atira flechas e Orun mistura golpe de perto com almas.
+
 VERSÃO 9 · REFORMA VISUAL DOS HERÓIS
 
 NOVO: PERSONAGENS REDESENHADOS
