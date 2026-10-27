@@ -3,11 +3,11 @@
    Salve, faça commit no GitHub e o Netlify atualiza sozinho.
    ============================================================ */
 window.SITE = {
-  status: "Em desenvolvimento · versão de teste 8 · Android em breve",
+  status: "Em desenvolvimento · versão de teste 9 · Android em breve",
   frase: "Um juramento forjado em cinzas.",
-  sobre: "Ashem Vow é um game 2D de ação em pixel art, ambientado num mundo sombrio de guerra, sacrifício e vingança. Escolha entre oito heróis, cada um com uma habilidade única, e sobreviva a hordas de criaturas voadoras em seis cenários dark fantasy sob uma lua vermelha, com três chefes por fase. A história, Juramento de Cinzas, é contada em cenas narradas e termina com uma escolha sua.",
+  sobre: "Ashem Vow é um game 2D de ação em pixel art, ambientado num mundo sombrio de guerra, sacrifício e vingança. Escolha entre oito heróis, todos com visual e animações refeitos e uma habilidade única cada, e sobreviva a hordas de criaturas voadoras em seis cenários dark fantasy sob uma lua vermelha, com três chefes por fase. A história, Juramento de Cinzas, é contada em cenas narradas e termina com uma escolha sua.",
   recursos: [
-    { t: "Oito heróis", d: "Garrick, Yurinn, Brann, Selka, Orun, Sombras das Cinzas, Vesper e Irmão Brasa, cada um com animações próprias e uma habilidade só dele." },
+    { t: "Oito heróis, visual refeito", d: "Garrick, Yurinn, Brann, Selka, Orun, Sombras das Cinzas, Vesper e Irmão Brasa, agora com novo design de corpo inteiro, banner e avatares, e animações desenhadas quadro a quadro. Cada um tem uma habilidade só dele." },
     { t: "Passe, roleta e fragmentos", d: "Passe de Catedral com 30 níveis, uma roleta diária e os fragmentos de vitral, a moeda rara que abre novos heróis." },
     { t: "Seis cenários", d: "Cada fase tem chão, objetos, música, 9 criaturas voadoras e 3 chefes próprios." },
     { t: "Só criaturas voadoras", d: "Nenhuma criatura anda no chão. Cada cenário tem espécies únicas, nas cores do próprio cenário, e cada uma ataca de um jeito: espirais, mergulhos, enxames, flechas e mais." },
@@ -16,7 +16,13 @@ window.SITE = {
   ],
   /* Andamento: o que já existe, o que está em produção e o que é planejado. Seja honesto: só coloque em "no teste" o que já roda. */
   andamento: [
-    { titulo: "Já no jogo (versão 8)", itens: [
+    { titulo: "Já no jogo (versão 9)", itens: [
+      "Reforma visual dos heróis: novo design de corpo inteiro, banners de perfil e 3 avatares por herói (o primeiro com máscara nos heróis que usam uma)",
+      "Animações novas de parado, correr e atacar do Garrick, da Yurinn, do Brann e do Orun, e parado novo do Sombras das Cinzas",
+      "Correr e atacar separados: a animação de ataque só toca quando você ataca (botão, botão segurado ou ataque automático)",
+      "Queda do herói ao ser derrotado",
+      "Correção do analógico que travava para um lado durante a partida",
+      "Correção da rolagem por arrasto no Passe, nos avatares, no ranking e nas outras listas",
       {"data": "25/10/2026", "img": "assets/print-passe.webp", "legenda": "Passe de Catedral: 30 níveis, trilha grátis e Premium"},
       {"data": "25/10/2026", "img": "assets/print-roleta.webp", "legenda": "Roleta da Catedral: 1 giro grátis por dia"},
       {"data": "25/10/2026", "img": "assets/print-heroi-passe.webp", "legenda": "Banner do Irmão Brasa, exclusivo do Passe (nível 15)"},
@@ -40,6 +46,8 @@ window.SITE = {
       "Opção de sair da conta ou excluir a conta e os dados dentro do jogo"
     ]},
     { titulo: "Em produção", itens: [
+      "4 heróis novos (Ysolde, Kaelor, Mordrek e Lyra) com visual e animações prontos, a caminho do jogo",
+      "Animações novas de correr e atacar do Sombras das Cinzas, do Irmão Brasa e da Vesper, e de parado do Irmão Brasa e da Vesper",
       "Conectar compras e anúncios reais do Google Play",
       "Trilhas próprias para Floresta, Pântano e Geleira",
       "Ajustes de equilíbrio dos chefes e testes em celulares reais",
@@ -54,6 +62,10 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "27/10/2026", titulo: "Versão 9: reforma visual dos heróis e novas animações", texto: "Os heróis ganharam um novo design de corpo inteiro, com mais detalhe em armaduras, capas, armas e rostos, além de banners e três avatares refeitos. Garrick, Yurinn, Brann e Orun também têm animações novas de parado, correr e atacar, desenhadas quadro a quadro, e o Sombras das Cinzas ganhou um parado novo. Os outros heróis recebem as deles nas próximas versões." },
+    { data: "27/10/2026", titulo: "Correr e atacar agora são animações separadas", texto: "Enquanto você só move o analógico, o herói corre. A animação de ataque aparece apenas quando você ataca: no botão, segurando o botão ou com o ataque automático ligado. Ao ser derrotado, o herói cai para trás e fica no chão." },
+    { data: "27/10/2026", titulo: "Correções: analógico e rolagem dos menus", texto: "O analógico não trava mais para um lado durante a partida, mesmo ao pausar ou soltar o dedo sobre um botão. Nos menus, dá para arrastar a tela para ver o Passe, os avatares, o ranking e as outras listas mesmo começando o arrasto em cima de um botão." },
+    { data: "27/10/2026", titulo: "Quatro heróis novos a caminho: Ysolde, Kaelor, Mordrek e Lyra", texto: "Ysolde, a Bruxa da Geleira, Kaelor, o Caçador de Espinhos, Mordrek, o Alquimista da Peste, e Lyra, a Arqueira Lunar, já têm visual, banner, avatares e animações prontos. Eles chegam ao jogo em breve. Os banners estão na seção Do projeto." },
     { data: "25/10/2026", titulo: "Login com Google e progresso na nuvem", texto: "O jogo agora tem conta: você entra com o Google, escolhe seu apelido e o progresso fica salvo na nuvem, então dá para trocar de celular sem perder nada. Dentro das Opções existem sair da conta e excluir a conta, que apaga login, progresso e ranking. Veja os detalhes na política de privacidade." },
     { data: "25/10/2026", titulo: "Versão 8: só criaturas voadoras e 18 chefes", texto: "Todas as criaturas agora voam, e cada cenário tem espécies únicas, desenhadas nas cores do próprio chão da fase. Cada fase ganhou três chefes, 18 no total, que aparecem em ciclo a cada 3 minutos, cada um mais forte que o anterior. Veja o novo bestiário na seção Criaturas." },
     { data: "25/10/2026", titulo: "Ataques mais justos e habilidades mais bonitas", texto: "Os ataques dos inimigos foram reequilibrados para as fases ficarem difíceis, mas possíveis: tiros mais lentos, avisos antes dos mergulhos e chefes com disparos menos pesados. As habilidades duram mais e ficam visíveis até o fim, e explosões, itens e armas agora são efeitos desenhados em detalhe, sem imagens prontas." },
@@ -98,6 +110,10 @@ window.SITE = {
   projeto: {
     intro: "Prints do jogo, folhas de arte e conceitos de Ashem Vow. Tudo em andamento e sujeito a mudanças.",
     itens: [
+      {"data": "27/10/2026", "img": "assets/b-ysolde.webp", "legenda": "Em breve: Ysolde, a Bruxa da Geleira"},
+      {"data": "27/10/2026", "img": "assets/b-kaelor.webp", "legenda": "Em breve: Kaelor, o Caçador de Espinhos"},
+      {"data": "27/10/2026", "img": "assets/b-mordrek.webp", "legenda": "Em breve: Mordrek, o Alquimista da Peste"},
+      {"data": "27/10/2026", "img": "assets/b-lyra.webp", "legenda": "Em breve: Lyra, a Arqueira Lunar"},
       {"data": "25/10/2026", "img": "assets/print-jogo_garrick.webp", "legenda": "Garrick no Campo de Cinzas, enfrentando criaturas voadoras"},
       {"data": "25/10/2026", "img": "assets/print-jogo_yurinn.webp", "legenda": "Yurinn na Floresta Morta"},
       {"data": "25/10/2026", "img": "assets/print-jogo_brann.webp", "legenda": "Brann na Catedral em Ruínas"},

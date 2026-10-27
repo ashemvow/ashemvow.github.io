@@ -1,3 +1,26 @@
+VERSÃO 9 · REFORMA VISUAL DOS HERÓIS
+
+NOVO: PERSONAGENS REDESENHADOS
+Os heróis ganharam um novo visual de corpo inteiro, com mais detalhe em armaduras, capas, armas e rostos. Os banners de perfil e os 3 avatares de cada herói também foram refeitos, e o primeiro avatar aparece de máscara nos heróis que usam uma.
+
+NOVO: ANIMAÇÕES REFEITAS
+Garrick, Yurinn, Brann e Orun agora têm animações novas de parado, correr e atacar, desenhadas quadro a quadro com o visual novo. O Sombras das Cinzas ganhou um parado novo, e os outros heróis recebem as deles nas próximas versões.
+
+NOVO: CORRIDA E ATAQUE SEPARADOS
+Enquanto você só move o analógico, o herói corre. A animação de ataque só aparece quando você ataca: no botão, segurando o botão ou com o ataque automático ligado.
+
+MUDANÇA: QUEDA DOS HERÓIS
+Ao ser derrotado, o herói cai para trás e fica no chão.
+
+CORREÇÃO: ANALÓGICO
+O analógico não trava mais para um lado durante a partida, mesmo ao pausar, abrir a escolha de melhoria ou soltar o dedo sobre um botão.
+
+CORREÇÃO: ROLAGEM DOS MENUS
+Agora dá para arrastar a tela para ver o Passe, os avatares, o ranking e as outras listas mesmo começando o arrasto em cima de um botão.
+
+EM BREVE: 4 HERÓIS NOVOS
+Ysolde, Kaelor, Mordrek e Lyra já têm visual e animações prontos e chegam em breve ao jogo.
+
 VERSÃO 8 · CRIATURAS VOADORAS E 18 CHEFES
 
 NOVO: SÓ CRIATURAS VOADORAS
