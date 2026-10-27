@@ -154,3 +154,5 @@ footer a{color:var(--ember);text-decoration:none}footer a:hover{text-decoration:
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 
 .qr{display:block;width:240px;max-width:100%;height:auto;margin:8px auto 0;background:#fff;padding:10px;border-radius:8px;image-rendering:pixelated}
+
+.heroi .tag{display:inline-block;margin:.2rem 0 .5rem;padding:.2rem .7rem;border:1px solid #c9a15a;border-radius:99px;color:#f0d79a;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;background:rgba(201,161,90,.12)}

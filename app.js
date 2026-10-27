@@ -7,7 +7,7 @@ const mkNews = n => el("article", "reveal", `<time>${esc(n.data)}</time><h3>${es
 const SHOW = 5, nb = $("news"), nm = $("news-more");
 nb.append(...S.novidades.slice(0, SHOW).map(mkNews));
 if (S.novidades.length > SHOW) { nm.hidden = false; nm.onclick = () => { nb.append(...S.novidades.slice(SHOW).map(mkNews)); nm.hidden = true; observe(); }; }
-$("stats").append(...[[S.personagens.length,"heróis"],[S.cenarios.length,"cenários"],[S.criaturas.reduce((n,f)=>n+f.criaturas.length,0),"criaturas e chefes"],[8,"poções"]].map(([n,t]) => el("li","",`<b>${n}</b><span>${t}</span>`)));
+$("stats").append(...[[S.personagens.filter(p => !p.tag).length,"heróis"],[S.cenarios.length,"cenários"],[S.criaturas.reduce((n,f)=>n+f.criaturas.length,0),"criaturas e chefes"],[8,"poções"]].map(([n,t]) => el("li","",`<b>${n}</b><span>${t}</span>`)));
 $("andamento-itens").append(...S.andamento.map(g => el("div", "", `<h3>${esc(g.titulo)}</h3><ul>${g.itens.map(i => `<li>${esc(i)}</li>`).join("")}</ul>`)));
 $("recursos").append(...S.recursos.map(r => el("div", "", `<h3>${esc(r.t)}</h3><p>${esc(r.d)}</p>`)));
 
@@ -21,7 +21,7 @@ const card = g => {
 addEventListener("keydown", e => { if (e.key === "Escape") lb.classList.remove("on"); });
 const zoom = src => { lb.querySelector("img").src = src; lb.classList.add("on"); };
 $("personagens-itens").append(...S.personagens.map(p => {
-  const d = el("article", "heroi", `<img class="hp" src="${esc(p.skins[0].img)}" alt="${esc(p.nome)}, ${esc(p.titulo)}" loading="lazy"><div><h3>${esc(p.nome)}</h3><p class="tit">${esc(p.titulo)}</p><p><b>${esc(p.habilidade)}.</b> ${esc(p.descricao)}</p><div class="hab"></div><img class="bnr" src="${esc(p.banner)}" alt="Banner de ${esc(p.nome)}" loading="lazy"></div>`);
+  const d = el("article", "heroi", `<img class="hp" src="${esc(p.skins[0].img)}" alt="${esc(p.nome)}, ${esc(p.titulo)}" loading="lazy"><div><h3>${esc(p.nome)}</h3><p class="tit">${esc(p.titulo)}</p>${p.tag ? `<p class="tag">${esc(p.tag)}</p>` : ""}<p><b>${esc(p.habilidade)}.</b> ${esc(p.descricao)}</p><div class="hab"></div><img class="bnr" src="${esc(p.banner)}" alt="Banner de ${esc(p.nome)}" loading="lazy"></div>`);
   const main = d.querySelector(".hp");
   d.querySelector(".hab").append(...p.habilidades.map(s => { const b = el("button", "", `<img src="${esc(s.img)}" alt="${esc(s.nome)}" loading="lazy"><span>${esc(s.nome)}</span>`); b.onclick = () => zoom(s.img); return b; }));
   const bn = d.querySelector(".bnr"); bn.onclick = () => zoom(p.banner);
