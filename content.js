@@ -58,7 +58,7 @@ window.SITE = {
       "Opção de sair da conta ou excluir a conta e os dados dentro do jogo"
     ]},
     { titulo: "Em produção", itens: [
-      "Recompensas raras do site com login Google opcional (página de conta pronta, em teste), com banners e insígnias exclusivos",
+      "Recompensas raras do site com login Google opcional (página de conta pronta, em teste), com insígnias exclusivas e, em breve, banners",
       "4 heróis novos (Ysolde, Kaelor, Mordrek e Lyra) com visual e animações prontos, a caminho do jogo",
       "Animações novas de correr e atacar do Sombras das Cinzas, do Irmão Brasa e da Vesper, e de parado do Irmão Brasa e da Vesper",
       "Conectar compras e anúncios reais do Google Play",
@@ -75,7 +75,7 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
-    { data: "27/10/2026", titulo: "Recompensas raras do site, com login opcional", texto: "O site ganhou uma página de conta. Entrando com o mesmo login Google do jogo (opcional), você resgata itens raros que só existem aqui: dois banners de perfil e duas insígnias exclusivos. Para liberar cada um é preciso cumprir uma tarefa difícil dentro do jogo, como vencer as 6 fases ou abater 10 mil inimigos. Depois de resgatar no site, o item cai direto na sua conta no jogo." },
+    { data: "27/10/2026", titulo: "Recompensas raras do site, com login opcional", texto: "O site ganhou uma página de conta. Entrando com o mesmo login Google do jogo (opcional), você resgata itens raros que só existem aqui: duas insígnias exclusivas (banners exclusivos chegam em breve). Para liberar cada um é preciso cumprir uma tarefa difícil dentro do jogo, como abater 10 mil inimigos. Depois de resgatar no site, o item cai direto na sua conta no jogo." },
     { data: "27/10/2026", titulo: "Versão 10: missões, maldição do dia e maestria", texto: "Três missões diárias e três semanais renovam sozinhas e pagam cinzas, fragmentos e XP do Passe. Cada dia traz uma Maldição nova (mais inimigos, mais vida, mais dano, mais velocidade, sem cura ou você mais frágil): ligue em Preparar e ganhe 75% a mais de cinzas. Cada herói também tem maestria de 5 níveis, com um bônus só dele, que sobe conforme você abate com ele." },
     { data: "27/10/2026", titulo: "Baú no fim da partida e o aviso Quase lá", texto: "Toda partida termina com um baú de bronze, prata ou ouro, de acordo com o seu desempenho, com cinzas, fragmentos ou XP do Passe. O jogo também mostra a insígnia ou missão que está mais perto de ser concluída, para você saber o que falta." },
     { data: "27/10/2026", titulo: "Desafios, banners e insígnias", texto: "Uma tela nova de Desafios libera banners e avatares ao cumprir metas, como vencer uma fase ou abater inimigos com um herói. Há também 46 insígnias para colecionar, com até 5 expostas no perfil. Heróis que você ainda não tem não aparecem nas listas, e a tela de desafios é só da sua conta. Veja os prints na seção Do projeto." },
