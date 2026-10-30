@@ -156,3 +156,14 @@ footer a{color:var(--ember);text-decoration:none}footer a:hover{text-decoration:
 .qr{display:block;width:240px;max-width:100%;height:auto;margin:8px auto 0;background:#fff;padding:10px;border-radius:8px;image-rendering:pixelated}
 
 .heroi .tag{display:inline-block;margin:.2rem 0 .5rem;padding:.2rem .7rem;border:1px solid #c9a15a;border-radius:99px;color:#f0d79a;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;background:rgba(201,161,90,.12)}
+
+/* saga em vídeo */
+.video{position:relative;max-width:960px;margin:1.4rem auto 0;aspect-ratio:16/9;background:#000;border:2px solid var(--gold);box-shadow:0 0 0 1px #000,0 0 40px rgba(155,28,31,.35)}
+.video iframe,.video .vplay,.video .vplay img{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.video .vplay{padding:0;margin:0;background:none;border:0;cursor:pointer}
+.video .vplay img{object-fit:cover;transition:filter .25s}
+.video .vplay:hover img,.video .vplay:focus-visible img{filter:brightness(1.12)}
+.vbtn{position:absolute;left:80%;top:52%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:rgba(12,10,9,.78);border:3px solid var(--gold);box-shadow:0 0 30px rgba(155,28,31,.8)}
+.vbtn::after{content:"";position:absolute;left:36px;top:26px;border-style:solid;border-width:20px 0 20px 32px;border-color:transparent transparent transparent var(--gold)}
+.vlink{text-align:center;margin-top:1.1rem}
+@media(max-width:640px){.vbtn{width:68px;height:68px;margin:-34px 0 0 -34px}.vbtn::after{left:27px;top:19px;border-width:15px 0 15px 24px}}

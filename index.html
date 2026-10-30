@@ -19,7 +19,7 @@
 <header class="nav" id="nav">
   <a class="logo" href="#topo"><img src="assets/emblema.webp" alt="" width="40" height="40">Ashem Vow</a>
   <button id="menu" class="menu" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  <nav id="links"><a href="#novidades">Novidades</a><a href="#jogo">O jogo</a><a href="#personagens">Personagens</a><a href="#criaturas">Criaturas</a><a href="#cenarios">Cenários</a><a href="#projeto">Galeria</a><a href="#andamento">Andamento</a><a href="#apoie">Apoie</a><a href="conta.html">Conta</a></nav>
+  <nav id="links"><a href="#novidades">Novidades</a><a href="#jogo">O jogo</a><a href="#saga">A saga</a><a href="#personagens">Personagens</a><a href="#criaturas">Criaturas</a><a href="#cenarios">Cenários</a><a href="#projeto">Galeria</a><a href="#andamento">Andamento</a><a href="#apoie">Apoie</a><a href="conta.html">Conta</a></nav>
 </header>
 
 <section id="topo" class="hero">
@@ -42,6 +42,15 @@
     <div id="news" class="news"></div><button id="news-more" class="btn more" hidden>Ver novidades antigas</button></section>
   <div class="ad" data-ad></div>
   <section id="jogo"><header class="sec"><span>Sobre</span><h2>O jogo</h2></header><p id="sobre" class="lead"></p><div id="recursos" class="recursos"></div></section>
+  <section id="saga"><header class="sec"><span>Em vídeo</span><h2>A saga completa</h2></header>
+    <p class="lead">Onze capítulos, da Lua Rubra à escolha final: renovar ou quebrar o juramento.</p>
+    <div class="video" id="saga-video" data-id="F1bEoAYxMx4">
+      <button type="button" class="vplay" aria-label="Assistir a saga completa de Ashem Vow">
+        <img src="assets/saga-miniatura.webp" alt="Ashem Vow: a saga completa" width="1280" height="720" loading="lazy"><span class="vbtn" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="vlink"><a class="btn red" href="https://youtu.be/F1bEoAYxMx4" target="_blank" rel="noopener">Assistir no YouTube</a></p>
+  </section>
   <section id="veja"><header class="sec"><span>Direto do jogo</span><h2>Veja o jogo</h2></header><div id="prints" class="prints" tabindex="0" aria-label="Prints do jogo"></div></section>
   <section id="personagens"><header class="sec"><span>Doze juramentos</span><h2>Personagens</h2></header><p class="lead">Doze heróis jogáveis, cada um com habilidades únicas: cinco liberados com cinzas, cinco na loja e dois exclusivos do Passe. O Dravik chega no próximo Passe. Veja o retrato, as habilidades e o banner de perfil de cada um.</p><div id="personagens-itens" class="herois"></div></section>
   <section id="criaturas"><header class="sec"><span>Bestiário</span><h2>Criaturas</h2></header><p class="lead">Todas as criaturas voam. Cada fase tem nove espécies próprias, nas cores do cenário, e três chefes que aparecem em ciclo.</p><div id="criaturas-abas" class="abas"></div><div id="criaturas-itens" class="criaturas"></div></section>
@@ -68,4 +77,11 @@
   <p><a href="#topo">Voltar ao topo ↑</a> · <a href="privacidade.html">Política de Privacidade</a></p>
 </footer>
 <script src="content.js"></script><script src="app.js"></script>
+<script>
+(function(){var b=document.getElementById("saga-video");if(!b)return;
+b.addEventListener("click",function(){var f=document.createElement("iframe");
+f.src="https://www.youtube-nocookie.com/embed/"+b.dataset.id+"?autoplay=1&rel=0";
+f.title="Ashem Vow: a saga completa";f.allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen";f.allowFullscreen=true;
+b.innerHTML="";b.appendChild(f);});})();
+</script>
 </body></html>
