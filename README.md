@@ -3,7 +3,15 @@
 Site estático (HTML, CSS e JS puro). Sem build.
 
 ## Como editar
-Tudo fica em `content.js`: novidades, textos, galeria, Instagram, Pix, LivePix e anúncios.
+Tudo fica em `content.js`: textos do topo, faixa, Seis momentos, Uma partida, recursos, telas, perguntas, ficha, redes, inscrição, Pix e anúncios.
+- Redes: em `redes`, cole o link do TikTok, Twitch ou Discord quando criar. Vazio esconde o botão.
+- Notícias: a página mostra as 3 primeiras de `novidades`.
+
+## Inscrições (teste fechado e lançamento)
+O formulário grava no Supabase (projeto ashemvow), tabela `inscricoes`, pela função `inscrever`. Ninguém de fora consegue ler a lista.
+- Ver e exportar: Supabase > Table Editor > inscricoes > Export to CSV.
+- Coluna `testador` = quer entrar no teste fechado. Use esses e-mails no Grupo do Google do teste fechado.
+- `inscricao.meta` muda a meta da barra; `inscricao.mostrarAPartirDe` esconde o contador enquanto houver poucos inscritos.
 - Nova novidade: copie um bloco em `novidades` e cole no topo.
 - Nova imagem: coloque em `assets/` e adicione em `galeria`.
 - Instagram: troque `SEU_USUARIO`.

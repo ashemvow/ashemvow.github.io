@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ashem Vow · game 2D dark fantasy</title>
-<meta name="description" content="Ashem Vow, game 2D dark fantasy em desenvolvimento por Teecki: 12 heróis, 6 cenários, 18 chefes e uma história em cenas. Acompanhe e apoie o projeto.">
-<meta property="og:title" content="Ashem Vow"><meta property="og:image" content="assets/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta property="og:description" content="Um juramento forjado em cinzas.">
+<title>Ashem Vow · ação dark fantasy para Android</title>
+<meta name="description" content="Ashem Vow: ação e sobrevivência em pixel art dark fantasy para Android. 12 heróis, 6 cenários e 18 chefes. Inscreva-se no teste fechado.">
+<meta property="og:title" content="Ashem Vow · inscrições abertas"><meta property="og:image" content="assets/og-image.jpg"><meta name="twitter:card" content="summary_large_image"><meta property="og:description" content="Um juramento forjado em cinzas. Inscreva-se no teste fechado para Android.">
 <meta name="theme-color" content="#0c0a09">
 <link rel="icon" type="image/png" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,69 +19,117 @@
 <header class="nav" id="nav">
   <a class="logo" href="#topo"><img src="assets/emblema.webp" alt="" width="40" height="40">Ashem Vow</a>
   <button id="menu" class="menu" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  <nav id="links"><a href="#novidades">Novidades</a><a href="#jogo">O jogo</a><a href="#saga">A saga</a><a href="#personagens">Personagens</a><a href="#criaturas">Criaturas</a><a href="#cenarios">Cenários</a><a href="#projeto">Galeria</a><a href="#andamento">Andamento</a><a href="#apoie">Apoie</a><a href="conta.html">Conta</a></nav>
+  <nav id="links"><a href="#saga">A saga</a><a href="#momentos">O jogo</a><a href="#herois">Heróis</a><a href="#criaturas">Criaturas</a><a href="#noticias">Notícias</a><a href="#perguntas">Perguntas</a><a href="conta.html">Conta</a><a class="nav-cta" href="#inscricao">Inscreva-se</a></nav>
 </header>
 
 <section id="topo" class="hero">
   <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <p id="status" class="status"></p>
+      <p class="selo"><i aria-hidden="true"></i><span id="status"></span></p>
       <h1>Ashem <span>Vow</span></h1>
       <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
       <p id="frase" class="frase"></p>
-      <div class="btns"><a class="btn red" href="#apoie">Apoiar o jogo</a><a class="btn" href="#novidades">Ver novidades</a><a class="btn" href="conta.html">Conta</a></div>
-    </div>
-    <div class="hero-art"><img class="hero-knight" src="assets/logo-ashem-vow.webp" alt="Logo de Ashem Vow: guerreiro encapuzado sob a lua vermelha"></div>
+      <p id="chamada" class="chamada"></p>
+      <div class="btns"><a class="btn red" href="#inscricao">Quero jogar primeiro</a><a class="btn" href="#saga">Assistir à saga</a></div>    </div>
+    <div class="hero-art"><img class="hero-knight" src="assets/logo-ashem-vow.webp" alt="Logo de Ashem Vow: guerreiro encapuzado sob a lua vermelha" width="800" height="800"></div>
   </div>
-  <ul id="stats" class="stats"></ul>
 </section>
 
+<div class="faixa" aria-label="Destaques do jogo"><div id="faixa" class="faixa-trilho"></div></div>
+
 <main>
-  <section id="novidades"><header class="sec"><span>Diário de desenvolvimento</span><h2>Novidades</h2></header>
-    <div id="news" class="news"></div><button id="news-more" class="btn more" hidden>Ver novidades antigas</button></section>
-  <div class="ad" data-ad></div>
-  <section id="jogo"><header class="sec"><span>Sobre</span><h2>O jogo</h2></header><p id="sobre" class="lead"></p><div id="recursos" class="recursos"></div></section>
-  <section id="saga"><header class="sec"><span>Em vídeo</span><h2>A saga completa</h2></header>
+  <section id="saga"><header class="sec"><span>Em vídeo</span><h2>A saga</h2></header>
     <p class="lead">Onze capítulos, da Lua Rubra à escolha final: renovar ou quebrar o juramento.</p>
     <div class="video" id="saga-video" data-id="F1bEoAYxMx4">
-      <button type="button" class="vplay" aria-label="Assistir a saga completa de Ashem Vow">
+      <button type="button" class="vplay" aria-label="Assistir à saga de Ashem Vow">
         <img src="assets/saga-miniatura.webp" alt="Ashem Vow: a saga completa" width="1280" height="720" loading="lazy"><span class="vbtn" aria-hidden="true"></span>
       </button>
     </div>
-    <p class="vlink"><a class="btn red" href="https://youtu.be/F1bEoAYxMx4" target="_blank" rel="noopener">Assistir no YouTube</a></p>
   </section>
-  <section id="veja"><header class="sec"><span>Direto do jogo</span><h2>Veja o jogo</h2></header><div id="prints" class="prints" tabindex="0" aria-label="Prints do jogo"></div></section>
-  <section id="personagens"><header class="sec"><span>Doze juramentos</span><h2>Personagens</h2></header><p class="lead">Doze heróis jogáveis, cada um com habilidades únicas: cinco liberados com cinzas, cinco na loja e dois exclusivos do Passe. O Dravik chega no próximo Passe. Veja o retrato, as habilidades e o banner de perfil de cada um.</p><div id="personagens-itens" class="herois"></div></section>
-  <section id="criaturas"><header class="sec"><span>Bestiário</span><h2>Criaturas</h2></header><p class="lead">Todas as criaturas voam. Cada fase tem nove espécies próprias, nas cores do cenário, e três chefes que aparecem em ciclo.</p><div id="criaturas-abas" class="abas"></div><div id="criaturas-itens" class="criaturas"></div></section>
-  <section id="cenarios"><header class="sec"><span>Seis lugares</span><h2>Cenários</h2></header><p class="lead">Chão e objetos que aparecem espalhados em cada fase.</p><div id="cenarios-abas" class="abas"></div><div id="cenarios-itens" class="cenarios"></div></section>
-  <section id="galeria"><header class="sec"><span>Artes</span><h2>Galeria</h2></header><div id="galeria-itens" class="galeria"></div></section>
-  <section id="projeto"><header class="sec"><span>Bastidores</span><h2>Do projeto</h2></header><p id="projeto-intro" class="lead"></p><div id="projeto-itens" class="galeria grande"></div></section>
-  <section id="andamento"><header class="sec"><span>Roteiro</span><h2>Andamento</h2></header><p class="lead">O que já roda no jogo, o que está sendo feito e o que vem depois.</p><div id="andamento-itens" class="andamento"></div></section>
-  <section id="apoie" class="apoie">
-    <header class="sec"><span>Ajude o juramento</span><h2>Apoie Ashem Vow</h2></header>
-    <p class="lead">Seu apoio paga ferramentas, arte e tempo de desenvolvimento. Qualquer valor ajuda.</p>
-    <div class="apoie-grid">
-      <div class="box"><h3>Pix</h3><p>Chave (<span id="pix-tipo"></span>):</p><code id="pix-chave"></code><button id="copiar" class="btn red">Copiar chave</button><p id="copiado" class="ok" aria-live="polite"></p></div>
-      <div class="box"><h3>Pix com QR Code</h3><p>Abra o app do seu banco e leia o código:</p><img class="qr" src="assets/pix-qrcode.png" alt="QR Code para doar por Pix" width="240" height="240"></div>
+
+  <section id="momentos"><header class="sec"><span>Direto do jogo</span><h2>Seis momentos</h2></header>
+    <div class="carrossel">
+      <div id="mom-trilho" class="mom-trilho" tabindex="0" aria-label="Momentos do jogo"></div>
+      <div class="mom-ctrl"><button type="button" id="mom-ant" class="seta" aria-label="Momento anterior">‹</button><span id="mom-n" aria-live="polite"></span><button type="button" id="mom-prox" class="seta" aria-label="Próximo momento">›</button></div>
     </div>
   </section>
+
+  <section id="jogo"><header class="sec"><span>Como se joga</span><h2>Uma partida</h2></header>
+    <p id="sobre" class="lead"></p>
+    <ol id="partida" class="partida"></ol>
+    <ul id="numeros" class="numeros"></ul>
+  </section>
+
+  <section id="inscricao" class="inscricao">
+    <div class="insc-texto">
+      <header class="sec"><span>Teste fechado · Android</span><h2>Seja um dos primeiros</h2></header>
+      <p class="lead">Inscreva-se para jogar Ashem Vow antes do lançamento. Use o e-mail da conta Google que você usa na Play Store.</p>
+      <ul id="vantagens" class="vantagens"></ul>
+      <div id="meta" class="meta" hidden><div class="meta-txt"><b id="meta-n">0</b> inscritos <span id="meta-alvo"></span></div><div class="meta-barra"><i id="meta-barra"></i></div></div>
+    </div>
+    <form id="form-insc" class="insc-form" novalidate>
+      <label><span>E-mail da conta Google <em>*</em></span><input type="email" name="email" id="f-email" required autocomplete="email" placeholder="voce@gmail.com" maxlength="120"></label>
+      <label>Apelido<input type="text" name="nome" maxlength="40" autocomplete="nickname" placeholder="Como quer ser chamado"></label>
+      <div class="dupla">
+        <label>Modelo do celular<input type="text" name="celular" maxlength="60" placeholder="Ex.: Galaxy A15"></label>
+        <label>Onde conheceu o jogo<select name="origem"><option value="">Escolha</option><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Twitch</option><option>Reddit</option><option>Discord</option><option>Amigo</option><option>Outro</option></select></label>
+      </div>
+      <label class="check"><input type="checkbox" name="testador" checked><span>Quero participar do teste fechado no Android</span></label>
+      <label class="check"><input type="checkbox" name="aceite" required><span>Aceito receber e-mails sobre o Ashem Vow e li a <a href="privacidade.html" target="_blank" rel="noopener">política de privacidade</a>.</span></label>
+      <button type="submit" class="btn red grande" id="f-enviar">Garantir minha vaga</button>
+      <p id="f-msg" class="f-msg" role="status" aria-live="polite"></p>
+    </form>
+    <div id="insc-ok" class="insc-ok" hidden>
+      <img src="assets/emblema.webp" alt="" width="84" height="84">
+      <h3>Juramento feito.</h3>
+      <p id="ok-txt"></p>
+      <div class="btns" id="ok-redes"></div>
+      <button type="button" id="outro" class="link-btn">Inscrever outro e-mail</button>
+    </div>
+  </section>
+
+  <section id="herois"><header class="sec"><span>Doze juramentos</span><h2>Heróis</h2></header>
+    <p class="lead">Cada herói tem habilidades só dele. Toque num retrato para conhecer.</p>
+    <div id="roster" class="roster" role="tablist" aria-label="Escolha um herói"></div>
+    <article id="heroi-det" class="heroi-det" role="tabpanel" aria-live="polite"></article>
+  </section>
+
+  <section id="alem"><header class="sec"><span>Além da partida</span><h2>Para voltar todo dia</h2></header><div id="recursos" class="recursos"></div></section>
+
+  <section id="criaturas"><header class="sec"><span>Bestiário</span><h2>Criaturas</h2></header><p class="lead">Todas voam. Cada cenário tem nove espécies próprias, nas cores do lugar, e três chefes.</p><div id="criaturas-abas" class="abas"></div><div id="criaturas-itens" class="criaturas"></div></section>
+
+  <section id="telas"><header class="sec"><span>Mídia</span><h2>Telas do jogo</h2></header><div id="telas-itens" class="telas"></div></section>
+
   <div class="ad" data-ad></div>
-  <section id="criador"><header class="sec"><span>Quem faz</span><h2>Criador</h2></header><div class="criador"><div><h3 id="c-nome"></h3><p id="c-bio"></p></div>
-    <div class="links"><a id="c-email" class="btn">E-mail</a><a id="c-insta" class="btn" target="_blank" rel="noopener">Instagram</a></div></div></section>
+
+  <section id="noticias"><header class="sec"><span>Do juramento</span><h2>Notícias</h2></header><div id="news" class="news-cards"></div></section>
+
+  <section id="perguntas"><header class="sec"><span>Antes de jogar</span><h2>Perguntas</h2></header><div id="faq" class="faq"></div></section>
+
+  <section id="ficha" class="ficha-sec">
+    <div><header class="sec"><span>Imprensa e criadores</span><h2>Ficha do jogo</h2></header><table id="ficha-tab" class="ficha"></table></div>
+    <div><header class="sec"><span>Comunidade</span><h2>Siga o juramento</h2></header>
+      <p class="lead">Novidades, vídeos e lives saem primeiro nas redes.</p>
+      <div id="redes" class="redes"></div>
+      <p class="contato">Contato e imprensa: <a id="email" href="#"></a></p>
+      <details class="apoio"><summary>Apoie o desenvolvimento por Pix</summary>
+        <div class="apoio-box"><div><p>Chave (<span id="pix-tipo"></span>):</p><code id="pix-chave"></code><button id="copiar" class="btn">Copiar chave</button><p id="copiado" class="ok" aria-live="polite"></p></div><img class="qr" src="assets/pix-qrcode.png" alt="QR Code para apoiar por Pix" width="240" height="240" loading="lazy"></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="final">
+    <p class="final-k">Inscrições abertas</p>
+    <h2>O juramento te espera.</h2>
+    <a class="btn red grande" href="#inscricao">Quero jogar primeiro</a>
+  </section>
 </main>
 <footer>
   <img src="assets/emblema.webp" alt="" width="72" height="72">
   <p class="f-title">Ashem Vow</p>
-  <p>© <span id="ano"></span> Ashem Vow · feito por <span id="f-nome"></span>. Projeto independente de homenagem ao dark fantasy.</p>
-  <p><a href="#topo">Voltar ao topo ↑</a> · <a href="privacidade.html">Política de Privacidade</a></p>
+  <p class="f-links"><a href="#inscricao">Inscrição</a> · <a href="conta.html">Conta</a> · <a href="privacidade.html">Privacidade</a> · <a id="f-email" href="#">Contato</a></p>
+  <p>© <span id="ano"></span> Ashem Vow. Todos os direitos reservados.</p>
 </footer>
 <script src="content.js"></script><script src="app.js"></script>
-<script>
-(function(){var b=document.getElementById("saga-video");if(!b)return;
-b.addEventListener("click",function(){var f=document.createElement("iframe");
-f.src="https://www.youtube-nocookie.com/embed/"+b.dataset.id+"?autoplay=1&rel=0";
-f.title="Ashem Vow: a saga completa";f.allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen";f.allowFullscreen=true;
-b.innerHTML="";b.appendChild(f);});})();
-</script>
 </body></html>

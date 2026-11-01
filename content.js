@@ -1,23 +1,105 @@
 /* ============================================================
    EDITE AQUI. Todo o conteúdo do site vem deste arquivo.
-   Salve, faça commit no GitHub e o Netlify atualiza sozinho.
+   Salve e faça commit no GitHub: o site atualiza sozinho.
    ============================================================ */
 window.SITE = {
-  status: "Em desenvolvimento · versão de teste 10 · Android em breve",
+  status: "Teste fechado no Android · inscrições abertas",
   frase: "Um juramento forjado em cinzas.",
-  sobre: "Ashem Vow é um game 2D de ação em pixel art, ambientado num mundo sombrio de guerra, sacrifício e vingança. Escolha entre doze heróis, todos com visual e animações refeitos e uma habilidade única cada, e sobreviva a hordas de criaturas voadoras em seis cenários dark fantasy sob uma lua vermelha, com três chefes por fase. A história, Juramento de Cinzas, é contada em cenas narradas e termina com uma escolha sua.",
-  recursos: [
-    { t: "Doze heróis, visual refeito", d: "Garrick, Yurinn, Brann, Selka, Orun, Sombras das Cinzas, Ysolde, Kaelor, Mordrek, Lyra, Vesper e Irmão Brasa, com novo design de corpo inteiro, banner e avatares, e animações desenhadas quadro a quadro. Cada um tem uma habilidade só dele." },
-    { t: "Missões, maldição e maestria", d: "Missões diárias e semanais, uma Maldição do dia que dá mais cinzas a quem topa o desafio, maestria que deixa cada herói mais forte conforme você joga com ele e um baú no fim da partida." },
-    { t: "Desafios e insígnias", d: "Complete desafios para liberar banners e avatares e colecione 46 insígnias para exibir no perfil. Heróis que você ainda não tem não aparecem nas listas." },
-    { t: "Magos e arqueira atiram", d: "Os heróis que usam magia lançam projéteis que acertam o inimigo mais próximo e perfuram. Lyra dispara flechas e Orun mistura golpes de perto com almas arremessadas." },
-    { t: "Passe, roleta e fragmentos", d: "Passe de Catedral com 30 níveis, uma roleta diária e os fragmentos de vitral, a moeda rara que abre novos heróis." },
-    { t: "Seis cenários", d: "Cada fase tem chão, objetos, música, 9 criaturas voadoras e 3 chefes próprios." },
-    { t: "Só criaturas voadoras", d: "Nenhuma criatura anda no chão. Cada cenário tem espécies únicas, nas cores do próprio cenário, e cada uma ataca de um jeito: espirais, mergulhos, enxames, flechas e mais." },
-    { t: "18 chefes", d: "Três chefes por fase, que aparecem em ciclo. Cada um é maior e mais forte que o anterior e tem a própria arte." },
-    { t: "Sem pagar para vencer", d: "Poções têm poder limitado e anúncios são sempre opcionais." }
+  chamada: "Ação e sobrevivência em pixel art dark fantasy. Enfrente hordas sem fim em partidas de até 15 minutos e chegue vivo ao amanhecer.",
+  sobre: "Ashem Vow é um jogo de ação e sobrevivência em pixel art para Android, ambientado num mundo sombrio de guerra, sacrifício e vingança. Escolha um entre doze heróis, cada um com habilidades próprias, e resista a hordas de criaturas voadoras em seis cenários sob a lua vermelha, com três chefes por fase.",
+
+  /* Inscrição. A lista de inscritos fica no Supabase, tabela "inscricoes" (Table Editor). */
+  inscricao: {
+    supabaseUrl: "https://vokffayvytyoojsysqyq.supabase.co",
+    supabaseKey: "sb_publishable_oBEi0zH9jANY1WYMamRmSg_C4Wm7BHo", // chave pública, pode ficar no site
+    meta: 100,               // meta mostrada na barra de progresso
+    mostrarAPartirDe: 10,    // o contador só aparece quando houver pelo menos este número de inscritos
+    vantagens: [
+      "Convite para o teste fechado no Android antes de todo mundo",
+      "Aviso por e-mail no dia do lançamento na Google Play",
+      "Insígnia exclusiva de Testador Fundador no seu perfil"
+    ]
+  },
+
+  /* Redes. Deixe "" para esconder o botão. */
+  redes: {
+    instagram: "https://www.instagram.com/ashemvow",
+    youtube: "https://youtu.be/F1bEoAYxMx4",
+    tiktok: "",
+    twitch: "",
+    discord: ""
+  },
+
+  /* Faixa rotativa abaixo do topo */
+  faixa: ["12 heróis jogáveis", "6 cenários dark fantasy", "18 chefes", "Partidas de até 15 minutos", "Ranking online", "Suporte a controle", "Progresso salvo na nuvem", "Sem pagar para vencer"],
+
+  /* Carrossel "Seis momentos" */
+  momentos: [
+    { img: "assets/print-jogo_garrick.webp", titulo: "A horda desce do céu.", texto: "Toda criatura voa. Em poucos minutos, a tela inteira está contra você." },
+    { img: "assets/print-jogo_orun.webp", titulo: "Cada herói luta do seu jeito.", texto: "Orun mistura golpes de perto com almas arremessadas na Geleira dos Esquecidos." },
+    { img: "assets/print-boss_floresta.webp", titulo: "Mãe das Raízes.", texto: "Três chefes por fase, cada um maior e mais forte que o anterior." },
+    { img: "assets/print-boss_gelo.webp", titulo: "Wyrm da Nevasca.", texto: "Os avisos chegam antes do mergulho. Quem presta atenção sobrevive." },
+    { img: "assets/print-boss_vulcanica.webp", titulo: "Fênix Negra.", texto: "O Abismo de Brasas guarda o chefe mais feroz do juramento." },
+    { img: "assets/print-fim.webp", titulo: "Você sobreviveu.", texto: "Cinzas, fragmentos e um baú que muda conforme o seu desempenho." }
   ],
-  /* Andamento: o que já existe, o que está em produção e o que é planejado. Seja honesto: só coloque em "no teste" o que já roda. */
+
+  /* "Uma partida": os quatro passos */
+  partida: [
+    { t: "Escolha.", d: "Um entre doze heróis e duas poções para levar à batalha." },
+    { t: "Sobreviva.", d: "Hordas de criaturas voadoras atacam de todos os lados por até 15 minutos." },
+    { t: "Evolua.", d: "Suba de nível no meio da luta e solte as três habilidades do herói na hora certa." },
+    { t: "Vença.", d: "Derrote os três chefes da fase e abra o baú da vitória." }
+  ],
+
+  /* Números grandes */
+  numeros: [[12, "heróis"], [6, "cenários"], [18, "chefes"], [15, "minutos por partida"]],
+
+  /* "Além da partida" */
+  recursos: [
+    { t: "Ranking online", d: "Compare seu melhor tempo em cada fase com jogadores de todo o Brasil." },
+    { t: "Missões e Maldição do dia", d: "Missões diárias e semanais, e uma maldição nova por dia que paga mais cinzas a quem aceita o desafio." },
+    { t: "Passe de Catedral", d: "30 níveis com trilha grátis e Premium, títulos, molduras e heróis exclusivos." },
+    { t: "Maestria e insígnias", d: "Cada herói fica mais forte conforme você joga com ele. Desafios liberam banners, e 46 insígnias enfeitam o perfil." },
+    { t: "Jogue com controle", d: "Conecte um controle Bluetooth, mude os botões como preferir e veja as dicas na tela." },
+    { t: "Sem pagar para vencer", d: "O jogo é grátis. Poções têm poder limitado e os anúncios são sempre opcionais." }
+  ],
+
+  /* Galeria de telas do jogo */
+  galeriaJogo: [
+    { img: "assets/print-home.webp", legenda: "Tela inicial" },
+    { img: "assets/print-maestria.webp", legenda: "Heróis e maestria" },
+    { img: "assets/print-preparar.webp", legenda: "Preparar: fase e poções" },
+    { img: "assets/print-missoes.webp", legenda: "Missões e Maldição do dia" },
+    { img: "assets/print-passe.webp", legenda: "Passe de Catedral" },
+    { img: "assets/print-roleta.webp", legenda: "Roleta da Catedral" },
+    { img: "assets/print-desafios.webp", legenda: "Desafios do perfil" },
+    { img: "assets/print-insignias.webp", legenda: "Insígnias" },
+    { img: "assets/print-loja.webp", legenda: "Loja" }
+  ],
+
+  /* Perguntas frequentes */
+  perguntas: [
+    { p: "Quanto custa?", r: "Ashem Vow é grátis. Há compras opcionais, como heróis da loja e o Passe Premium, mas nada que faça alguém vencer só por pagar." },
+    { p: "Em quais aparelhos dá para jogar?", r: "Em celulares Android, pela Google Play. O jogo é jogado com o celular na horizontal." },
+    { p: "Quando o jogo lança?", r: "Logo depois do teste fechado. Quem se inscreve recebe o aviso por e-mail no dia do lançamento." },
+    { p: "Como entro no teste fechado?", r: "Inscreva-se com o e-mail da conta Google que você usa na Play Store. Quando o teste abrir, mandamos o convite com o link para instalar." },
+    { p: "Preciso de conta?", r: "Você entra com a sua conta Google. Assim o progresso fica salvo na nuvem e você não perde nada ao trocar de celular." },
+    { p: "Dá para jogar com controle?", r: "Sim. Funciona com controle Bluetooth, os botões podem ser trocados e as dicas na tela seguem o padrão do controle de PS4." },
+    { p: "Posso gravar vídeos e fazer lives?", r: "Pode, e a gente adora ver. Marque @ashemvow nas redes para aparecer no nosso perfil." }
+  ],
+
+  /* Ficha do jogo (imprensa) */
+  ficha: [
+    ["Gênero", "Ação e sobrevivência (survivors-like)"],
+    ["Visual", "Pixel art 2D, dark fantasy"],
+    ["Plataforma", "Android (Google Play)"],
+    ["Partidas", "Até 15 minutos"],
+    ["Modelo", "Grátis, com compras opcionais"],
+    ["Idioma", "Português do Brasil"],
+    ["Controles", "Toque na tela ou controle Bluetooth"],
+    ["Fase", "Teste fechado"]
+  ],
+
   andamento: [
     { titulo: "Já no jogo (versão 10)", itens: [
       "Missões diárias (3) e semanais (3), com cinzas, fragmentos e XP do Passe, e indicador no menu quando há recompensa para resgatar",
