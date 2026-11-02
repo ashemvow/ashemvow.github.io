@@ -4,7 +4,7 @@
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim' };
+  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4' };
   let cfg = Object.assign({}, PADRAO, JSON.parse(ls.get('vigia-cfg') || '{}'));
   if (!cfg.legenda) { cfg.legenda = Math.random().toString(36).slice(2, 12); ls.set('vigia-cfg', JSON.stringify(cfg)); }
   const BOTS = ['nightbot', 'streamelements', 'moobot', 'fossabot', 'wizebot', 'soundalerts', 'streamlabs', 'sery_bot', 'kofistreambot'];
@@ -437,19 +437,44 @@ ${conhecimento(pergunta)}`;
     obs.onmessage = async e => {
       const m = JSON.parse(e.data);
       if (m.op === 0) { const d = { rpcVersion: 1, eventSubscriptions: 4 }; if (m.d.authentication) d.authentication = await sha(await sha(cfg.obs + m.d.authentication.salt) + m.d.authentication.challenge); obs.send(JSON.stringify({ op: 1, d })); }
-      else if (m.op === 2) { luz('l-obs', 'Conectado', 'ok'); obs.send(JSON.stringify({ op: 6, d: { requestType: 'GetCurrentProgramScene', requestId: 'cena' } })); }
+      else if (m.op === 2) { luz('l-obs', 'Conectado', 'ok'); obs.send(JSON.stringify({ op: 6, d: { requestType: 'GetCurrentProgramScene', requestId: 'cena' } })); obs.send(JSON.stringify({ op: 6, d: { requestType: 'GetSceneList', requestId: 'lista' } })); }
+      else if (m.op === 7 && m.d.requestId === 'lista') listaCenas(((m.d.responseData || {}).scenes || []).map(s => s.sceneName).reverse());
       else if (m.op === 7 && m.d.requestId === 'cena') cena((m.d.responseData || {}).currentProgramSceneName || (m.d.responseData || {}).sceneName);
       else if (m.op === 5 && m.d.eventType === 'CurrentProgramSceneChanged') cena(m.d.eventData.sceneName);
     };
     obs.onclose = e => { luz('l-obs', e.code === 4009 ? 'Senha errada' : 'Desligado', 'erro'); if (e.code !== 4009) setTimeout(conectarOBS, 10000); };
   }
-  function cena(nome) { if (!nome) return; const lista = cfg.cenas.split(',').map(sem).filter(Boolean); luz('l-obs', 'Cena: ' + nome, 'ok'); definirAusente(lista.includes(sem(nome)), 'obs'); }
+  // cenas em que você está fora: as da lista + as do rodízio
+  const cenasFora = () => [...cfg.cenas.split(','), ...rodizio()].map(sem).filter(Boolean);
+  const rodizio = () => (cfg.rodizio || '').split('|').map(s => s.trim()).filter(Boolean);
+  let cenaAtual = '', trocandoEu = '', ultimaTroca = 0;
+  function cena(nome) {
+    if (!nome) return; cenaAtual = nome; luz('l-obs', 'Cena: ' + nome, 'ok');
+    if (trocandoEu && sem(nome) === sem(trocandoEu)) { trocandoEu = ''; return; } // fui eu que troquei (rodízio)
+    const fora = cenasFora().includes(sem(nome));
+    if (fora && !ausente) ultimaTroca = Date.now();
+    definirAusente(fora, 'obs');
+  }
+  // ---------- rodízio de cenas enquanto você está fora ----------
+  function trocarCena(nome) { if (!obs || obs.readyState !== 1) return; trocandoEu = nome; ultimaTroca = Date.now(); obs.send(JSON.stringify({ op: 6, d: { requestType: 'SetCurrentProgramScene', requestId: 'troca', requestData: { sceneName: nome } } })); anotar('s', `Troquei para a cena "${esc(nome)}".`); }
+  setInterval(() => {
+    const lista = rodizio(), min = +cfg.rodizioMin || 4;
+    if (!ausente || lista.length < 2 || !obs || obs.readyState !== 1 || falando || apresentando) return;
+    if (Date.now() - ultimaTroca < min * 60000) return;
+    const i = lista.findIndex(n => sem(n) === sem(cenaAtual));
+    trocarCena(lista[(i + 1) % lista.length]);
+  }, 5000);
+  function listaCenas(nomes) {
+    const box = $('c-rodizio'); if (!box) return; const marcadas = rodizio().map(sem);
+    box.innerHTML = nomes.map(n => `<label class="row" style="gap:.5rem;color:var(--bone)"><input type="checkbox" value="${esc(n)}" style="width:auto"${marcadas.includes(sem(n)) ? ' checked' : ''}> ${esc(n)}</label>`).join('') || '<span class="nota">Nenhuma cena encontrada.</span>';
+  }
 
   // ---------- configuração ----------
-  const CAMPOS = { codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente' };
+  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
     for (const [k, id] of Object.entries(CAMPOS)) cfg[k] = $(id).value.trim();
+    const marc = [...document.querySelectorAll('#c-rodizio input:checked')].map(i => i.value); if (document.querySelector('#c-rodizio input')) cfg.rodizio = marc.join('|');
     ls.set('vigia-cfg', JSON.stringify(cfg)); $('salvo').textContent = 'Salvo.'; setTimeout(() => $('salvo').textContent = '', 2500);
     carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); luz('l-ia', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'Pronta' : 'Sem chave', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'ok' : 'meio');
     if (cfg.chave && cfg.canal) $('cfg').open = false;
