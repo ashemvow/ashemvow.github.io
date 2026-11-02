@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Vigia · câmera</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Fonte de navegador no OBS para o quadro "AO VIVO" (ex.: 480 x 300). Tudo se ajusta ao tamanho da fonte. */
+*{margin:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-family:"IM Fell English",Georgia,serif;color:#f3e7d2}
+#cena{position:absolute;inset:0;background:radial-gradient(60% 75% at 50% 78%,rgba(194,42,45,.38),rgba(12,10,9,.92) 70%),#0c0a09;overflow:hidden}
+#cena::after{content:"";position:absolute;inset:0;background:radial-gradient(closest-side at 50% 50%,transparent 70%,rgba(0,0,0,.55));pointer-events:none}
+.brasa{position:absolute;bottom:-4%;width:.9vmin;height:.9vmin;border-radius:50%;background:#ff9a4a;box-shadow:0 0 1.6vmin #ff6a2a;opacity:0;animation:sobe 6s linear infinite}
+@keyframes sobe{0%{transform:translateY(0);opacity:0}10%{opacity:.9}100%{transform:translateY(-110vh);opacity:0}}
+#vg{position:absolute;left:50%;bottom:4%;height:88%;aspect-ratio:350/370;transform:translateX(-50%);transition:filter .8s,height .6s}
+#vg img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform-origin:50% 100%;filter:drop-shadow(0 1.2vmin 1.6vmin rgba(0,0,0,.85))}
+#vg .quieto{animation:respira 4s ease-in-out infinite}
+#vg .fala{opacity:0}
+@keyframes respira{50%{transform:translateY(-2%) scale(1.01,.99)}}
+@keyframes conversa{from{transform:translateY(0) rotate(-1.2deg)}to{transform:translateY(-3%) scale(1.02,.98) rotate(1.6deg)}}
+/* dormindo (você está presente) */
+body.dorme #vg{filter:brightness(.55) saturate(.7)}
+body.dorme #zz{opacity:1}
+#zz{position:absolute;right:22%;top:12%;font-family:"Pirata One",serif;font-size:9vmin;color:#c79a4f;opacity:0;transition:opacity .8s;text-shadow:0 0 2vmin #000}
+#zz span{display:inline-block;animation:zz 2.4s ease-in-out infinite}#zz span:nth-child(2){animation-delay:.4s;font-size:.75em}#zz span:nth-child(3){animation-delay:.8s;font-size:.55em}
+@keyframes zz{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-35%);opacity:1}}
+/* falando */
+body.fala #vg .fala{opacity:1;animation:conversa .32s ease-in-out infinite alternate}body.fala #vg .quieto{opacity:0}
+#nome{position:absolute;left:4%;top:5%;font-family:"Pirata One",serif;font-size:7.5vmin;color:#ffd27a;text-shadow:0 .4vmin 1vmin #000}
+#nome small{display:block;font-family:"IM Fell English",serif;font-size:.45em;color:#c9bfae;letter-spacing:.15em;text-transform:uppercase}
+#leg{position:absolute;left:3%;right:3%;bottom:3%;padding:1.6vmin 2.4vmin;background:rgba(12,10,9,.88);border:1px solid rgba(199,154,79,.6);border-left:.8vmin solid #c22a2d;font-size:5.2vmin;line-height:1.25;max-height:42%;overflow:hidden;opacity:0;transform:translateY(20%);transition:opacity .4s,transform .4s;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+body.leg #leg{opacity:1;transform:none}
+</style>
+</head>
+<body class="dorme">
+<div id="cena"></div>
+<div id="vg"><img class="quieto" src="assets/vigia-quieto.webp" alt=""><img class="fala" src="assets/vigia-fala.webp" alt=""></div>
+<div id="zz"><span>Z</span><span>z</span><span>z</span></div>
+<div id="nome">Vigia<small id="estado">cochilando</small></div>
+<div id="leg"></div>
+<script src="content.js"></script>
+<script src="rede.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id), B = document.body, canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
+  for (let i = 0; i < 14; i++) { const b = document.createElement('i'); b.className = 'brasa'; b.style.left = (Math.random() * 100) + '%'; b.style.animationDelay = (-Math.random() * 6) + 's'; b.style.animationDuration = (4 + Math.random() * 4) + 's'; $('cena').append(b); }
+  let digitar = 0, some = 0, ativo = false, ultimo = 0;
+  const estado = () => { $('estado').textContent = B.classList.contains('fala') ? 'falando' : ativo ? 'cuidando do chat' : 'cochilando'; B.classList.toggle('dorme', !ativo && !B.classList.contains('fala')); };
+  function mostrar(d) {
+    clearTimeout(some); clearInterval(digitar); ultimo = Date.now();
+    const txt = d.r || ''; let i = 0; $('leg').textContent = '';
+    digitar = setInterval(() => { i += 2; $('leg').textContent = txt.slice(0, i); if (i >= txt.length) clearInterval(digitar); }, 26);
+    B.classList.add('fala', 'leg'); estado();
+  }
+  function calar() { B.classList.remove('fala'); estado(); clearTimeout(some); some = setTimeout(() => B.classList.remove('leg'), 2600); }
+  if (canal) window.REDE.canal('voz-' + canal, (ev, d) => {
+    if (ev === 'f') mostrar(d); else if (ev === 'x') calar();
+    else if (ev === 'm') { ativo = !!d.a; ultimo = Date.now(); estado(); }
+  }).catch(() => { });
+  // se o Vigia ficar muito tempo sem dar sinal, volta a cochilar
+  setInterval(() => { if (ativo && Date.now() - ultimo > 60000) { ativo = false; estado(); } }, 5000);
+  estado();
+})();
+</script>
+</body></html>

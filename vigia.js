@@ -132,6 +132,7 @@ ${conhecimento()}`;
   async function legenda(ev, dados) {
     try { if (!canalLegenda) canalLegenda = await window.REDE.canal('voz-' + cfg.legenda, () => { }); canalLegenda.enviar(ev, dados); } catch (e) { canalLegenda = null; }
   }
+  $('url-cam').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-cam.html#canal=${cfg.legenda}`;
   $('url-legenda').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-overlay.html#canal=${cfg.legenda}`;
 
   // ---------- fila ----------
