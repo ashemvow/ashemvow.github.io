@@ -31,8 +31,9 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </head>
 <body>
 <main class="vg-adm">
+  <div class="row" style="gap:1.2rem;align-items:center"><img src="assets/vigia-fala.webp" alt="" width="120" height="139" style="filter:drop-shadow(0 8px 14px rgba(0,0,0,.8))"><div>
   <p class="k">Só para você · deixe aberto no Microsoft Edge</p>
-  <h1>Vigia do chat</h1>
+  <h1>Vigia do chat</h1></div></div>
   <p class="nota">Quando você estiver ausente, o Vigia responde o chat com voz e agradece bits, inscrições, raids e Pix. A voz sai por esta janela; o OBS pega pelo áudio da área de trabalho.</p>
 
   <div class="card">
@@ -64,11 +65,24 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <label>Voz<select id="c-voz"></select></label>
       <label>Velocidade da fala<select id="c-vel"><option value=".9">Calma</option><option value="1" selected>Normal</option><option value="1.12">Rápida</option></select></label>
     </div>
-    <div class="row"><button class="btn" id="voz-teste">Ouvir a voz</button><span class="nota">As melhores são as "Online (Natural)", que só aparecem no Edge.</span></div>
+    <div class="dupla">
+      <label>Apresentação repetida enquanto você está fora<select id="c-lembrete"><option value="0">Só quando assumir o chat</option><option value="10">A cada 10 minutos</option><option value="15" selected>A cada 15 minutos</option><option value="25">A cada 25 minutos</option></select></label>
+      <span></span>
+    </div>
+    <div class="row"><button class="btn" id="voz-teste">Ouvir a voz</button><button class="btn" id="apres-teste">Ouvir a apresentação</button><span class="nota">As melhores são as "Online (Natural)", que só aparecem no Edge.</span></div>
     <div class="dupla">
       <label>Responder<select id="c-quem"><option value="todos">Todas as mensagens (quando ausente)</option><option value="chamado">Só quando chamarem "Vigia" ou perguntarem algo</option></select></label>
       <label>Intervalo mínimo entre falas<select id="c-int"><option value="6">6 segundos</option><option value="10" selected>10 segundos</option><option value="20">20 segundos</option></select></label>
     </div>
+    <label>O que mais o Vigia deve saber (opcional)<textarea id="c-extra" rows="6" placeholder="Escreva aqui qualquer coisa que o chat costuma perguntar: dicas, histórias do mundo, horários das lives, o que vem na próxima versão, seu setup..." style="width:100%;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;color:var(--bone);font:15px Georgia,serif;resize:vertical"></textarea></label>
+    <p class="nota">Ele já sabe tudo o que está no site: heróis e habilidades, fases, criaturas e chefes, recursos, novidades, perguntas frequentes e os links.</p>
+    <span class="k" style="margin-top:.6rem">Escrever no chat (para mandar os links)</span>
+    <p class="nota">1. Entre em <a href="https://dev.twitch.tv/console/apps/create" target="_blank" rel="noopener">dev.twitch.tv/console/apps/create</a> (pede autenticação em dois fatores na conta). 2. Nome: Vigia Ashem Vow. URL de redirecionamento: <b id="redir"></b>. Categoria: Chat Bot. Tipo de cliente: Público. 3. Copie o "ID do cliente" e cole abaixo. 4. Clique em Conectar e entre com a conta que vai escrever (a do canal ou uma conta só do bot).</p>
+    <div class="dupla">
+      <label>ID do cliente da Twitch<input id="c-cliente" autocomplete="off"></label>
+      <label>Conta conectada<span class="row"><input id="tw-quem" disabled placeholder="nenhuma"><button class="btn" id="tw-conectar" type="button">Conectar</button></span></label>
+    </div>
+    <p class="nota">Se o chat bloqueia links, dê moderador para a conta do bot: digite /mod nome_do_bot no chat.</p>
     <label>Contas que avisam doação no chat (separe por vírgula)<input id="c-alertas" placeholder="ex.: livepix, streamelements"></label>
     <p class="nota">Se o LivePix ou outro bot escreve no chat quando chega um Pix, coloque o nome dessa conta aqui e o Vigia agradece em voz.</p>
     <span class="k" style="margin-top:.6rem">Troca automática pelo OBS (opcional)</span>
