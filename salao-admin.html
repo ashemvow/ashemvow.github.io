@@ -36,6 +36,7 @@ ul{list-style:none;padding:0;display:grid;gap:.3rem}li{padding:.4rem .7rem;backg
       <p class="msg" id="m2"></p>
     </div>
     <div class="card"><span class="k">Últimos no Salão (esta live)</span><ul id="ev-lista"><li>Nada ainda.</li></ul></div>
+    <div class="card"><span class="k">Arena multiplayer</span><p>Abra a tela da arena no PC da live e capture no OBS como fonte de navegador 1920 × 1080. Ela só funciona com o Salão aberto.</p><a class="btn red grande" href="arena.html" target="_blank" rel="noopener">Abrir a tela da arena</a></div>
     <p style="margin-top:1rem"><a href="salao.html" style="color:var(--ember)">Abrir o Salão</a> · <button class="btn" id="sair" style="padding:.2rem .8rem">Sair deste aparelho</button></p>
   </div>
 </main>
@@ -61,7 +62,7 @@ async function entrar() {
 }
 async function eventos() {
   try { const l = await rpc('eventos_salao', { p_apos: 0 });
-    $('ev-lista').innerHTML = l.length ? l.map(v => `<li><b>${esc(v.nick)}</b> · ${v.tipo === 'vigilia' ? `${v.pontos} pontos com ${esc(v.texto)}` : v.tipo === 'quiz' ? `é ${esc(v.texto)}` : `${v.pontos}/10 chefes`}</li>`).join('') : '<li>Nada ainda.</li>'; } catch (e) { }
+    $('ev-lista').innerHTML = l.length ? l.map(v => `<li><b>${esc(v.nick)}</b> · ${v.tipo === 'vigilia' ? `${v.pontos} pontos com ${esc(v.texto)}` : v.tipo === 'quiz' ? `é ${esc(v.texto)}` : v.tipo === 'arena' ? `destaque da arena (${v.pontos} abates, ${v.texto === 'amanhecer' ? 'chegou ao amanhecer' : 'o time caiu'})` : `${v.pontos}/10 chefes`}</li>`).join('') : '<li>Nada ainda.</li>'; } catch (e) { }
 }
 $('entrar').onclick = entrar; $('cod').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
 $('abrir').onclick = () => definir(true); $('fechar').onclick = () => definir(false);

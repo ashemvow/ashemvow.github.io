@@ -16,7 +16,7 @@
 <header class="nav solid" id="nav">
   <a class="logo" href="index.html"><img src="assets/emblema.webp" alt="" width="40" height="40">Ashem Vow</a>
   <button id="menu" class="menu" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  <nav id="links"><a href="#vigilia">Vigília</a><a href="#quiz">Qual herói é você?</a><a href="#chefes">Que chefe é esse?</a><a href="#ranking">Ranking</a><a href="index.html">Site do jogo</a><a class="nav-cta" href="index.html#inscricao">Inscreva-se</a></nav>
+  <nav id="links"><a href="#arena">Arena</a><a href="#vigilia">Vigília</a><a href="#quiz">Qual herói é você?</a><a href="#chefes">Que chefe é esse?</a><a href="#ranking">Ranking</a><a href="index.html">Site do jogo</a><a class="nav-cta" href="index.html#inscricao">Inscreva-se</a></nav>
 </header>
 
 <section class="sl-topo">
@@ -45,9 +45,36 @@
 </div>
 
 <main>
+  <!-- ARENA (MULTIPLAYER) -->
+  <section id="arena" class="sl-bloco trava">
+    <header class="sec"><span>Multiplayer · na tela da live</span><h2>Arena da Vigília</h2></header>
+    <p class="lead">Todo mundo na mesma arena, contra a mesma horda. Escolha um vigia livre e lute ao lado do chat até o amanhecer. Cada vigia só pode ter um dono por vez, e quem joga aparece ao vivo na tela da live.</p>
+    <div class="vg ar" id="ar">
+      <canvas id="ar-canvas" tabindex="0" aria-label="Arena da Vigília"></canvas>
+      <div class="vg-hud" id="ar-hud" hidden>
+        <div class="vg-l"><div class="vg-barra"><i id="ar-vida"></i></div><div class="vg-barra xp"><i id="ar-xp"></i></div><span>Nível do time <b id="ar-nivel">1</b></span></div>
+        <div class="vg-c"><b id="ar-tempo">00:00</b><span id="ar-amanhecer"></span></div>
+        <div class="vg-r"><span>Abates</span><b id="ar-abates">0</b></div>
+      </div>
+      <div class="ar-faixa" id="ar-faixa" hidden><b id="ar-faixa-t"></b><span id="ar-faixa-s"></span></div>
+      <div class="ar-ups" id="ar-ups" hidden><p class="k">Melhoria <span id="ar-ups-n"></span> · <span id="ar-ups-t"></span></p><div class="ar-ups-in" id="ar-ups-in"></div></div>
+      <button type="button" class="vg-pausa ar-sair" id="ar-sair" hidden>Sair</button>
+      <div class="vg-tela" id="ar-menu">
+        <div class="vg-menu-in">
+          <p class="k" id="ar-status">A arena abre quando a live começar</p>
+          <div class="vg-herois" id="ar-herois"></div>
+          <p class="vg-info" id="ar-info"></p>
+          <button type="button" class="btn red grande" id="ar-entrar" disabled>Entrar na arena</button>
+          <p class="sl-nota" id="ar-nota">Computador: WASD ou setas. Celular: arraste o dedo na tela. As melhorias aparecem embaixo e não pausam o jogo.</p>
+        </div>
+      </div>
+      <button type="button" class="vg-cheia" id="ar-cheia" aria-label="Tela cheia">⛶</button>
+    </div>
+  </section>
+
   <!-- VIGÍLIA -->
   <section id="vigilia" class="sl-bloco trava">
-    <header class="sec"><span>Mini game · ranking da live</span><h2>Vigília das Cinzas</h2></header>
+    <header class="sec"><span>Solo · ranking da live</span><h2>Vigília das Cinzas</h2></header>
     <p class="lead">Escolha um dos oito vigias e sobreviva ao Cemitério da Vigília até o amanhecer: 5 minutos. Heróis, criaturas e chefes que só existem aqui no Salão. A cada minuto chega um chefe. Suba de nível e escolha melhorias para aguentar a horda.</p>
     <div class="vg" id="vg">
       <canvas id="vg-canvas" tabindex="0" aria-label="Área do jogo Vigília das Cinzas"></canvas>
@@ -119,5 +146,5 @@
   <p class="f-links"><a href="index.html">Site do jogo</a> · <a href="index.html#inscricao">Inscrição</a> · <a href="privacidade.html">Privacidade</a></p>
   <p>© <span id="ano"></span> Ashem Vow. Todos os direitos reservados.</p>
 </footer>
-<script src="content.js"></script><script src="salao.js"></script><script src="vigilia.js"></script>
+<script src="content.js"></script><script src="salao.js"></script><script src="vigilia.js"></script><script src="rede.js"></script><script src="arena-comum.js"></script><script src="arena-jogador.js"></script>
 </body></html>

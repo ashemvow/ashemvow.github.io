@@ -67,6 +67,7 @@ function toast(v) {
   const img = v.tipo === 'vigilia' || v.tipo === 'quiz' ? RET[v.texto] : 'assets/emblema.webp';
   const txt = v.tipo === 'vigilia' ? `<b>${esc(v.nick)}</b> fez <span class="x">${v.pontos.toLocaleString('pt-BR')}</span> pontos com ${esc(v.texto)}`
     : v.tipo === 'quiz' ? `<b>${esc(v.nick)}</b> descobriu que é <span class="x">${esc(v.texto)}</span>`
+    : v.tipo === 'arena' ? (v.texto === 'amanhecer' ? `A arena sobreviveu até o <span class="x">amanhecer</span>! Destaque: <b>${esc(v.nick)}</b> com ${v.pontos} abates` : `A arena caiu aos <span class="x">${Math.floor((+v.texto.split(':')[1] || 0) / 60)}min</span>. Destaque: <b>${esc(v.nick)}</b> com ${v.pontos} abates`)
     : `<b>${esc(v.nick)}</b> reconheceu <span class="x">${v.pontos}/10</span> chefes e virou ${esc(v.texto)}`;
   const d = document.createElement('div'); d.className = 't'; d.innerHTML = `${img ? `<img src="${esc(img)}" alt="">` : ''}<div>${txt}</div>`;
   const box = $('toasts'); box.append(d); while (box.children.length > 3) box.firstChild.remove();

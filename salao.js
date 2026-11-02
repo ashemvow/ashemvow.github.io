@@ -20,6 +20,7 @@
     $('sl-selo').classList.toggle('vivo', ab);
     if (estado.evento) $('sl-evento').textContent = ab ? `Esta noite: ${estado.evento}` : 'Jogue com o chat durante as lives de Ashem Vow.';
     $('sl-fechado').hidden = ab;
+    dispatchEvent(new CustomEvent('salao-status', { detail: estado }));
     if (!ab && window.__vigilia && window.__vigilia.estado() && !window.__vigilia.estado().fim) { /* deixa terminar a partida em andamento */ }
     ranking();
   }
@@ -67,7 +68,7 @@
   }
   function toast(t) { const d = document.createElement('div'); d.className = 'sl-toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.classList.add('on'), 20); setTimeout(() => { d.classList.remove('on'); setTimeout(() => d.remove(), 400); }, 2600); }
 
-  window.SALAO = { rpc, ranking, compartilhar, nick, pedirNick, aberto: () => !!estado.aberto };
+  window.SALAO = { estado: () => estado, status, rpc, ranking, compartilhar, nick, pedirNick, aberto: () => !!estado.aberto };
 
   // ---------- QUIZ ----------
   const PERFIL = {

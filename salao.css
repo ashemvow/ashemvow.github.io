@@ -30,7 +30,7 @@
 .vg{position:relative;width:100%;aspect-ratio:16/9;max-height:80vh;background:#000;border:3px solid var(--gold);box-shadow:0 0 0 2px #000,0 0 60px rgba(155,28,31,.45);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 .vg:fullscreen,.vg.cheia{max-height:none;aspect-ratio:auto;width:100vw;height:100vh;border:0}
 .vg.cheia{position:fixed;inset:0;z-index:50}
-#vg-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;cursor:crosshair}
+#vg-canvas,#ar-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;cursor:crosshair}
 .vg-tela{position:absolute;inset:0;display:grid;place-items:safe center;background:radial-gradient(70% 80% at 50% 40%,rgba(155,28,31,.3),rgba(12,10,9,.92) 70%);overflow:auto;padding:1rem}
 .vg-menu-in{width:min(100%,860px);text-align:center;display:grid;justify-items:center;gap:.6rem}
 .vg .k{font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ember)}
@@ -127,3 +127,16 @@
   .vg-res{gap:1.2rem}.vg-res b{font-size:2rem}
   #vg-fim .btns{gap:.4rem}#vg-fim .btns .btn{padding:.45rem .7rem;font-size:.9rem}
 }
+
+/* arena multiplayer */
+.ar-sair{width:auto;padding:0 .8rem;right:3.6rem}
+.vg-herois button.ocupado{opacity:.45;cursor:not-allowed}.vg-herois button.ocupado span{color:var(--ember)}
+.ar-faixa{position:absolute;left:50%;top:22%;transform:translateX(-50%);display:grid;justify-items:center;gap:.2rem;padding:.8rem 1.6rem;background:rgba(12,10,9,.82);border:1px solid rgba(199,154,79,.6);text-align:center;pointer-events:none;max-width:92%}
+.ar-faixa b{font:400 clamp(1.6rem,4vw,2.6rem)/1.05 "Pirata One",serif;color:var(--gold)}.ar-faixa span{color:#d8cdbb;font-size:.98rem}
+.ar-ups{position:absolute;left:0;right:0;bottom:0;padding:.6rem .8rem .8rem;background:linear-gradient(0deg,rgba(12,10,9,.95),rgba(12,10,9,.7) 70%,transparent);text-align:center;z-index:2}
+.ar-ups .k{margin-bottom:.4rem}
+.ar-ups-in{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;max-width:760px;margin:0 auto}
+.ar-ups-in button{display:grid;gap:.15rem;padding:.55rem .5rem;background:linear-gradient(180deg,#2a1d1a,#140e0d);border:1px solid #5a4535;border-top:3px solid var(--blood2);color:var(--bone);font:inherit;cursor:pointer;text-align:center}
+.ar-ups-in button b{font:400 1.15rem/1.05 "Pirata One",serif;color:var(--gold)}.ar-ups-in button span{font-size:.8rem;color:#c9bfae}
+.ar-ups-in button:hover,.ar-ups-in button:focus-visible{border-color:var(--gold);box-shadow:0 0 18px rgba(199,154,79,.35)}
+@media(max-width:560px){.ar-ups-in button span{display:none}.ar-ups-in button b{font-size:1rem}.ar-faixa{top:16%}}

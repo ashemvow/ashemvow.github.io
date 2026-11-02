@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arena da Vigília · tela da live</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}[hidden]{display:none!important}
+html,body{height:100%;background:#000;color:#d8cdbb;font-family:"IM Fell English",Georgia,serif;overflow:hidden}
+#palco{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;background:#0c0a09}
+#cv{width:1920px;height:1080px;display:block}
+#login{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(60% 60% at 50% 40%,#2a1210,#0c0a09);z-index:5}
+#login .c{width:min(92vw,440px);display:grid;gap:.8rem;padding:1.6rem;background:#1a1615;border:1px solid #5a4535;border-top:3px solid #c22a2d}
+#login h1{font-family:"Pirata One",serif;font-weight:400;font-size:2.6rem;line-height:1}
+#login input{padding:.7rem .9rem;background:#000;border:1px solid #3a302d;color:#d8cdbb;font:18px Georgia,serif}
+button{font:inherit;cursor:pointer}
+.b{padding:.7rem 1rem;background:#9b1c1f;border:1px solid #c22a2d;color:#f3e7d2;font-size:1.1rem}
+.b2{padding:.45rem .8rem;background:rgba(12,10,9,.85);border:1px solid #c79a4f;color:#c79a4f;font-size:.95rem}
+#msg{color:#c8742a;min-height:1.3em}
+#ctrl{position:fixed;right:12px;bottom:12px;display:flex;gap:.5rem;align-items:center;z-index:4;transition:opacity .4s;background:rgba(12,10,9,.85);padding:.5rem;border:1px solid #3a302d}
+#ctrl.some{opacity:0;pointer-events:none}
+#ctrl span{font-size:.9rem;color:#a99d8b;max-width:360px}
+</style>
+</head>
+<body>
+<div id="palco"><canvas id="cv" width="1920" height="1080"></canvas></div>
+<div id="login">
+  <div class="c">
+    <p style="letter-spacing:.3em;text-transform:uppercase;color:#c8742a;font-size:.85rem">Tela da live</p>
+    <h1>Arena da Vigília</h1>
+    <p>Abra esta página no seu PC e capture no OBS (fonte de navegador 1920 × 1080). Ela comanda a partida de todo mundo.</p>
+    <input id="cod" type="password" placeholder="Código secreto" autocomplete="current-password">
+    <button class="b" id="entrar">Colocar a arena no ar</button>
+    <p id="msg"></p>
+  </div>
+</div>
+<div id="ctrl" class="some">
+  <span id="ctrl-st">Conectando...</span>
+  <button class="b2" id="reiniciar">Reiniciar rodada</button>
+  <button class="b2" id="desligar">Tirar do ar</button>
+</div>
+<script src="content.js"></script>
+<script src="rede.js"></script>
+<script src="arena-comum.js"></script>
+<script src="arena.js"></script>
+</body></html>
