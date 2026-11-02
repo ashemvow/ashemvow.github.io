@@ -453,7 +453,7 @@ ${conhecimento(pergunta)}`;
     obs.onclose = e => { luz('l-obs', e.code === 4009 ? 'Senha errada' : 'Desligado', 'erro'); if (e.code !== 4009) setTimeout(conectarOBS, 10000); };
   }
   // cenas em que você está fora: as da lista + as do rodízio
-  const cenasFora = () => [...cfg.cenas.split(','), ...rodizio()].map(sem).filter(Boolean);
+  const cenasFora = () => [...cfg.cenas.replace(/[()"]/g, '').split(/,|;|\s+e\s+/), ...rodizio()].map(sem).filter(Boolean); // aceita vírgula, ponto e vírgula ou "e"
   const rodizio = () => (cfg.rodizio || '').split('|').map(s => s.trim()).filter(Boolean);
   let cenaAtual = '', trocandoEu = '', ultimaTroca = 0;
   function cena(nome) {
