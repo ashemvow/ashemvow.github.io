@@ -59,12 +59,12 @@
     return S2.filter(s => s[0] === 'base' || temas.includes(s[0])).map(s => s[1]).join('\n\n');
   }
   function sistema(pergunta) {
-    return `Você é o Vigia, a voz que cuida do chat da live do canal ${cfg.canal} na Twitch enquanto ${cfg.nome} está ausente${cfg.ytChave ? ' (a mesma live também passa no YouTube)' : ''}. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
+    return `Você é o Vigia, a voz que cuida do chat da live de ${cfg.nome} ${naTwitch() ? 'na Twitch (canal ' + cfg.canal + ')' : 'no YouTube'} enquanto ${cfg.nome} está ausente. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
 Como responder:
 - Português do Brasil, tom amigável e um pouco sombrio, combinando com o jogo (um vigia de cemitério sob a lua vermelha), nunca assustador de verdade.
 - Pense antes de responder: entenda o que a pessoa realmente quer saber, use a conversa recente do chat como contexto e responda de forma específica e útil, com detalhes reais do jogo (nomes de heróis, habilidades, chefes, fases, recursos) quando for sobre o jogo.
 - Você pode conversar sobre outros assuntos também (games, curiosidades, dúvidas gerais), com bom humor, desde que seja algo apropriado. Se usar pesquisa na internet, confirme o que for atual antes de afirmar.
-- A primeira parte da resposta é FALADA em voz alta: de 1 a 3 frases e no máximo 350 caracteres, chamando a pessoa pelo nome. Sem emojis, sem markdown e sem listas. ${tw ? 'Não leia endereços em voz alta: diga "mandei o link no chat".' : 'Se precisar de um endereço, fale assim: "ashemvow ponto github ponto io barra salao". Diga também que o link aparece na tela.'}
+- A primeira parte da resposta é FALADA em voz alta: de 1 a 3 frases e no máximo 350 caracteres, chamando a pessoa pelo nome. Sem emojis, sem markdown e sem listas. ${tw && naTwitch() ? 'Não leia endereços em voz alta: diga "mandei o link no chat".' : 'Se precisar de um endereço, fale assim: "ashemvow ponto github ponto io barra salao". Diga também que o link aparece na tela.'}
 - Se alguém quiser jogar, perguntar como entra na corrida ou parecer interessado em participar, ensine o passo a passo com calma, como se fosse a primeira vez: abrir o Salão no site (pelo celular ou PC), escrever o nome do chat no topo da página e tocar em Entrar no Salão, descer até Corrida das Cinzas, escolher um vigia e tocar em Entrar na corrida. A largada acontece sozinha depois de uma contagem de 10 segundos; quem chega no meio de uma corrida treina e entra na próxima. Toque na tela (ou espaço no PC) para pular e segure para pular mais alto; pegue as almas para somar pontos; o último de pé vence e aparece na live. Mande o link do Salão no CHAT. Se a pessoa disser que não abriu ou travou, peça para recarregar a página.
 - Se a pessoa pedir um link, perguntar onde se inscrever, onde jogar o Salão, como apoiar, ou se um link ajudar de verdade, acrescente no final uma linha separada começando exatamente com "CHAT:" e depois uma mensagem curta com o(s) link(s) completo(s) da lista de links oficiais. Use só links da lista.
 - Sobre Ashem Vow, responda com base no conhecimento abaixo, que você conhece a fundo. Se a resposta sobre o jogo ou sobre ${cfg.nome} não estiver aqui, diga que ${cfg.nome} responde quando voltar. Nunca invente datas, preços, números ou novidades do jogo.
@@ -285,7 +285,7 @@ ${conhecimento(pergunta)}`;
   // ---------- Salão sozinho: abre quando a live está no ar, fecha quando acaba ----------
   const I = S.inscricao;
   const rpc = async (n, b) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); const t = await r.text(); if (!r.ok) throw new Error(t); return t ? JSON.parse(t) : null; };
-  let salao = { aberto: false }, noAr = null, foraDoArDesde = 0, abriEu = false;
+  let salao = { aberto: false }, noAr = null, ytAoVivo = false, foraDoArDesde = 0, abriEu = false;
   const codigoSalao = () => cfg.codigo || ls.get('salao-admin') || '';
   async function abrirSalao(motivo) {
     if (!codigoSalao()) { anotar('s', 'Não consegui abrir o Salão sozinho: coloque o código do Salão na configuração.'); return; }
@@ -299,10 +299,11 @@ ${conhecimento(pergunta)}`;
   async function vigiarSalao() {
     try { salao = await rpc('salao_status'); } catch (e) { return; }
     luzSalao(); ligarCorrida();
-    if (cfg.autoSalao === 'nao' || !tw || !tw.canalId) return;
+    if (!tw || !tw.canalId) return;
     try {
       const s = await twitch('https://api.twitch.tv/helix/streams?user_id=' + tw.canalId);
       noAr = !!(s.data && s.data.length);
+      if (cfg.autoSalao === 'nao' || ytAoVivo) return;
       if (noAr) { foraDoArDesde = 0; if (!salao.aberto) abrirSalao('a live está no ar'); }
       else { if (!foraDoArDesde) foraDoArDesde = Date.now(); if (salao.aberto && abriEu && Date.now() - foraDoArDesde > 15 * 60000) fecharSalao(); }
     } catch (e) { }
@@ -342,7 +343,10 @@ ${conhecimento(pergunta)}`;
   let ultimoEscrito = -1e9; const enviadas = [];
   const chave = t => String(t).replace(/\s+/g, ' ').trim().slice(0, 60).toLowerCase();
   const foiEu = t => enviadas.includes(chave(t));
+  // a live é só numa plataforma por vez: no chat da Twitch ele só escreve quando a live da Twitch está no ar
+  const naTwitch = () => noAr !== false && !ytAoVivo;
   async function escrever(msg) {
+    if (!naTwitch()) return;
     if ((!tw || !tw.canalId) && cfg.token) { try { await Promise.race([twPronto, new Promise(r => setTimeout(r, 8000))]); } catch (e) { } } // a conta ainda está conectando
     if (!tw || !tw.canalId) { anotar('s', 'Não mandei no chat: conecte uma conta da Twitch na configuração.'); return; }
     if (performance.now() - ultimoEscrito < 3000) await new Promise(r => setTimeout(r, 3000));
@@ -435,7 +439,9 @@ ${conhecimento(pergunta)}`;
         let vid = idVideo(cfg.ytLive);
         if (!vid) {
           // procurar a live gasta muita cota: só quando a live da Twitch está no ar ou você está fora, no máximo a cada 5 minutos
-          if (!(noAr || ausente) || Date.now() - yt.procurado < 5 * 60000) return mais(30000, 'Esperando a live', 'meio');
+          // procura só quando você está fora e a live da Twitch não está no ar
+          if (!ausente || noAr === true) return mais(30000, noAr === true ? 'Live está na Twitch' : 'Procura quando você sair', 'meio');
+          if (Date.now() - yt.procurado < 5 * 60000) return mais(30000, 'Live não está no ar', 'meio');
           yt.procurado = Date.now();
           if (!yt.canalId) yt.canalId = await ytCanal();
           if (!yt.canalId) { luz('l-yt', 'Canal não encontrado', 'erro'); anotar('s', 'Não achei seu canal do YouTube. Confira o @ do canal na configuração.'); return; }
@@ -446,7 +452,8 @@ ${conhecimento(pergunta)}`;
         const v = await ytGet('videos', { part: 'liveStreamingDetails', id: vid });
         const chat = v.items && v.items[0] && v.items[0].liveStreamingDetails && v.items[0].liveStreamingDetails.activeLiveChatId;
         if (!chat) { yt.procurado = Date.now(); return mais(60000, 'Live não está no ar', 'meio'); }
-        yt.chatId = chat; yt.token = ''; yt.pular = true; anotar('s', 'Conectei no chat da live do YouTube.');
+        yt.chatId = chat; yt.token = ''; yt.pular = true; ytAoVivo = true; anotar('s', 'Conectei no chat da live do YouTube.');
+        if (!salao.aberto && cfg.autoSalao !== 'nao') abrirSalao('a live do YouTube está no ar');
       }
       // com você aqui, não lê (economiza a cota grátis); quando você sai, ignora o que ficou para trás
       if (!ausente) { yt.pular = true; yt.token = ''; return mais(4000, 'Conectado · lê quando você sair', 'ok'); }
@@ -457,7 +464,7 @@ ${conhecimento(pergunta)}`;
       mais(Math.max(10000, j.pollingIntervalMillis || 0), 'Lendo o chat', 'ok');
     } catch (e) {
       const m = e.message;
-      if (/liveChatEnded|liveChatNotFound|liveChatDisabled/.test(m)) { yt.chatId = ''; yt.procurado = Date.now(); anotar('s', 'A live do YouTube acabou.'); return mais(60000, 'Live terminou', 'meio'); }
+      if (/liveChatEnded|liveChatNotFound|liveChatDisabled/.test(m)) { yt.chatId = ''; ytAoVivo = false; if (salao.aberto && abriEu && cfg.autoSalao !== 'nao') fecharSalao(); yt.procurado = Date.now(); anotar('s', 'A live do YouTube acabou.'); return mais(60000, 'Live terminou', 'meio'); }
       if (/quota|rateLimit/i.test(m)) { anotar('s', 'O YouTube chegou no limite grátis do dia. Amanhã volta sozinho.'); return mais(30 * 60000, 'Limite do dia', 'erro'); }
       if (e.status === 400 || e.status === 403) { luz('l-yt', /accessNotConfigured|SERVICE_DISABLED/.test(m) ? 'API não ativada' : 'Chave com problema', 'erro'); anotar('s', `O YouTube recusou a chave (${esc(m)}). Confira se a YouTube Data API v3 está ativada e se a chave foi copiada inteira.`); return; }
       mais(20000, 'Reconectando', 'erro');
