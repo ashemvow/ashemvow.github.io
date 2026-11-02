@@ -4,7 +4,7 @@
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '' };
+  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim' };
   let cfg = Object.assign({}, PADRAO, JSON.parse(ls.get('vigia-cfg') || '{}'));
   if (!cfg.legenda) { cfg.legenda = Math.random().toString(36).slice(2, 12); ls.set('vigia-cfg', JSON.stringify(cfg)); }
   const BOTS = ['nightbot', 'streamelements', 'moobot', 'fossabot', 'wizebot', 'soundalerts', 'streamlabs', 'sery_bot', 'kofistreambot'];
@@ -65,6 +65,7 @@ Como responder:
 - Pense antes de responder: entenda o que a pessoa realmente quer saber, use a conversa recente do chat como contexto e responda de forma específica e útil, com detalhes reais do jogo (nomes de heróis, habilidades, chefes, fases, recursos) quando for sobre o jogo.
 - Você pode conversar sobre outros assuntos também (games, curiosidades, dúvidas gerais), com bom humor, desde que seja algo apropriado. Se usar pesquisa na internet, confirme o que for atual antes de afirmar.
 - A primeira parte da resposta é FALADA em voz alta: de 1 a 3 frases e no máximo 350 caracteres, chamando a pessoa pelo nome. Sem emojis, sem markdown e sem listas. ${tw ? 'Não leia endereços em voz alta: diga "mandei o link no chat".' : 'Se precisar de um endereço, fale assim: "ashemvow ponto github ponto io barra salao". Diga também que o link aparece na tela.'}
+- Se alguém quiser jogar, perguntar como entra na corrida ou parecer interessado em participar, ensine o passo a passo com calma, como se fosse a primeira vez: abrir o Salão no site (pelo celular ou PC), escrever o nome do chat no topo da página e tocar em Entrar no Salão, descer até Corrida das Cinzas, escolher um vigia e tocar em Entrar na corrida. A largada acontece sozinha depois de uma contagem de 10 segundos; quem chega no meio de uma corrida treina e entra na próxima. Toque na tela (ou espaço no PC) para pular e segure para pular mais alto; pegue as almas para somar pontos; o último de pé vence e aparece na live. Mande o link do Salão no CHAT. Se a pessoa disser que não abriu ou travou, peça para recarregar a página.
 - Se a pessoa pedir um link, perguntar onde se inscrever, onde jogar o Salão, como apoiar, ou se um link ajudar de verdade, acrescente no final uma linha separada começando exatamente com "CHAT:" e depois uma mensagem curta com o(s) link(s) completo(s) da lista de links oficiais. Use só links da lista.
 - Sobre Ashem Vow, responda com base no conhecimento abaixo, que você conhece a fundo. Se a resposta sobre o jogo ou sobre ${cfg.nome} não estiver aqui, diga que ${cfg.nome} responde quando voltar. Nunca invente datas, preços, números ou novidades do jogo.
 ${infoLive ? '- ' + infoLive : ''}
@@ -244,6 +245,7 @@ ${conhecimento(pergunta)}`;
     fila.sort((a, b) => (a.tipo === 'evento' ? 0 : 1) - (b.tipo === 'evento' ? 0 : 1));
     const it = fila.shift(); ocupado = true;
     let resp;
+    if (it.tipo === 'aviso') { ocupado = false; const fala = paraFala(it.texto); anotar('v', `<b>Vigia:</b> ${esc(fala)}`); legenda('f', { n: '', p: '', r: fala, e: 1 }); await falar(fala); processar(); return; }
     const conversa = recentes.length ? `Conversa recente no chat (do mais antigo ao mais novo):\n${recentes.join('\n')}\n\n` : '';
     try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}Responda agora a mensagem de ${it.nick}: "${it.texto}"`); }
     catch (e) { resp = pronta(it.tipo === 'evento' ? 'evento' : 'chat', it.nick); luz('l-ia', e.message === 'sem_chave' ? 'Sem chave' : e.message === 'RESOURCE_EXHAUSTED' ? 'Limite do dia' : 'Com erro', e.message === 'sem_chave' ? 'meio' : 'erro');
@@ -270,6 +272,58 @@ ${conhecimento(pergunta)}`;
   let infoLive = '';
   async function infoCanal() { try { if (!tw || !tw.canalId) return; const c = await twitch('https://api.twitch.tv/helix/channels?broadcaster_id=' + tw.canalId); const d = c.data && c.data[0]; if (d) infoLive = `Título da live agora: "${d.title}". Categoria: ${d.game_name || 'sem categoria'}.`; } catch (e) { } }
   setInterval(infoCanal, 5 * 60000);
+
+  // ---------- Salão sozinho: abre quando a live está no ar, fecha quando acaba ----------
+  const I = S.inscricao;
+  const rpc = async (n, b) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); const t = await r.text(); if (!r.ok) throw new Error(t); return t ? JSON.parse(t) : null; };
+  let salao = { aberto: false }, noAr = null, foraDoArDesde = 0, abriEu = false;
+  const codigoSalao = () => cfg.codigo || ls.get('salao-admin') || '';
+  async function abrirSalao(motivo) {
+    if (!codigoSalao()) { anotar('s', 'Não consegui abrir o Salão sozinho: coloque o código do Salão na configuração.'); return; }
+    try { salao = await rpc('salao_definir', { p_codigo: codigoSalao(), p_aberto: true, p_evento: null }); abriEu = true; anotar('s', `Abri o Salão (${esc(motivo)}). A corrida e os mini games estão liberados.`); luzSalao(); ligarCorrida(); }
+    catch (e) { anotar('s', /codigo_invalido/.test(e.message) ? 'O código do Salão está errado.' : 'Não consegui abrir o Salão agora.'); }
+  }
+  async function fecharSalao() {
+    try { salao = await rpc('salao_definir', { p_codigo: codigoSalao(), p_aberto: false, p_evento: null }); abriEu = false; anotar('s', 'A live acabou: fechei o Salão.'); luzSalao(); } catch (e) { }
+  }
+  function luzSalao() { const el = $('l-salao'); if (el) luz('l-salao', salao.aberto ? (salao.sala ? 'Aberto · corrida no ar' : 'Aberto') : 'Fechado', salao.aberto ? (salao.sala ? 'ok' : 'meio') : ''); }
+  async function vigiarSalao() {
+    try { salao = await rpc('salao_status'); } catch (e) { return; }
+    luzSalao(); ligarCorrida();
+    if (cfg.autoSalao === 'nao' || !tw || !tw.canalId) return;
+    try {
+      const s = await twitch('https://api.twitch.tv/helix/streams?user_id=' + tw.canalId);
+      noAr = !!(s.data && s.data.length);
+      if (noAr) { foraDoArDesde = 0; if (!salao.aberto) abrirSalao('a live está no ar'); }
+      else { if (!foraDoArDesde) foraDoArDesde = Date.now(); if (salao.aberto && abriEu && Date.now() - foraDoArDesde > 15 * 60000) fecharSalao(); }
+    } catch (e) { }
+  }
+  setInterval(vigiarSalao, 60000); setTimeout(vigiarSalao, 4000);
+
+  // ---------- Corrida: avisa a largada e o vencedor ----------
+  let corridaSala = null, corridaCanal = null, corridaAnt = { e: '', k: -1 }, ultimoAvisoLargada = 0, ultimoVencedor = -1;
+  async function ligarCorrida() {
+    const sala = salao.aberto ? salao.sala : null;
+    if (sala === corridaSala) return;
+    if (corridaCanal) { try { (await corridaCanal).sair(); } catch (e) { } corridaCanal = null; }
+    corridaSala = sala; if (!sala) return;
+    corridaCanal = window.REDE.canal('cc-' + sala, (ev, d) => { if (ev === 'e') noticiaCorrida(d); });
+    corridaCanal.catch(() => { corridaCanal = null; corridaSala = null; });
+  }
+  function noticiaCorrida(d) {
+    const ant = corridaAnt; corridaAnt = { e: d.e, k: d.k };
+    if (cfg.avisarCorrida === 'nao') return;
+    const n = (d.j || []).length;
+    if (d.e === 'contagem' && (ant.e !== 'contagem' || ant.k !== d.k) && Date.now() - ultimoAvisoLargada > 3 * 60000) {
+      ultimoAvisoLargada = Date.now();
+      escrever(`A Corrida das Cinzas vai começar com ${n} ${n === 1 ? 'corredor' : 'corredores'}! Entre agora: ${SITE_URL}/salao (nome do chat no topo, depois Entrar na corrida).`);
+      if (ausente) entrar({ tipo: 'aviso', nick: '', texto: `Atenção, chat! A Corrida das Cinzas vai começar com ${n} ${n === 1 ? 'corredor' : 'corredores'}. Ainda dá tempo: entra no Salão do site, escolhe um vigia e toca em Entrar na corrida. Mandei o link no chat.` });
+    }
+    if (d.e === 'fim' && d.r && d.k !== ultimoVencedor) {
+      ultimoVencedor = d.k; const v = d.r.v || (d.r.l && d.r.l[0] ? [d.r.l[0][0], d.r.l[0][1], d.r.l[0][2]] : null);
+      if (v && ausente) entrar({ tipo: 'aviso', nick: v[0], texto: `${v[0]} ${d.r.v ? 'venceu a Corrida das Cinzas' : 'fez a melhor marca da corrida'} com ${Number(v[2]).toLocaleString('pt-BR')} pontos! Quem quiser desafiar, a próxima largada já vem aí.` });
+    }
+  }
   function mostrarConta(prob) {
     $('tw-quem').value = tw ? tw.login : prob === 'expirou' ? 'conexão expirou, conecte de novo' : prob === 'erro' ? 'não deu para conectar' : '';
     $('tw-conectar').textContent = tw ? 'Trocar' : 'Conectar';
@@ -294,6 +348,7 @@ ${conhecimento(pergunta)}`;
   };
   // volta da Twitch com a chave no endereço
   { const h = new URLSearchParams(location.hash.slice(1)); if (h.get('access_token') && h.get('state') === ls.get('vigia-estado')) { cfg.token = h.get('access_token'); ls.set('vigia-cfg', JSON.stringify(cfg)); history.replaceState(null, '', location.pathname); } }
+  const PASSO_A_PASSO = () => `Para jogar a Corrida das Cinzas: 1) abra ${SITE_URL}/salao 2) escreva seu nome do chat no topo e toque em Entrar no Salão 3) desça até Corrida das Cinzas, escolha um vigia e toque em Entrar na corrida. Toque para pular, segure para pular mais alto. O último de pé vence!`;
   const LISTA_LINKS = () => LINKS.filter(l => /^https?:/.test(l[1])).slice(0, 4).map(l => `${l[0]}: ${l[1]}`).join(' · ');
 
   // ---------- chat da Twitch (leitura sem senha) ----------
@@ -321,7 +376,8 @@ ${conhecimento(pergunta)}`;
       if (alertas.includes(login)) { anotar('s', `Doação: ${esc(texto)}`); entrar({ tipo: 'evento', nick: nomeDoacao(texto) || 'você que apoiou', texto: `alerta de doação: ${texto}` }); return; }
       if (tags.bits) { anotar('s', `${esc(nick)} mandou ${tags.bits} bits`); entrar({ tipo: 'evento', nick, texto: `${nick} mandou ${tags.bits} bits com a mensagem "${texto.replace(/cheer\d+/gi, '').trim()}"` }); return; }
       if (BOTS.includes(login) || login === sem(cfg.canal) || (tw && login === sem(tw.login))) return;
-      if (/^!(links?|site|salao|corrida|inscri)/i.test(texto)) { if (ausente) escrever(`@${nick} ${LISTA_LINKS()}`); return; }
+      if (/^!(jogar|corrida|salao|sal\u00e3o|como)/i.test(texto)) { escrever(`@${nick} ${PASSO_A_PASSO()}`); return; }
+      if (/^!(links?|site|inscri)/i.test(texto)) { escrever(`@${nick} ${LISTA_LINKS()}`); return; }
       if (texto.startsWith('!')) return;
       anotar('', `<b>${esc(nick)}:</b> ${esc(texto)}`); recentes.push(`${nick}: ${texto.slice(0, 200)}`); if (recentes.length > 20) recentes.shift();
       if (cfg.quem === 'chamado' && !/vigia|\?/i.test(texto)) return;
@@ -363,7 +419,7 @@ ${conhecimento(pergunta)}`;
     $('modo-nota').textContent = origem === 'obs' ? 'Trocado pela cena do OBS.' : v ? 'Clique quando voltar.' : 'Clique quando sair.';
     anotar('s', v ? 'Vigia assumiu o chat.' : 'Vigia ficou em silêncio.');
     fila.length = 0;
-    if (v) apresentar();
+    if (v) { apresentar(); if (!salao.aberto && cfg.autoSalao !== 'nao') abrirSalao('você saiu'); }
     else { try { speechSynthesis.cancel(); } catch (e) { } legenda('x', {}); }
     legenda('m', { a: v ? 1 : 0 });
   }
@@ -390,7 +446,7 @@ ${conhecimento(pergunta)}`;
   function cena(nome) { if (!nome) return; const lista = cfg.cenas.split(',').map(sem).filter(Boolean); luz('l-obs', 'Cena: ' + nome, 'ok'); definirAusente(lista.includes(sem(nome)), 'obs'); }
 
   // ---------- configuração ----------
-  const CAMPOS = { provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente' };
+  const CAMPOS = { codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
     for (const [k, id] of Object.entries(CAMPOS)) cfg[k] = $(id).value.trim();
