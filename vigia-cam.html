@@ -72,7 +72,7 @@ body.leg #leg{opacity:1;transform:none}
   }
   if (canal) ler();
   // se o Vigia ficar muito tempo sem dar sinal, volta a cochilar
-  setInterval(() => { if (ativo && Date.now() - ultimo > 60000) { ativo = false; estado(); } }, 5000);
+  setInterval(() => { if (ativo && Date.now() - ultimo > 240000) { ativo = false; estado(); } }, 5000);
   estado();
 })();
 </script>

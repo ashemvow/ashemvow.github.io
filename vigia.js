@@ -213,6 +213,17 @@ ${conhecimento(pergunta)}`;
   }
   const liberarVoz = () => { if (!vozBloqueada) return; try { const u = new SpeechSynthesisUtterance('Voz liberada.'); u.lang = 'pt-BR'; const v = vozAtual(); if (v) u.voice = v; u.onstart = () => { vozBloqueada = false; avisoVoz(); }; speechSynthesis.speak(u); } catch (e) { } };
   document.addEventListener('pointerdown', liberarVoz, true); document.addEventListener('keydown', liberarVoz, true);
+  // mantém a aba acordada: o Edge põe abas em segundo plano para dormir (e atrasa os relógios),
+  // mas não faz isso com abas que estão tocando som. Um tom grave de 14 Hz, quase sem volume, que ninguém ouve.
+  let somVivo = null;
+  function manterAcordado() {
+    try {
+      if (!somVivo) { const C = new (window.AudioContext || window.webkitAudioContext)(); const o = C.createOscillator(), g = C.createGain(); o.frequency.value = 14; g.gain.value = 0.0012; o.connect(g).connect(C.destination); o.start(); somVivo = C; }
+      if (somVivo.state === 'suspended') somVivo.resume();
+    } catch (e) { }
+  }
+  document.addEventListener('pointerdown', manterAcordado, true);
+  try { navigator.locks && navigator.locks.request('vigia-acordado', () => new Promise(() => { })); } catch (e) { }
   function falar(txt) {
     return new Promise(ok => {
       falando = true; let fim = false; const acabar = () => { if (fim) return; fim = true; falando = false; ultimaFala = performance.now(); legenda('x', {}); ok(); setTimeout(processar, 0); };
