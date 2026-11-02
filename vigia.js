@@ -65,8 +65,24 @@ ${conhecimento()}`;
 
   // ---------- inteligência (Gemini) ----------
   // cérebro: tenta o Pro (mais inteligente); se passar do limite grátis, usa o Flash por um tempo
-  const PRO = ['gemini-pro-latest', 'gemini-2.5-pro'], FLASH = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
-  const sumiu = new Set(), funciona = {}; let proDescansa = 0; const historia = [];
+  let PRO = ['gemini-pro-latest', 'gemini-2.5-pro'], FLASH = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  // pergunta ao Google quais modelos esta chave pode usar (e confere se a chave funciona)
+  async function descobrirModelos() {
+    if (!cfg.chave) { luz('l-ia', 'Sem chave', 'meio'); return; }
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000&key=${encodeURIComponent(cfg.chave)}`);
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { const msg = (j.error && j.error.message) || ('erro ' + r.status); luz('l-ia', 'Chave com problema', 'erro'); anotar('s', `O Google recusou a chave: ${esc(msg)}`); return; }
+      const nomes = (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')).map(m => m.name.replace(/^models\//, ''))
+        .filter(n => /^gemini/.test(n) && !/(tts|image|audio|live|embedding|vision|learnlm|robotics|computer|lite)/i.test(n));
+      const versao = n => { const v = n.match(/gemini-(\d+(?:\.\d+)?)/); return v ? parseFloat(v[1]) : (/latest/.test(n) ? 99 : 0); };
+      const ord = arr => arr.sort((a, b) => versao(b) - versao(a) || (/preview|exp/.test(a) ? 1 : 0) - (/preview|exp/.test(b) ? 1 : 0));
+      const pro = ord(nomes.filter(n => /pro/.test(n))), flash = ord(nomes.filter(n => /flash/.test(n)));
+      if (pro.length) PRO = pro.slice(0, 3); if (flash.length) FLASH = flash.slice(0, 4);
+      luz('l-ia', 'Chave ok', 'ok'); anotar('s', `Chave funcionando. Modelos: ${esc([PRO[0], FLASH[0]].filter(Boolean).join(' e '))}.`);
+    } catch (e) { luz('l-ia', 'Sem conexão', 'erro'); anotar('s', 'Não consegui falar com o Google para conferir a chave. Veja se a internet ou algum bloqueador está impedindo.'); }
+  }
+  const sumiu = new Set(), funciona = {}; let ultimaMsg = ''; let proDescansa = 0; const historia = [];
   async function chamar(m, contents, extra) {
     const gen = { temperature: .75, maxOutputTokens: 2048 };
     if (extra.pensar) gen.thinkingConfig = { thinkingBudget: /pro/.test(m) ? 2048 : 1024 };
@@ -74,6 +90,7 @@ ${conhecimento()}`;
     if (extra.busca) body.tools = [{ google_search: {} }];
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(cfg.chave)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
+    if (!r.ok && j.error) ultimaMsg = `${m}: ${j.error.message || j.error.status}`;
     return { st: r.status, erro: j.error && j.error.status, txt: ((j.candidates || [])[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join(' ').trim() };
   }
   async function pensar(pedido) {
@@ -90,6 +107,8 @@ ${conhecimento()}`;
         const r = await chamar(m, contents, extra);
         if (r.st === 404) { sumiu.add(m); break; }
         if (r.st === 429 || r.erro === 'RESOURCE_EXHAUSTED') { ultimoErro = 'RESOURCE_EXHAUSTED'; if (PRO.includes(m)) proDescansa = Date.now() + 15 * 60000; break; }
+        if (r.st === 400 && /api key|api_key/i.test(ultimaMsg)) throw new Error('CHAVE_INVALIDA');
+        if (r.st === 403) throw new Error(r.erro || 'PERMISSION_DENIED');
         if (r.st === 400) { ultimoErro = r.erro || 'ia_400'; continue; }
         if (r.st >= 500) { ultimoErro = r.erro || 'ia_' + r.st; break; }
         if (!r.txt) { ultimoErro = 'ia_vazia'; continue; }
@@ -124,7 +143,7 @@ ${conhecimento()}`;
   }
   const vozAtual = () => vozes.find(v => v.name === cfg.voz) || vozes[0] || null;
   if ('speechSynthesis' in window) { carregarVozes(); speechSynthesis.onvoiceschanged = carregarVozes; } else luz('l-voz', 'Sem voz', 'erro');
-  let falando = false, ultimaFala = 0;
+  let falando = false, ultimaFala = -1e9;
   function falar(txt) {
     return new Promise(ok => {
       falando = true; let fim = false; const acabar = () => { if (fim) return; fim = true; falando = false; ultimaFala = performance.now(); legenda('x', {}); ok(); setTimeout(processar, 0); };
@@ -172,7 +191,7 @@ ${conhecimento()}`;
     const conversa = recentes.length ? `Conversa recente no chat (do mais antigo ao mais novo):\n${recentes.join('\n')}\n\n` : '';
     try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}Responda agora a mensagem de ${it.nick}: "${it.texto}"`); }
     catch (e) { resp = pronta(it.tipo === 'evento' ? 'evento' : 'chat', it.nick); luz('l-ia', e.message === 'sem_chave' ? 'Sem chave' : e.message === 'RESOURCE_EXHAUSTED' ? 'Limite do dia' : 'Com erro', e.message === 'sem_chave' ? 'meio' : 'erro');
-      anotar('s', `Usei uma frase pronta porque a inteligência não respondeu (${esc(e.message)}).`); }
+      anotar('s', `Usei uma frase pronta porque a inteligência não respondeu (${esc(e.message)}${ultimaMsg ? ' · ' + esc(ultimaMsg.slice(0, 220)) : ''}).`); }
     const partes = String(resp).split(/\n?\s*CHAT:\s*/i), fala = paraFala(partes[0]), msgChat = partes[1] ? partes.slice(1).join(' ').replace(/\s+/g, ' ').trim().slice(0, 450) : '';
     anotar('v', `<b>Vigia:</b> ${esc(fala)}${msgChat ? `<br><small>No chat: ${esc(msgChat)}</small>` : ''}`);
     if (msgChat) escrever(`@${it.nick} ${msgChat}`);
@@ -320,7 +339,7 @@ ${conhecimento()}`;
   $('salvar').onclick = () => {
     for (const [k, id] of Object.entries(CAMPOS)) cfg[k] = $(id).value.trim();
     ls.set('vigia-cfg', JSON.stringify(cfg)); $('salvo').textContent = 'Salvo.'; setTimeout(() => $('salvo').textContent = '', 2500);
-    carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); luz('l-ia', cfg.chave ? 'Pronta' : 'Sem chave', cfg.chave ? 'ok' : 'meio');
+    carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); luz('l-ia', cfg.chave ? 'Pronta' : 'Sem chave', cfg.chave ? 'ok' : 'meio');
     if (cfg.chave && cfg.canal) $('cfg').open = false;
   };
   $('voz-teste').onclick = () => { cfg.voz = $('c-voz').value; cfg.vel = $('c-vel').value; falar(`Oi, chat! Eu sou o Vigia e cuido de vocês enquanto ${$('c-nome').value || cfg.nome} não volta.`); };
@@ -330,6 +349,6 @@ ${conhecimento()}`;
 
   luz('l-ia', cfg.chave ? 'Pronta' : 'Sem chave', cfg.chave ? 'ok' : 'meio');
   if (cfg.chave && cfg.canal) $('cfg').open = false;
-  conectarChat(); conectarOBS(); prepararTwitch();
+  conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos();
   window.__vigia = { apresentar, sistema, linha, estado: () => ({ ausente, fila: fila.length, falando, cfg }), definirAusente, paraFala };
 })();
