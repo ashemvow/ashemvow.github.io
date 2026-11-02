@@ -26,6 +26,7 @@ input,select{width:100%;padding:.6rem .8rem;background:#000;border:1px solid #3a
 .log li.v{border-left:3px solid var(--gold)}.log li.v b{color:var(--gold)}.log li.s{color:var(--mut);font-size:.85rem}
 .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
 code.url{display:block;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;word-break:break-all;font-size:.85rem}
+.segredo{-webkit-text-security:disc;text-security:disc}
 details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;font-size:1.4rem}
 </style>
 </head>
@@ -64,14 +65,14 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     </div>
     <div class="dupla">
       <label>Serviço de inteligência<select id="c-provedor"><option value="groq" selected>Groq (grátis, cerca de 1.000 respostas por dia)</option><option value="gemini">Google Gemini</option></select></label>
-      <label>Chave grátis do Groq<input id="c-groq" type="password" placeholder="começa com gsk_" autocomplete="off"></label>
+      <label>Chave grátis do Groq<input id="c-groq" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="começa com gsk_" autocomplete="off"></label>
     </div>
     <p class="nota">Pegue a chave do Groq em <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (entre com sua conta Google, clique em "Create API Key" e copie). Ela só aparece uma vez.</p>
     <div class="dupla">
       <label>Cérebro do Gemini<select id="c-cerebro"><option value="pro" selected>Mais inteligente (Gemini Pro; se passar do limite grátis, usa o Flash)</option><option value="flash">Mais rápido (Gemini Flash)</option></select></label>
       <label>Pesquisar na internet quando precisar<select id="c-busca"><option value="sim" selected>Sim</option><option value="nao">Não</option></select></label>
     </div>
-    <label>Chave grátis do Google Gemini<input id="c-chave" type="password" placeholder="Cole aqui a chave (começa com AIza...)" autocomplete="off"></label>
+    <label>Chave grátis do Google Gemini<input id="c-chave" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Cole aqui a chave (começa com AIza...)" autocomplete="off"></label>
     <p class="nota">Pegue em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> com sua conta Google, sem cartão. A chave fica salva só neste computador.</p>
     <div class="dupla">
       <label>Voz<select id="c-voz"></select></label>
@@ -98,14 +99,14 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     <span class="k" style="margin-top:.6rem">Live no YouTube também (opcional)</span>
     <p class="nota">O Vigia lê o chat da live do YouTube e responde em voz e na legenda. No chat do YouTube ele não escreve: os links aparecem na tela. 1. Abra <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">a página da YouTube Data API v3</a> com sua conta Google e clique em Ativar. 2. Vá em Credenciais › Criar credenciais › Chave de API e copie. 3. Para proteger, abra a chave, em "Restrições de aplicativo" escolha Sites e adicione <b>ashemvow.github.io/*</b>.</p>
     <div class="dupla">
-      <label>Chave da API do YouTube<input id="c-ytchave" type="password" placeholder="começa com AIza" autocomplete="off"></label>
+      <label>Chave da API do YouTube<input id="c-ytchave" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="começa com AIza" autocomplete="off"></label>
       <label>Seu canal do YouTube<input id="c-ytcanal" placeholder="@seucanal" autocomplete="off"></label>
     </div>
     <label>Link da live do YouTube (opcional, só se ele não achar sozinho)<input id="c-ytlive" placeholder="https://youtube.com/live/..." autocomplete="off"></label>
     <p class="nota">Pode fazer live numa plataforma de cada vez: quando você sai, ele vê se a live da Twitch está no ar; se não estiver, procura a live do YouTube sozinho e cuida dela. No chat da Twitch ele só escreve quando a live da Twitch está no ar. A cota grátis do YouTube dá para cerca de 5 horas de Vigia por dia.</p>
     <span class="k" style="margin-top:.6rem">Salão e Corrida sem você</span>
     <div class="dupla">
-      <label>Código do Salão<input id="c-codigo" type="password" placeholder="o mesmo da página de controle" autocomplete="off"></label>
+      <label>Código do Salão<input id="c-codigo" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="o mesmo da página de controle" autocomplete="off"></label>
       <label>Abrir o Salão sozinho<select id="c-auto"><option value="sim" selected>Sim: abre quando a live entra no ar e fecha 15 min depois que acaba</option><option value="nao">Não, eu abro na mão</option></select></label>
     </div>
     <label>Avisar as corridas<select id="c-avisar"><option value="sim" selected>Sim: avisa a largada no chat (e em voz quando você está fora) e anuncia o vencedor</option><option value="nao">Não</option></select></label>
@@ -115,7 +116,7 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     <span class="k" style="margin-top:.6rem">Troca automática pelo OBS (opcional)</span>
     <p class="nota">No OBS: Ferramentas › Configurações do servidor WebSocket › marque "Ativar servidor WebSocket" e copie a senha.</p>
     <div class="dupla">
-      <label>Senha do WebSocket do OBS<input id="c-obs" type="password" autocomplete="off"></label>
+      <label>Senha do WebSocket do OBS<input id="c-obs" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" autocomplete="off"></label>
       <label>Cenas em que você está ausente<input id="c-cenas" placeholder="tela ja volto, Apresentação do jogo"></label>
     </div>
     <span class="k" style="margin-top:.6rem">Rodízio de cenas enquanto você está fora</span>
@@ -136,5 +137,5 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=18"></script>
+<script src="vigia.js?v=19"></script>
 </body></html>

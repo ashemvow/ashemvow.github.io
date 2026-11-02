@@ -586,7 +586,11 @@ ${conhecimento(pergunta)}`;
   const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
+    const antes = Object.assign({}, cfg);
     for (const [k, id] of Object.entries(CAMPOS)) cfg[k] = $(id).value.trim();
+    // o navegador às vezes preenche um campo de chave com outra senha salva: confere o formato antes de trocar
+    const conferir = (k, re, nome) => { if (cfg[k] && !re.test(cfg[k])) { anotar('s', `A ${nome} que estava no campo não tem o formato certo, então mantive a anterior. Cole de novo se quiser trocar.`); cfg[k] = antes[k]; $(CAMPOS[k]).value = antes[k] || ''; } };
+    conferir('groq', /^gsk_/, 'chave do Groq (começa com gsk_)'); conferir('ytChave', /^AIza/, 'chave do YouTube (começa com AIza)'); conferir('chave', /^(AIza|AQ\.)/, 'chave do Gemini');
     const marc = [...document.querySelectorAll('#c-rodizio input:checked')].map(i => i.value); if (document.querySelector('#c-rodizio input')) cfg.rodizio = marc.join('|');
     ls.set('vigia-cfg', JSON.stringify(cfg)); $('salvo').textContent = 'Salvo.'; setTimeout(() => $('salvo').textContent = '', 2500);
     carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); ytLigar(); luz('l-ia', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'Pronta' : 'Sem chave', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'ok' : 'meio');
