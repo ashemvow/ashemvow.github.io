@@ -262,7 +262,9 @@ ${conhecimento(pergunta)}`;
   // ---------- escrever no chat (API oficial da Twitch, com a conta conectada) ----------
   let tw = null; // { login, id, canalId }
   async function twitch(url, opt = {}) { const r = await fetch(url, Object.assign({}, opt, { headers: Object.assign({ 'Client-Id': cfg.cliente, Authorization: 'Bearer ' + cfg.token, 'Content-Type': 'application/json' }, opt.headers || {}) })); if (r.status === 401) { tw = null; mostrarConta('expirou'); throw new Error('tw_401'); } return r.json(); }
-  async function prepararTwitch() {
+  let twPronto = Promise.resolve();
+  function prepararTwitch() { twPronto = prepararTwitch2(); return twPronto; }
+  async function prepararTwitch2() {
     if (!cfg.token || !cfg.cliente) { mostrarConta(); return; }
     try {
       const v = await (await fetch('https://id.twitch.tv/oauth2/validate', { headers: { Authorization: 'OAuth ' + cfg.token } })).json();
@@ -336,6 +338,7 @@ ${conhecimento(pergunta)}`;
   const chave = t => String(t).replace(/\s+/g, ' ').trim().slice(0, 60).toLowerCase();
   const foiEu = t => enviadas.includes(chave(t));
   async function escrever(msg) {
+    if ((!tw || !tw.canalId) && cfg.token) { try { await Promise.race([twPronto, new Promise(r => setTimeout(r, 8000))]); } catch (e) { } } // a conta ainda está conectando
     if (!tw || !tw.canalId) { anotar('s', 'Não mandei no chat: conecte uma conta da Twitch na configuração.'); return; }
     if (performance.now() - ultimoEscrito < 3000) await new Promise(r => setTimeout(r, 3000));
     ultimoEscrito = performance.now(); enviadas.push(chave(msg.slice(0, 480))); if (enviadas.length > 30) enviadas.shift();
