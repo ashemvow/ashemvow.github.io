@@ -43,7 +43,7 @@ body.leg #leg{opacity:1;transform:none}
 <script src="content.js"></script>
 <script>
 (() => {
-  const $ = id => document.getElementById(id), B = document.body, canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
+  const $ = id => document.getElementById(id), B = document.body, canal = ((location.hash.match(/canal=([a-z0-9]+)/i) || [])[1] || '').toLowerCase().replace(/1/g, 'l').replace(/0/g, 'o');
   for (let i = 0; i < 14; i++) { const b = document.createElement('i'); b.className = 'brasa'; b.style.left = (Math.random() * 100) + '%'; b.style.animationDelay = (-Math.random() * 6) + 's'; b.style.animationDuration = (4 + Math.random() * 4) + 's'; $('cena').append(b); }
   let digitar = 0, some = 0, ativo = false, ultimo = 0;
   const estado = () => { $('estado').textContent = B.classList.contains('fala') ? 'falando' : ativo ? 'cuidando do chat' : 'cochilando'; B.classList.toggle('dorme', !ativo && !B.classList.contains('fala')); };

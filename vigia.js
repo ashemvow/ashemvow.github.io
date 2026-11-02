@@ -228,7 +228,7 @@ ${conhecimento(pergunta)}`;
   function legenda(ev, dados) {
     filaLegenda = filaLegenda.then(async () => {
       try {
-        const r = await fetch(`${S.inscricao.supabaseUrl}/rest/v1/rpc/vigia_publicar`, { method: 'POST', headers: { apikey: S.inscricao.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: cfg.legenda, p_ev: ev, p_dados: dados || {} }) });
+        const r = await fetch(`${S.inscricao.supabaseUrl}/rest/v1/rpc/vigia_publicar`, { method: 'POST', headers: { apikey: S.inscricao.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: cfg.legenda.toLowerCase().replace(/1/g, 'l').replace(/0/g, 'o'), p_ev: ev, p_dados: dados || {} }) });
         if (!r.ok) throw new Error('erro ' + r.status);
         if (!legendaOk) { legendaOk = true; luz('l-live', 'Ligada', 'ok'); }
       } catch (e) { if (legendaOk !== false) anotar('s', `A legenda da live não conectou (${esc(e.message)}).`); legendaOk = false; luz('l-live', 'Sem conexão', 'erro'); }

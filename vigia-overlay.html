@@ -34,7 +34,7 @@
 <script src="content.js"></script>
 <script>
 (() => {
-  const $ = id => document.getElementById(id), canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
+  const $ = id => document.getElementById(id), canal = ((location.hash.match(/canal=([a-z0-9]+)/i) || [])[1] || '').toLowerCase().replace(/1/g, 'l').replace(/0/g, 'o');
   let digitar = 0, some = 0, ativo = false, sair = 0;
   const aparecer = v => { $('vigia').classList.toggle('off', !v); $('nome').classList.toggle('off', !v); };
   function mostrar(d) {
