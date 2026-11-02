@@ -223,9 +223,11 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- legenda para o OBS ----------
+  let legendaOk = null;
   let canalLegenda = null; // promessa da conexão (uma só, mesmo com várias mensagens ao mesmo tempo)
   async function legenda(ev, dados) {
-    try { if (!canalLegenda) canalLegenda = window.REDE.canal('voz-' + cfg.legenda, () => { }); (await canalLegenda).enviar(ev, dados); } catch (e) { canalLegenda = null; }
+    try { if (!canalLegenda) canalLegenda = window.REDE.canal('voz-' + cfg.legenda, () => { }); (await canalLegenda).enviar(ev, dados); if (!legendaOk) { legendaOk = true; luz('l-live', 'Ligada', 'ok'); } }
+    catch (e) { canalLegenda = null; if (legendaOk !== false) anotar('s', `A legenda da live não conectou (${esc(e.message)}). Vou tentar de novo.`); legendaOk = false; luz('l-live', 'Sem conexão', 'erro'); }
   }
   $('url-cam').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-cam.html#canal=${cfg.legenda}`;
   $('url-legenda').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-overlay.html#canal=${cfg.legenda}`;
@@ -330,11 +332,13 @@ ${conhecimento(pergunta)}`;
     luzChat();
   }
   let chatLendo = false; const luzChat = () => luz('l-chat', chatLendo ? (tw ? 'Lendo e escrevendo' : 'Só lendo') : 'Conectando', chatLendo ? (tw ? 'ok' : 'meio') : 'meio');
-  let ultimoEscrito = -1e9;
+  let ultimoEscrito = -1e9; const enviadas = [];
+  const chave = t => String(t).replace(/\s+/g, ' ').trim().slice(0, 60).toLowerCase();
+  const foiEu = t => enviadas.includes(chave(t));
   async function escrever(msg) {
     if (!tw || !tw.canalId) { anotar('s', 'Não mandei no chat: conecte uma conta da Twitch na configuração.'); return; }
     if (performance.now() - ultimoEscrito < 3000) await new Promise(r => setTimeout(r, 3000));
-    ultimoEscrito = performance.now();
+    ultimoEscrito = performance.now(); enviadas.push(chave(msg.slice(0, 480))); if (enviadas.length > 30) enviadas.shift();
     try { const r = await twitch('https://api.twitch.tv/helix/chat/messages', { method: 'POST', body: JSON.stringify({ broadcaster_id: tw.canalId, sender_id: tw.id, message: msg.slice(0, 480) }) });
       const d = r.data && r.data[0]; if (d && !d.is_sent) anotar('s', `A Twitch segurou a mensagem${d.drop_reason ? ': ' + esc(d.drop_reason.message || '') : ''}. Dê moderador para a conta do bot.`); }
     catch (e) { }
@@ -375,7 +379,8 @@ ${conhecimento(pergunta)}`;
       const alertas = cfg.alertas.split(',').map(sem).filter(Boolean);
       if (alertas.includes(login)) { anotar('s', `Doação: ${esc(texto)}`); entrar({ tipo: 'evento', nick: nomeDoacao(texto) || 'você que apoiou', texto: `alerta de doação: ${texto}` }); return; }
       if (tags.bits) { anotar('s', `${esc(nick)} mandou ${tags.bits} bits`); entrar({ tipo: 'evento', nick, texto: `${nick} mandou ${tags.bits} bits com a mensagem "${texto.replace(/cheer\d+/gi, '').trim()}"` }); return; }
-      if (BOTS.includes(login) || login === sem(cfg.canal) || (tw && login === sem(tw.login))) return;
+      if (BOTS.includes(login)) return;
+      if (tw && login === sem(tw.login) && foiEu(texto)) return; // mensagem que o próprio Vigia mandou
       if (/^!(jogar|corrida|salao|sal\u00e3o|como)/i.test(texto)) { escrever(`@${nick} ${PASSO_A_PASSO()}`); return; }
       if (/^!(links?|site|inscri)/i.test(texto)) { escrever(`@${nick} ${LISTA_LINKS()}`); return; }
       if (texto.startsWith('!')) return;
@@ -394,7 +399,7 @@ ${conhecimento(pergunta)}`;
   // ---------- apresentação (toda vez que assume o chat, e de tempos em tempos) ----------
   const LINKS_APRES = () => `Inscrição no teste: ${SITE_URL}/#inscricao · Apoie por Pix: https://livepix.gg/teecki · Corrida das Cinzas: ${SITE_URL}/salao`;
   const APRES_PRONTA = () => `Oi, chat! Eu sou o Vigia, o guardião desta live enquanto ${cfg.nome} dá uma saída. Aqui a gente acompanha Ashem Vow, um jogo de ação e sobrevivência em pixel art dark fantasy para Android, com doze heróis, seis cenários e dezoito chefes, feito do zero por um desenvolvedor independente. O teste fechado está com inscrições abertas no site do jogo. Se quiser ajudar Ashem Vow a nascer, qualquer Pix faz diferença, e o QR code está aqui na tela. E enquanto ${cfg.nome} não volta, vem correr com o chat na Corrida das Cinzas, lá no Salão do site.`;
-  let ultimaApres = 0, testeApres = false, apresentando = false;
+  let ultimaApres = 0, testeApres = false, apresentando = false, ultimoLinkApres = 0;
   async function apresentar(teste) {
     if (apresentando) return; apresentando = true; testeApres = !!teste; ultimaApres = performance.now();
     let txt = '', link = LINKS_APRES();
@@ -404,7 +409,7 @@ ${conhecimento(pergunta)}`;
     } catch (e) { txt = paraFala(APRES_PRONTA()); }
     if (!txt || txt.length < 120) txt = paraFala(APRES_PRONTA());
     anotar('v', `<b>Vigia (apresentação):</b> ${esc(txt)}`);
-    if (!teste) escrever(link);
+    if (!teste && Date.now() - ultimoLinkApres > 10 * 60000) { ultimoLinkApres = Date.now(); escrever(link); }
     await falarLongo(txt, link);
     apresentando = false; testeApres = false; processar();
   }
@@ -480,6 +485,8 @@ ${conhecimento(pergunta)}`;
     if (cfg.chave && cfg.canal) $('cfg').open = false;
   };
   $('voz-teste').onclick = () => { cfg.voz = $('c-voz').value; cfg.vel = $('c-vel').value; falar(`Oi, chat! Eu sou o Vigia e cuido de vocês enquanto ${$('c-nome').value || cfg.nome} não volta.`); };
+  $('leg-teste').onclick = () => { legenda('m', { a: 1 }); legenda('f', { n: '', p: '', r: 'Teste da legenda: se você está lendo isto na live, o Vigia está ligado ao OBS.', e: 0 }); setTimeout(() => { legenda('x', {}); if (!ausente) legenda('m', { a: 0 }); }, 6000); anotar('s', 'Mandei um teste para a legenda e o quadro AO VIVO. Olhe no OBS.'); };
+  setTimeout(() => legenda('m', { a: ausente ? 1 : 0 }), 1500);
   $('apres-teste').onclick = () => apresentar(true);
   $('teste-ok').onclick = () => { const t = $('teste-msg').value.trim(); if (!t) return; anotar('', `<b>teste:</b> ${esc(t)}`); entrar({ tipo: 'chat', nick: 'teste', texto: t, teste: true }); $('teste-msg').value = ''; };
   $('teste-msg').addEventListener('keydown', e => { if (e.key === 'Enter') $('teste-ok').click(); });

@@ -39,8 +39,9 @@ body.leg #leg{opacity:1;transform:none}
 <div id="zz"><span>Z</span><span>z</span><span>z</span></div>
 <div id="nome">Vigia<small id="estado">cochilando</small></div>
 <div id="leg"></div>
+<div id="sinal" title="sem conexão com o Vigia" style="position:absolute;right:3%;top:5%;width:1.6vmin;height:1.6vmin;border-radius:50%;background:#e04b3c;box-shadow:0 0 1vmin #e04b3c"></div>
 <script src="content.js"></script>
-<script src="rede.js?v=2"></script>
+<script src="rede.js?v=3"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id), B = document.body, canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
@@ -58,7 +59,7 @@ body.leg #leg{opacity:1;transform:none}
     if (ev === 'f') mostrar(d); else if (ev === 'x') calar();
     else if (ev === 'm') { ativo = !!d.a; ultimo = Date.now(); estado(); }
   };
-  const ligar = () => window.REDE.canal('voz-' + canal, ouvir).catch(() => setTimeout(ligar, 5000)); // tenta de novo até conectar
+  const ligar = () => window.REDE.canal('voz-' + canal, ouvir).then(() => { $('sinal').hidden = true; }).catch(() => { $('sinal').hidden = false; setTimeout(ligar, 5000); }); // tenta de novo até conectar
   if (canal) ligar();
   // se o Vigia ficar muito tempo sem dar sinal, volta a cochilar
   setInterval(() => { if (ativo && Date.now() - ultimo > 60000) { ativo = false; estado(); } }, 5000);

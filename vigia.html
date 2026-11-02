@@ -15,7 +15,7 @@ main.vg-adm{max-width:860px;margin:0 auto;padding:3rem 1.2rem 4rem}
 label{color:var(--gold);display:grid;gap:.3rem;font-size:.95rem}
 input,select{width:100%;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;color:var(--bone);font:16px Georgia,serif}
 .dupla{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}@media(max-width:640px){.dupla{grid-template-columns:1fr}}
-.luzes{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}@media(max-width:640px){.luzes{grid-template-columns:1fr 1fr}}
+.luzes{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}@media(max-width:640px){.luzes{grid-template-columns:1fr 1fr}}
 .luz{padding:.6rem .7rem;background:#0c0a09;border:1px solid var(--line);font-size:.9rem}.luz b{display:block;font:400 1.15rem "Pirata One",serif;color:var(--mut)}
 .luz.ok b{color:#9fe08a}.luz.erro b{color:#ff8f80}.luz.meio b{color:#ffd27a}
 #modo{width:100%;font-size:1.5rem;padding:1.1rem;text-align:center}
@@ -43,6 +43,7 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <div class="luz" id="l-voz"><span>Voz</span><b>...</b></div>
       <div class="luz" id="l-obs"><span>OBS</span><b>...</b></div>
       <div class="luz" id="l-salao"><span>Salão</span><b>...</b></div>
+      <div class="luz" id="l-live"><span>Legenda na live</span><b>...</b></div>
     </div>
     <button class="btn red" id="modo">Estou aqui · Vigia em silêncio</button>
     <p class="nota" id="modo-nota">Clique quando sair. Se ligar o OBS abaixo, ele troca sozinho pela cena.</p>
@@ -119,11 +120,12 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     <span class="k">Legenda na live (opcional)</span>
     <p class="nota">Adicione no OBS uma fonte de navegador 1920 × 1080 com este endereço. Ela mostra o que o Vigia está falando.</p>
     <code class="url" id="url-legenda"></code>
+    <div class="row" style="margin-top:.6rem"><button class="btn" id="leg-teste" type="button">Testar a legenda na live</button><span class="nota">Aparece uma frase de teste na legenda e no quadro AO VIVO por 6 segundos.</span></div>
     <p class="nota" style="margin-top:.6rem">Para o Vigia aparecer no quadro "AO VIVO" (no lugar da câmera), use este outro endereço numa fonte de navegador de 480 × 300:</p>
     <code class="url" id="url-cam"></code>
   </div>
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=8"></script>
+<script src="vigia.js?v=9"></script>
 </body></html>
