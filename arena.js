@@ -14,7 +14,9 @@
   let mexeu = 0; addEventListener('mousemove', () => { $('ctrl').classList.remove('some'); clearTimeout(mexeu); mexeu = setTimeout(() => $('ctrl').classList.add('some'), 3000); });
 
   // ---------- estado ----------
-  let codigo = ls.get('salao-admin') || '', sala = null, aberto = false, sessao = 0, mundo = null, IM = null, conectado = false, msgs = 0;
+  // o código pode vir no próprio endereço (arena.html#codigo=...), para o OBS não precisar de clique
+  const doEndereco = decodeURIComponent((location.hash.match(/codigo=([^&]+)/) || [])[1] || '').trim();
+  let codigo = doEndereco || ls.get('salao-admin') || '', sala = null, aberto = false, sessao = 0, mundo = null, IM = null, conectado = false, msgs = 0;
   const cacheChao = {};
   const P = new Array(VAGAS).fill(null); // jogadores por vaga (vaga = vigia)
   let G = novoMundo();
