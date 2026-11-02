@@ -60,7 +60,12 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <label>Como o Vigia chama você<input id="c-nome" placeholder="Teecki"></label>
     </div>
     <div class="dupla">
-      <label>Cérebro<select id="c-cerebro"><option value="pro" selected>Mais inteligente (Gemini Pro; se passar do limite grátis, usa o Flash)</option><option value="flash">Mais rápido (Gemini Flash)</option></select></label>
+      <label>Serviço de inteligência<select id="c-provedor"><option value="groq" selected>Groq (grátis, cerca de 1.000 respostas por dia)</option><option value="gemini">Google Gemini</option></select></label>
+      <label>Chave grátis do Groq<input id="c-groq" type="password" placeholder="começa com gsk_" autocomplete="off"></label>
+    </div>
+    <p class="nota">Pegue a chave do Groq em <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (entre com sua conta Google, clique em "Create API Key" e copie). Ela só aparece uma vez.</p>
+    <div class="dupla">
+      <label>Cérebro do Gemini<select id="c-cerebro"><option value="pro" selected>Mais inteligente (Gemini Pro; se passar do limite grátis, usa o Flash)</option><option value="flash">Mais rápido (Gemini Flash)</option></select></label>
       <label>Pesquisar na internet quando precisar<select id="c-busca"><option value="sim" selected>Sim</option><option value="nao">Não</option></select></label>
     </div>
     <label>Chave grátis do Google Gemini<input id="c-chave" type="password" placeholder="Cole aqui a chave (começa com AIza...)" autocomplete="off"></label>
@@ -108,5 +113,5 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </main>
 <script src="content.js"></script>
 <script src="rede.js"></script>
-<script src="vigia.js?v=4"></script>
+<script src="vigia.js?v=5"></script>
 </body></html>
