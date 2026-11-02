@@ -30,7 +30,7 @@
 .vg{position:relative;width:100%;aspect-ratio:16/9;max-height:80vh;background:#000;border:3px solid var(--gold);box-shadow:0 0 0 2px #000,0 0 60px rgba(155,28,31,.45);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 .vg:fullscreen,.vg.cheia{max-height:none;aspect-ratio:auto;width:100vw;height:100vh;border:0}
 .vg.cheia{position:fixed;inset:0;z-index:50}
-#vg-canvas,#ar-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;cursor:crosshair}
+#vg-canvas,#ar-canvas,#cc-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;cursor:crosshair}
 .vg-tela{position:absolute;inset:0;display:grid;place-items:safe center;background:radial-gradient(70% 80% at 50% 40%,rgba(155,28,31,.3),rgba(12,10,9,.92) 70%);overflow:auto;padding:1rem}
 .vg-menu-in{width:min(100%,860px);text-align:center;display:grid;justify-items:center;gap:.6rem}
 .vg .k{font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ember)}
@@ -140,3 +140,9 @@
 .ar-ups-in button b{font:400 1.15rem/1.05 "Pirata One",serif;color:var(--gold)}.ar-ups-in button span{font-size:.8rem;color:#c9bfae}
 .ar-ups-in button:hover,.ar-ups-in button:focus-visible{border-color:var(--gold);box-shadow:0 0 18px rgba(199,154,79,.35)}
 @media(max-width:560px){.ar-ups-in button span{display:none}.ar-ups-in button b{font-size:1rem}.ar-faixa{top:16%}}
+
+/* corrida */
+.vg.cc{aspect-ratio:16/9}.vg.cc #cc-canvas{cursor:pointer;touch-action:none}
+.vg.cc .vg-l{display:flex;gap:1rem;width:auto}
+@media(max-width:860px){.vg.cc{aspect-ratio:4/3}}
+@media(max-width:560px){.vg.cc{aspect-ratio:1/1}}

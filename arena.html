@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arena da Vigília · tela da live</title>
+<title>Corrida das Cinzas · tela da live</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
@@ -29,20 +29,20 @@ button{font:inherit;cursor:pointer}
 <div id="login">
   <div class="c">
     <p style="letter-spacing:.3em;text-transform:uppercase;color:#c8742a;font-size:.85rem">Tela da live</p>
-    <h1>Arena da Vigília</h1>
-    <p>Abra esta página no seu PC e capture no OBS (fonte de navegador 1920 × 1080). Ela comanda a partida de todo mundo.</p>
+    <h1>Corrida das Cinzas</h1>
+    <p>Abra esta página no seu PC e capture no OBS (fonte de navegador 1920 × 1080). Ela organiza as corridas e mostra todo mundo correndo junto.</p>
     <input id="cod" type="password" placeholder="Código secreto" autocomplete="current-password">
-    <button class="b" id="entrar">Colocar a arena no ar</button>
+    <button class="b" id="entrar">Colocar a corrida no ar</button>
     <p id="msg"></p>
   </div>
 </div>
 <div id="ctrl" class="some">
   <span id="ctrl-st">Conectando...</span>
-  <button class="b2" id="reiniciar">Reiniciar rodada</button>
+  <button class="b2" id="reiniciar">Encerrar corrida</button>
   <button class="b2" id="desligar">Tirar do ar</button>
 </div>
 <script src="content.js"></script>
 <script src="rede.js"></script>
-<script src="arena-comum.js"></script>
-<script src="arena.js"></script>
+<script src="corrida-comum.js"></script>
+<script src="corrida-live.js"></script>
 </body></html>
