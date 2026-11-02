@@ -34,7 +34,7 @@
 .vg-tela{position:absolute;inset:0;display:grid;place-items:safe center;background:radial-gradient(70% 80% at 50% 40%,rgba(155,28,31,.3),rgba(12,10,9,.92) 70%);overflow:auto;padding:1rem}
 .vg-menu-in{width:min(100%,860px);text-align:center;display:grid;justify-items:center;gap:.6rem}
 .vg .k{font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ember)}
-.vg-herois{display:grid;grid-template-columns:repeat(6,1fr);gap:.45rem;width:100%}
+.vg-herois{display:grid;grid-template-columns:repeat(8,1fr);gap:.45rem;width:100%}
 .vg-herois button,.vg-fases button{background:radial-gradient(circle at 50% 75%,rgba(155,28,31,.25),transparent 70%),var(--iron);border:1px solid var(--line);color:var(--mut);font:inherit;font-size:.78rem;line-height:1.15;padding:.35rem .2rem;cursor:pointer;display:grid;justify-items:center;gap:.2rem;transition:.15s}
 .vg-herois img{height:clamp(44px,8vw,78px);width:100%;object-fit:contain;filter:drop-shadow(0 6px 6px rgba(0,0,0,.8))}
 .vg-herois button.on,.vg-fases button.on{border-color:var(--blood2);color:var(--bone);box-shadow:0 0 16px rgba(155,28,31,.5);background:radial-gradient(circle at 50% 75%,rgba(194,42,45,.45),transparent 70%),var(--iron2)}

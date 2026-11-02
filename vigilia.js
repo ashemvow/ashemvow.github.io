@@ -1,28 +1,13 @@
 /* Vigília das Cinzas: mini game de sobrevivência do Salão do Juramento.
-   Usa os retratos dos heróis e as criaturas reais de cada cenário (content.js). */
+   Heróis, criaturas e cenário próprios da Vigília, que não são do jogo (content.js). */
 (() => {
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ALVO = 300; // segundos até o amanhecer
-  const CHAO = { 'Campo de Cinzas': 'g-campo', 'Floresta Morta': 'g-floresta', 'Catedral em Ruínas': 'g-ruinas', 'Pântano de Sangue': 'g-pantano', 'Geleira dos Esquecidos': 'g-gelo', 'Abismo de Brasas': 'g-vulcanica' };
 
-  // estilo de cada herói na Vigília (inspirado na habilidade dele no jogo)
-  const ESTILO = {
-    'Garrick': { arma: 'aura', cor: '#ff7a2a', txt: 'Aura de brasas em volta dele' },
-    'Yurinn': { arma: 'bolt', cor: '#ff5a8a', homing: 1, count: 2, txt: 'Fios de brasa que perseguem' },
-    'Brann': { arma: 'strike', cor: '#ffe6a8', hp: 40, vel: -.1, txt: 'Pilares de luz. Muita vida, passos lentos' },
-    'Selka': { arma: 'orbit', cor: '#b98cff', hp: -20, vel: .15, txt: 'Lâminas giratórias. Rápida e frágil' },
-    'Orun': { arma: 'bolt', cor: '#9fd6ff', homing: 1, pierce: 1, txt: 'Almas que caçam e atravessam' },
-    'Sombras das Cinzas': { arma: 'bolt', cor: '#ff6a1a', boom: 60, txt: 'Bolas de fogo que explodem' },
-    'Ysolde': { arma: 'bolt', cor: '#8fe3ff', slow: .45, count: 2, txt: 'Dardos de gelo que atrasam' },
-    'Kaelor': { arma: 'bolt', cor: '#7fd36a', pierce: 2, txt: 'Espinhos que rasgam a fila' },
-    'Mordrek': { arma: 'pool', cor: '#8cff4a', txt: 'Poças de veneno' },
-    'Lyra': { arma: 'bolt', cor: '#dfe8ff', pierce: 3, speed: 1.5, txt: 'Flechas que atravessam a fila inteira' },
-    'Irmão Brasa': { arma: 'aura', cor: '#ff4a2a', slow: .3, txt: 'Círculo de brasas que atrasa' },
-    'Vesper': { arma: 'pulse', cor: '#c84a6a', txt: 'Badaladas que ferem em volta' }
-  };
-  const HEROIS = S.personagens.filter(p => !p.tag && ESTILO[p.nome]);
-  const FASES = S.criaturas;
+  // heróis exclusivos da Vigília (não são do jogo), definidos em content.js
+  const HEROIS = S.vigiliaHerois, ESTILO = Object.fromEntries(HEROIS.map(h => [h.nome, h]));
+  const FASES = [S.vigiliaFase]; // um cenário só
 
   // ---------- imagens ----------
   const IMG = {};
@@ -41,9 +26,9 @@
 
   // ---------- tela de escolha ----------
   const heroBox = $('vg-herois'), faseBox = $('vg-fases');
-  heroBox.innerHTML = HEROIS.map((h, i) => `<button type="button" data-i="${i}" class="${i ? '' : 'on'}"><img src="${esc(h.skins[0].img)}" alt="" loading="lazy"><span>${esc(h.nome)}</span></button>`).join('');
+  heroBox.innerHTML = HEROIS.map((h, i) => `<button type="button" data-i="${i}" class="${i ? '' : 'on'}"><img src="${esc(h.img)}" alt="" loading="lazy"><span>${esc(h.nome)}</span></button>`).join('');
   faseBox.innerHTML = FASES.map((f, i) => `<button type="button" data-i="${i}" class="${i ? '' : 'on'}">${esc(f.fase)}</button>`).join('');
-  const info = () => { const h = HEROIS[escolhaH]; $('vg-info').innerHTML = `<b>${esc(h.nome)}</b> · ${esc(ESTILO[h.nome].txt)}`; };
+  const info = () => { const h = HEROIS[escolhaH]; $('vg-info').innerHTML = `<b>${esc(h.nome)}, ${esc(h.titulo)}</b> · ${esc(h.txt)}`; };
   heroBox.onclick = e => { const b = e.target.closest('button'); if (!b) return; escolhaH = +b.dataset.i; heroBox.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); info(); };
   faseBox.onclick = e => { const b = e.target.closest('button'); if (!b) return; escolhaF = +b.dataset.i; faseBox.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
   info();
@@ -58,7 +43,7 @@
       pulse: { cd: 2.2, dmg: 30, r: 190 },
       pool: { cd: 2.0, dps: 34, r: 70, dur: 3.2 }
     }[tipo];
-    return Object.assign({ tipo, cor, t: 0, nivel: 1 }, base, o);
+    return Object.assign({ tipo, cor, t: 0, nivel: 1 }, base, Object.fromEntries(Object.entries(o).filter(([, x]) => x !== undefined)));
   }
   const UPS = [
     { id: 'dano', nome: 'Fúria das Cinzas', d: '+25% de dano em tudo', f: g => { g.mult *= 1.25; } },
@@ -81,7 +66,7 @@
     const h = HEROIS[escolhaH], fase = FASES[escolhaF], es = ESTILO[h.nome];
     $('vg-menu').hidden = true; $('vg-fim').hidden = true; $('vg-carregando').hidden = false;
     const mobs = fase.criaturas.filter(c => !c.chefe), chefes = fase.criaturas.filter(c => c.chefe);
-    const imgs = await Promise.all([load(h.skins[0].img), load('assets/' + CHAO[fase.fase] + '.webp'), ...mobs.map(m => load(m.img)), ...chefes.map(m => load(m.img))]);
+    const imgs = await Promise.all([load(h.img), load(fase.chao), ...mobs.map(m => load(m.img)), ...chefes.map(m => load(m.img))]);
     $('vg-carregando').hidden = true;
     G = {
       h, fase, t: 0, abates: 0, nivel: 1, xp: 0, prox: 6, mult: 1, cad: 1, area: 1, ima: 1, regen: 0,
@@ -91,7 +76,6 @@
       armas: [novaArma(es.arma, es.cor, { homing: es.homing || 0, count: es.count || (es.arma === 'bolt' ? 1 : undefined), pierce: es.pierce || 0, speed: 520 * (es.speed || 1), boom: es.boom || 0, slow: es.slow || 0 })],
       inim: [], proj: [], gemas: [], fx: [], textos: [], spawn: 0, chefeIdx: 0, aviso: null, pegos: new Set()
     };
-    if (G.armas[0].count === undefined) delete G.armas[0].count;
     $('vg-hud').hidden = false; $('vg-pausa').hidden = false; paused = false;
     resize(); cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(loop);
     cv.focus();
@@ -175,7 +159,7 @@
   function criarInimigo(chefe) {
     const g = G, ang = rnd(0, Math.PI * 2), dist = Math.hypot(W, H) / 2 + 80;
     if (chefe) { const c = g.chefes[(g.chefeIdx - 1) % g.chefes.length];
-      g.inim.push({ chefe: 1, img: c.img, nome: c.nome, x: g.p.x + Math.cos(ang) * dist, y: g.p.y + Math.sin(ang) * dist, r: 70, tam: 190, hp: 650 * (1 + g.t / 90), hpMax: 650 * (1 + g.t / 90), vel: 62 + g.t / 10, dano: 26, fase: 0 });
+      g.inim.push({ chefe: 1, img: c.img, nome: c.nome, x: g.p.x + Math.cos(ang) * dist, y: g.p.y + Math.sin(ang) * dist, r: Math.min(70, W * .14), tam: Math.min(190, W * .38), hp: 650 * (1 + g.t / 90), hpMax: 650 * (1 + g.t / 90), vel: 62 + g.t / 10, dano: 26, fase: 0 });
       g.aviso = { txt: 'Chefe: ' + c.nome, t: 3 }; return; }
     const m = g.mobImgs[Math.floor(Math.random() * g.mobImgs.length)], forte = 1 + g.t / 55;
     g.inim.push({ img: m.img, x: g.p.x + Math.cos(ang) * dist, y: g.p.y + Math.sin(ang) * dist, r: 22, tam: rnd(58, 74), hp: 11 * forte, hpMax: 11 * forte, vel: rnd(66, 100) + g.t * .35, dano: 7 + g.t / 18, fase: rnd(0, 6) });

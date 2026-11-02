@@ -43,7 +43,7 @@ li.vz{display:block;color:#8f8576;font-size:18px;text-align:center}
 const S = window.SITE, I = S.inscricao, $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const rpc = async (n, b) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); if (!r.ok) throw new Error(await r.text()); return r.json(); };
-const RET = Object.fromEntries(S.personagens.map(p => [p.nome, p.skins[0].img]));
+const RET = Object.fromEntries([...S.personagens.map(p => [p.nome, p.skins[0].img]), ...S.vigiliaHerois.map(h => [h.nome, h.img])]);
 let st = { aberto: false, sessao: -1 }, ultimo = 0, primeiro = true, topAnt = '';
 async function status() {
   try { const s = await rpc('salao_status');

@@ -116,10 +116,9 @@
       <div class="qz-txt"><p class="k">Seu juramento</p><h3>${esc(h.nome)}</h3><p class="tit">${esc(h.titulo)}</p><p class="frase">${esc(p.frase)}</p>
       <p class="hab"><b>${esc(h.habilidade)}.</b> ${esc(h.descricao.replace(/^(Herói|Exclusiv)[^.]*\.\s*/i, ''))}</p>
       <div class="qz-sk">${h.habilidades.map(s => `<figure><img src="${esc(s.img)}" alt=""><figcaption>${esc(s.nome)}</figcaption></figure>`).join('')}</div>
-      <div class="btns"><button type="button" class="btn red" id="qz-share">Compartilhar</button><button type="button" class="btn" id="qz-again">Refazer</button><a class="btn" href="#vigilia" id="qz-jogar">Jogar com ${esc(h.nome)}</a></div></div></div>`;
+      <div class="btns"><button type="button" class="btn red" id="qz-share">Compartilhar</button><button type="button" class="btn" id="qz-again">Refazer</button><a class="btn" href="#vigilia">Jogar a Vigília</a></div></div></div>`;
     $('qz-share').onclick = () => compartilhar(`Fiz o quiz de Ashem Vow e meu herói é ${h.nome}, ${h.titulo}. E o seu?`, location.origin + location.pathname + '#quiz');
     $('qz-again').onclick = () => { qi = 0; pts = {}; pergunta(); };
-    $('qz-jogar').onclick = () => { const b = document.querySelector(`#vg-herois button img[src="${h.skins[0].img}"]`); if (b) b.closest('button').click(); };
     registrar('quiz', h.nome, 0);
   }
   quizInicio();
