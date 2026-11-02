@@ -65,7 +65,8 @@ ${conhecimento()}`;
 
   // ---------- inteligência (Gemini) ----------
   // cérebro: tenta o Pro (mais inteligente); se passar do limite grátis, usa o Flash por um tempo
-  let PRO = ['gemini-pro-latest', 'gemini-2.5-pro'], FLASH = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  let modeloAtual = '';
+  let PRO = ['gemini-pro-latest', 'gemini-2.5-pro'], FLASH = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash-lite'];
   // pergunta ao Google quais modelos esta chave pode usar (e confere se a chave funciona)
   async function descobrirModelos() {
     if (!cfg.chave) { luz('l-ia', 'Sem chave', 'meio'); return; }
@@ -74,15 +75,18 @@ ${conhecimento()}`;
       const j = await r.json().catch(() => ({}));
       if (!r.ok) { const msg = (j.error && j.error.message) || ('erro ' + r.status); luz('l-ia', 'Chave com problema', 'erro'); anotar('s', `O Google recusou a chave: ${esc(msg)}`); return; }
       const nomes = (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')).map(m => m.name.replace(/^models\//, ''))
-        .filter(n => /^gemini/.test(n) && !/(tts|image|audio|live|embedding|vision|learnlm|robotics|computer|lite)/i.test(n));
+        .filter(n => /^gemini/.test(n) && !/(tts|image|audio|live|embedding|vision|learnlm|robotics|computer)/i.test(n));
       const versao = n => { const v = n.match(/gemini-(\d+(?:\.\d+)?)/); return v ? parseFloat(v[1]) : (/latest/.test(n) ? 99 : 0); };
       const ord = arr => arr.sort((a, b) => versao(b) - versao(a) || (/preview|exp/.test(a) ? 1 : 0) - (/preview|exp/.test(b) ? 1 : 0));
-      const pro = ord(nomes.filter(n => /pro/.test(n))), flash = ord(nomes.filter(n => /flash/.test(n)));
-      if (pro.length) PRO = pro.slice(0, 3); if (flash.length) FLASH = flash.slice(0, 4);
+      // modelos estáveis primeiro (os novos e "preview" muitas vezes não têm cota grátis); "lite" por último, que costuma ter mais cota grátis
+      const estavel = n => !/preview|exp/.test(n);
+      const pro = ord(nomes.filter(n => /pro/.test(n))), flash = ord(nomes.filter(n => /flash/.test(n) && !/lite/.test(n))), lite = ord(nomes.filter(n => /flash-lite/.test(n)));
+      if (pro.length) PRO = [...pro.filter(estavel), ...pro.filter(n => !estavel(n))].slice(0, 4);
+      if (flash.length || lite.length) FLASH = [...flash.filter(estavel), ...flash.filter(n => !estavel(n)), ...lite.filter(estavel), ...lite.filter(n => !estavel(n))];
       luz('l-ia', 'Chave ok', 'ok'); anotar('s', `Chave funcionando. Modelos: ${esc([PRO[0], FLASH[0]].filter(Boolean).join(' e '))}.`);
     } catch (e) { luz('l-ia', 'Sem conexão', 'erro'); anotar('s', 'Não consegui falar com o Google para conferir a chave. Veja se a internet ou algum bloqueador está impedindo.'); }
   }
-  const sumiu = new Set(), funciona = {}; let ultimaMsg = ''; let proDescansa = 0; const historia = [];
+  const sumiu = new Set(), funciona = {}, semCota = {}; let ultimaMsg = ''; let proDescansa = 0; const historia = [];
   async function chamar(m, contents, extra) {
     const gen = { temperature: .75, maxOutputTokens: 2048 };
     if (extra.pensar) gen.thinkingConfig = { thinkingBudget: /pro/.test(m) ? 2048 : 1024 };
@@ -97,7 +101,7 @@ ${conhecimento()}`;
     if (!cfg.chave) throw new Error('sem_chave');
     const contents = [...historia, { role: 'user', parts: [{ text: pedido }] }];
     const usarPro = cfg.cerebro !== 'flash' && Date.now() > proDescansa;
-    const fila = (usarPro ? [...PRO, ...FLASH] : FLASH).filter(m => !sumiu.has(m));
+    const fila = (usarPro ? [...PRO, ...FLASH] : FLASH).filter(m => !sumiu.has(m) && !(semCota[m] > Date.now()));
     let ultimoErro = 'ia_sem_modelo';
     for (const m of fila) {
       // tenta com raciocínio e pesquisa; se o modelo não aceitar, tenta mais simples
@@ -106,7 +110,7 @@ ${conhecimento()}`;
       for (const extra of tentativas) {
         const r = await chamar(m, contents, extra);
         if (r.st === 404) { sumiu.add(m); break; }
-        if (r.st === 429 || r.erro === 'RESOURCE_EXHAUSTED') { ultimoErro = 'RESOURCE_EXHAUSTED'; if (PRO.includes(m)) proDescansa = Date.now() + 15 * 60000; break; }
+        if (r.st === 429 || r.erro === 'RESOURCE_EXHAUSTED') { ultimoErro = 'RESOURCE_EXHAUSTED'; semCota[m] = Date.now() + (/limit: 0|free_tier/i.test(ultimaMsg) ? 6 * 3600000 : 10 * 60000); break; } // sem cota: pula esse modelo por um tempo e tenta o próximo
         if (r.st === 400 && /api key|api_key/i.test(ultimaMsg)) throw new Error('CHAVE_INVALIDA');
         if (r.st === 403) throw new Error(r.erro || 'PERMISSION_DENIED');
         if (r.st === 400) { ultimoErro = r.erro || 'ia_400'; continue; }
@@ -114,7 +118,7 @@ ${conhecimento()}`;
         if (!r.txt) { ultimoErro = 'ia_vazia'; continue; }
         funciona[m] = { i: todas.indexOf(extra) };
         historia.push({ role: 'user', parts: [{ text: pedido }] }, { role: 'model', parts: [{ text: r.txt }] }); while (historia.length > 20) historia.shift();
-        luz('l-ia', PRO.includes(m) ? 'Pro' : 'Flash', 'ok'); return r.txt;
+        luz('l-ia', PRO.includes(m) ? 'Pro' : /lite/.test(m) ? 'Flash-Lite' : 'Flash', 'ok'); if (modeloAtual !== m) { modeloAtual = m; anotar('s', `Respondendo com ${esc(m)}.`); } return r.txt;
       }
     }
     throw new Error(ultimoErro);
