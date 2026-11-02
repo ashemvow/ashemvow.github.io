@@ -432,7 +432,7 @@ ${conhecimento(pergunta)}`;
     $('modo-nota').textContent = origem === 'obs' ? 'Trocado pela cena do OBS.' : v ? 'Clique quando voltar.' : 'Clique quando sair.';
     anotar('s', v ? 'Vigia assumiu o chat.' : 'Vigia ficou em silêncio.');
     fila.length = 0;
-    if (v) { apresentar(); if (!salao.aberto && cfg.autoSalao !== 'nao') abrirSalao('você saiu'); }
+    if (v) { ultimaTroca = Date.now(); apresentar(); if (!salao.aberto && cfg.autoSalao !== 'nao') abrirSalao('você saiu'); }
     else { try { speechSynthesis.cancel(); } catch (e) { } legenda('x', {}); }
     legenda('m', { a: v ? 1 : 0 });
   }
@@ -465,6 +465,7 @@ ${conhecimento(pergunta)}`;
     if (!nome) return; cenaAtual = nome; luz('l-obs', 'Cena: ' + nome, 'ok');
     if (trocandoEu && sem(nome) === sem(trocandoEu)) { trocandoEu = ''; return; } // fui eu que troquei (rodízio)
     const fora = cenasFora().includes(sem(nome));
+    if (ausente && rodizio().some(n => sem(n) === sem(nome))) { ultimaTroca = Date.now(); return; } // cena do rodízio: continua cuidando do chat (para voltar, clique no botão)
     if (fora && !ausente) ultimaTroca = Date.now();
     definirAusente(fora, 'obs'); // troca feita por você: cena de ausência liga o Vigia, qualquer outra quer dizer que você voltou
   }
