@@ -41,7 +41,6 @@ body.leg #leg{opacity:1;transform:none}
 <div id="leg"></div>
 <div id="sinal" title="sem conexão com o Vigia" style="position:absolute;right:3%;top:5%;width:1.6vmin;height:1.6vmin;border-radius:50%;background:#e04b3c;box-shadow:0 0 1vmin #e04b3c"></div>
 <script src="content.js"></script>
-<script src="rede.js?v=3"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id), B = document.body, canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
@@ -59,8 +58,19 @@ body.leg #leg{opacity:1;transform:none}
     if (ev === 'f') mostrar(d); else if (ev === 'x') calar();
     else if (ev === 'm') { ativo = !!d.a; ultimo = Date.now(); estado(); }
   };
-  const ligar = () => window.REDE.canal('voz-' + canal, ouvir).then(() => { $('sinal').hidden = true; }).catch(() => { $('sinal').hidden = false; setTimeout(ligar, 5000); }); // tenta de novo até conectar
-  if (canal) ligar();
+  const SINAL = ok => { $('sinal').hidden = ok; };
+  // lê as falas do Vigia no banco (a cada 0,7 s)
+  const I = window.SITE.inscricao; let apos = 0, erros = 0;
+  async function ler() {
+    try {
+      const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/vigia_ler`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: canal, p_apos: apos }) });
+      if (!r.ok) throw new Error(r.status); const j = await r.json(); erros = 0; SINAL(true);
+      for (const e of j.ev || []) ouvir(e.ev, e.d || {});
+      apos = Math.max(apos, j.ultimo || 0);
+    } catch (e) { if (++erros > 3) SINAL(false); }
+    setTimeout(ler, 700);
+  }
+  if (canal) ler();
   // se o Vigia ficar muito tempo sem dar sinal, volta a cochilar
   setInterval(() => { if (ativo && Date.now() - ultimo > 60000) { ativo = false; estado(); } }, 5000);
   estado();

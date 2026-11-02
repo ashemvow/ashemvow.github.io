@@ -110,7 +110,7 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <label>Cenas em que você está ausente<input id="c-cenas" placeholder="tela ja volto, Apresentação do jogo"></label>
     </div>
     <span class="k" style="margin-top:.6rem">Rodízio de cenas enquanto você está fora</span>
-    <p class="nota">Marque as cenas que o Vigia deve ir alternando (por exemplo: tela ja volto e as de apresentação do jogo). A lista aparece quando o OBS estiver conectado. Quando você voltar para a sua cena de gameplay, o rodízio para.</p>
+    <p class="nota">Marque as cenas que o Vigia deve ir alternando enquanto você está fora. Você sai trocando para uma "cena em que você está ausente" (ou no botão); quando você mesmo trocar de cena de novo, ele entende que você voltou e o rodízio para. A lista aparece quando o OBS estiver conectado.</p>
     <div id="c-rodizio" style="display:grid;gap:.35rem"><span class="nota">Conecte o OBS para ver as cenas.</span></div>
     <label>Tempo em cada cena<select id="c-rodmin"><option value="2">2 minutos</option><option value="3">3 minutos</option><option value="4" selected>4 minutos</option><option value="6">6 minutos</option><option value="10">10 minutos</option></select></label>
     <div class="row"><button class="btn red" id="salvar">Salvar e conectar</button><span class="nota" id="salvo"></span></div>
@@ -127,5 +127,5 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=11"></script>
+<script src="vigia.js?v=12"></script>
 </body></html>

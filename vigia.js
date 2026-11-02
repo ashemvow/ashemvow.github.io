@@ -223,13 +223,18 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- legenda para o OBS ----------
-  let legendaOk = null;
-  let canalLegenda = null; // promessa da conexão (uma só, mesmo com várias mensagens ao mesmo tempo)
-  async function legenda(ev, dados) {
-    try { if (!canalLegenda) canalLegenda = window.REDE.canal('voz-' + cfg.legenda, () => { }); (await canalLegenda).enviar(ev, dados); if (!legendaOk) { legendaOk = true; luz('l-live', 'Ligada', 'ok'); } }
-    catch (e) { canalLegenda = null; if (legendaOk !== false) anotar('s', `A legenda da live não conectou (${esc(e.message)}). Vou tentar de novo.`); legendaOk = false; luz('l-live', 'Sem conexão', 'erro'); }
+  // as falas vão para o banco; a legenda e o quadro AO VIVO do OBS leem de lá (mais garantido que o tempo real)
+  let legendaOk = null, filaLegenda = Promise.resolve();
+  function legenda(ev, dados) {
+    filaLegenda = filaLegenda.then(async () => {
+      try {
+        const r = await fetch(`${S.inscricao.supabaseUrl}/rest/v1/rpc/vigia_publicar`, { method: 'POST', headers: { apikey: S.inscricao.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: cfg.legenda, p_ev: ev, p_dados: dados || {} }) });
+        if (!r.ok) throw new Error('erro ' + r.status);
+        if (!legendaOk) { legendaOk = true; luz('l-live', 'Ligada', 'ok'); }
+      } catch (e) { if (legendaOk !== false) anotar('s', `A legenda da live não conectou (${esc(e.message)}).`); legendaOk = false; luz('l-live', 'Sem conexão', 'erro'); }
+    });
+    return filaLegenda;
   }
-  $('url-cam').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-cam.html#canal=${cfg.legenda}`;
   $('url-legenda').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-overlay.html#canal=${cfg.legenda}`;
 
   // ---------- fila ----------
@@ -453,7 +458,7 @@ ${conhecimento(pergunta)}`;
     obs.onclose = e => { luz('l-obs', e.code === 4009 ? 'Senha errada' : 'Desligado', 'erro'); if (e.code !== 4009) setTimeout(conectarOBS, 10000); };
   }
   // cenas em que você está fora: as da lista + as do rodízio
-  const cenasFora = () => [...cfg.cenas.replace(/[()"]/g, '').split(/,|;|\s+e\s+/), ...rodizio()].map(sem).filter(Boolean); // aceita vírgula, ponto e vírgula ou "e"
+  const cenasFora = () => cfg.cenas.replace(/[()"]/g, '').split(/,|;|\s+e\s+/).map(sem).filter(Boolean); // aceita vírgula, ponto e vírgula ou "e"
   const rodizio = () => (cfg.rodizio || '').split('|').map(s => s.trim()).filter(Boolean);
   let cenaAtual = '', trocandoEu = '', ultimaTroca = 0;
   function cena(nome) {
@@ -461,16 +466,16 @@ ${conhecimento(pergunta)}`;
     if (trocandoEu && sem(nome) === sem(trocandoEu)) { trocandoEu = ''; return; } // fui eu que troquei (rodízio)
     const fora = cenasFora().includes(sem(nome));
     if (fora && !ausente) ultimaTroca = Date.now();
-    definirAusente(fora, 'obs');
+    definirAusente(fora, 'obs'); // troca feita por você: cena de ausência liga o Vigia, qualquer outra quer dizer que você voltou
   }
   // ---------- rodízio de cenas enquanto você está fora ----------
   function trocarCena(nome) { if (!obs || obs.readyState !== 1) return; trocandoEu = nome; ultimaTroca = Date.now(); obs.send(JSON.stringify({ op: 6, d: { requestType: 'SetCurrentProgramScene', requestId: 'troca', requestData: { sceneName: nome } } })); anotar('s', `Troquei para a cena "${esc(nome)}".`); }
   setInterval(() => {
     const lista = rodizio(), min = +cfg.rodizioMin || 4;
-    if (!ausente || lista.length < 2 || !obs || obs.readyState !== 1 || falando || apresentando) return;
+    if (!ausente || lista.length < 1 || !obs || obs.readyState !== 1 || falando || apresentando) return;
     if (Date.now() - ultimaTroca < min * 60000) return;
     const i = lista.findIndex(n => sem(n) === sem(cenaAtual));
-    trocarCena(lista[(i + 1) % lista.length]);
+    trocarCena(lista[i < 0 ? 0 : (i + 1) % lista.length]);
   }, 5000);
   function listaCenas(nomes) {
     const box = $('c-rodizio'); if (!box) return; const marcadas = rodizio().map(sem);

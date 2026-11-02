@@ -32,7 +32,6 @@
 <div id="nome" class="off">Vigia</div>
 <div id="balao" class="off"><div class="perg" id="perg" hidden></div><div class="resp" id="resp"></div><div class="link" id="link" hidden></div></div>
 <script src="content.js"></script>
-<script src="rede.js?v=2"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id), canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
@@ -51,8 +50,19 @@
     if (ev === 'f') mostrar(d); else if (ev === 'x') calar();
     else if (ev === 'm') { ativo = !!d.a; if (ativo) aparecer(true); else if ($('balao').classList.contains('off')) aparecer(false); }
   };
-  const ligar = () => window.REDE.canal('voz-' + canal, ouvir).catch(() => setTimeout(ligar, 5000)); // tenta de novo até conectar
-  if (canal) ligar();
+  const SINAL = () => { };
+  // lê as falas do Vigia no banco (a cada 0,7 s)
+  const I = window.SITE.inscricao; let apos = 0, erros = 0;
+  async function ler() {
+    try {
+      const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/vigia_ler`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: canal, p_apos: apos }) });
+      if (!r.ok) throw new Error(r.status); const j = await r.json(); erros = 0; SINAL(true);
+      for (const e of j.ev || []) ouvir(e.ev, e.d || {});
+      apos = Math.max(apos, j.ultimo || 0);
+    } catch (e) { if (++erros > 3) SINAL(false); }
+    setTimeout(ler, 700);
+  }
+  if (canal) ler();
 })();
 </script>
 </body></html>
