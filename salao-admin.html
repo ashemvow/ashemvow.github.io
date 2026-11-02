@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Controle do Salão · Ashem Vow</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+[hidden]{display:none!important}
+main.adm{max-width:640px;margin:0 auto;padding:4rem 1.2rem}
+.adm h1{font-size:3rem;line-height:1}.adm .k{color:var(--ember);letter-spacing:.3em;text-transform:uppercase;font-size:.85rem}
+.card{margin-top:1.4rem;padding:1.4rem;background:linear-gradient(180deg,var(--iron2),var(--iron));border:1px solid var(--line);border-top:3px solid var(--blood2);display:grid;gap:.8rem}
+label{color:var(--gold)}input{width:100%;padding:.7rem .9rem;background:#000;border:1px solid #3a302d;color:var(--bone);font:18px Georgia,serif}
+.st{font-family:"Pirata One",serif;font-size:2.4rem}.st.on{color:#ff8f80}.st.off{color:var(--mut)}
+.grande{width:100%;text-align:center;font-size:1.3rem;padding:1rem}
+.msg{color:var(--ember);min-height:1.4em}
+ul{list-style:none;padding:0;display:grid;gap:.3rem}li{padding:.4rem .7rem;background:#0c0a09;border:1px solid var(--line);font-size:.95rem}
+</style>
+</head>
+<body>
+<main class="adm">
+  <p class="k">Só para você</p>
+  <h1>Controle do Salão</h1>
+  <div class="card" id="login">
+    <label for="cod">Código secreto</label><input id="cod" type="password" autocomplete="current-password">
+    <button class="btn red" id="entrar">Entrar</button><p class="msg" id="m1"></p>
+  </div>
+  <div id="painel" hidden>
+    <div class="card">
+      <span class="k">Agora</span><div class="st" id="st">...</div>
+      <label for="ev">Atração da noite (aparece no site)</label><input id="ev" maxlength="80" placeholder="ex.: Torneio da Vigília · quem chegar ao amanhecer?">
+      <button class="btn red grande" id="abrir">Abrir o Salão (comecei a live)</button>
+      <button class="btn grande" id="fechar">Fechar o Salão (terminei a live)</button>
+      <p class="msg" id="m2"></p>
+    </div>
+    <div class="card"><span class="k">Últimos no Salão (esta live)</span><ul id="ev-lista"><li>Nada ainda.</li></ul></div>
+    <p style="margin-top:1rem"><a href="salao.html" style="color:var(--ember)">Abrir o Salão</a> · <button class="btn" id="sair" style="padding:.2rem .8rem">Sair deste aparelho</button></p>
+  </div>
+</main>
+<script src="content.js"></script>
+<script>
+const I = window.SITE.inscricao, $ = id => document.getElementById(id), K = 'salao-admin';
+const rpc = async (n, b) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); const t = await r.text(); if (!r.ok) throw new Error(t); return t ? JSON.parse(t) : null; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let codigo = ''; try { codigo = localStorage.getItem(K) || ''; } catch (e) { }
+function mostrar(s) { $('st').textContent = s.aberto ? `Aberto · live nº ${s.sessao}` : 'Fechado'; $('st').className = 'st ' + (s.aberto ? 'on' : 'off'); if (s.evento && !$('ev').value) $('ev').value = s.evento; }
+async function definir(aberto) {
+  $('m2').textContent = aberto ? 'Abrindo...' : 'Fechando...';
+  try { const s = await rpc('salao_definir', { p_codigo: codigo, p_aberto: aberto, p_evento: $('ev').value.trim() || null }); mostrar(s); $('m2').textContent = aberto ? 'Salão aberto. O ranking desta live começou do zero.' : 'Salão fechado.'; eventos(); }
+  catch (e) { $('m2').textContent = /codigo_invalido/.test(e.message) ? 'Código errado.' : 'Não deu certo. Tente de novo.'; }
+}
+async function entrar() {
+  codigo = $('cod').value.trim() || codigo; $('m1').textContent = 'Conferindo...';
+  try { const s = await rpc('salao_status'); // confere o código mantendo o estado atual
+    await rpc('salao_definir', { p_codigo: codigo, p_aberto: s.aberto, p_evento: null });
+    try { localStorage.setItem(K, codigo); } catch (e) { }
+    $('login').hidden = true; $('painel').hidden = false; mostrar(s); eventos(); }
+  catch (e) { $('m1').textContent = /codigo_invalido/.test(e.message) ? 'Código errado.' : 'Sem conexão. Tente de novo.'; }
+}
+async function eventos() {
+  try { const l = await rpc('eventos_salao', { p_apos: 0 });
+    $('ev-lista').innerHTML = l.length ? l.map(v => `<li><b>${esc(v.nick)}</b> · ${v.tipo === 'vigilia' ? `${v.pontos} pontos com ${esc(v.texto)}` : v.tipo === 'quiz' ? `é ${esc(v.texto)}` : `${v.pontos}/10 chefes`}</li>`).join('') : '<li>Nada ainda.</li>'; } catch (e) { }
+}
+$('entrar').onclick = entrar; $('cod').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+$('abrir').onclick = () => definir(true); $('fechar').onclick = () => definir(false);
+$('sair').onclick = () => { try { localStorage.removeItem(K); } catch (e) { } location.reload(); };
+if (codigo) entrar();
+setInterval(() => { if (!$('painel').hidden) eventos(); }, 10000);
+</script>
+</body></html>

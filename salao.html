@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Salão do Juramento · Ashem Vow</title>
+<meta name="description" content="Mini game, quiz e desafios de Ashem Vow, abertos durante as lives. Jogue com o chat e entre no ranking da noite.">
+<meta property="og:title" content="Salão do Juramento · Ashem Vow"><meta property="og:image" content="assets/og-image.jpg"><meta property="og:description" content="Sobreviva à Vigília das Cinzas, descubra qual herói você é e dispute o ranking da live.">
+<meta name="theme-color" content="#0c0a09">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="salao.css">
+</head>
+<body>
+<canvas id="embers" aria-hidden="true"></canvas>
+<header class="nav solid" id="nav">
+  <a class="logo" href="index.html"><img src="assets/emblema.webp" alt="" width="40" height="40">Ashem Vow</a>
+  <button id="menu" class="menu" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav id="links"><a href="#vigilia">Vigília</a><a href="#quiz">Qual herói é você?</a><a href="#chefes">Que chefe é esse?</a><a href="#ranking">Ranking</a><a href="index.html">Site do jogo</a><a class="nav-cta" href="index.html#inscricao">Inscreva-se</a></nav>
+</header>
+
+<section class="sl-topo">
+  <div class="sl-topo-in">
+    <p class="selo" id="sl-selo"><i aria-hidden="true"></i><span id="sl-estado">Verificando o Salão...</span></p>
+    <h1 class="sl-h1">Salão do <span>Juramento</span></h1>
+    <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
+    <p class="frase" id="sl-evento">Jogue com o chat durante as lives de Ashem Vow.</p>
+    <p class="chamada">Sobreviva à Vigília das Cinzas, descubra qual herói você é e prove que conhece os chefes. Quem joga aparece na tela da live.</p>
+    <div class="sl-nick" id="sl-nickbox">
+      <label for="sl-nick">Seu nome no chat da Twitch</label>
+      <div><input id="sl-nick" maxlength="16" autocomplete="nickname" placeholder="ex.: corvo_rubro"><button type="button" class="btn red" id="sl-nick-ok">Entrar no Salão</button></div>
+      <p class="sl-nota" id="sl-nick-msg">É com esse nome que você aparece no ranking e na live.</p>
+    </div>
+  </div>
+</section>
+
+<div class="sl-fechado" id="sl-fechado" hidden>
+  <div class="sl-fechado-in">
+    <img src="assets/emblema.webp" alt="" width="96" height="96">
+    <h2>O Salão está fechado.</h2>
+    <p>Ele abre só durante as lives de Ashem Vow. Siga o canal para saber quando o próximo juramento começa.</p>
+    <div class="btns" id="sl-redes"></div>
+    <p class="sl-nota">Enquanto isso, confira o ranking geral e inscreva-se no teste fechado.</p>
+  </div>
+</div>
+
+<main>
+  <!-- VIGÍLIA -->
+  <section id="vigilia" class="sl-bloco trava">
+    <header class="sec"><span>Mini game · ranking da live</span><h2>Vigília das Cinzas</h2></header>
+    <p class="lead">Escolha um herói e um cenário e sobreviva às criaturas do jogo até o amanhecer: 5 minutos. A cada minuto chega um chefe. Suba de nível e escolha melhorias para aguentar a horda.</p>
+    <div class="vg" id="vg">
+      <canvas id="vg-canvas" tabindex="0" aria-label="Área do jogo Vigília das Cinzas"></canvas>
+      <div class="vg-hud" id="vg-hud" hidden>
+        <div class="vg-l"><div class="vg-barra"><i id="vg-vida"></i></div><div class="vg-barra xp"><i id="vg-xp"></i></div><span>Nível <b id="vg-nivel">1</b></span></div>
+        <div class="vg-c"><b id="vg-tempo">00:00</b><span id="vg-amanhecer"></span></div>
+        <div class="vg-r"><span>Abates</span><b id="vg-abates">0</b></div>
+      </div>
+      <button type="button" class="vg-pausa" id="vg-pausa" hidden aria-label="Pausar">II</button>
+
+      <div class="vg-tela" id="vg-menu">
+        <div class="vg-menu-in">
+          <p class="k">Escolha o seu juramento</p>
+          <div class="vg-herois" id="vg-herois"></div>
+          <p class="vg-info" id="vg-info"></p>
+          <p class="k" style="margin-top:.6rem">Cenário</p>
+          <div class="vg-fases" id="vg-fases"></div>
+          <button type="button" class="btn red grande" id="vg-jogar">Começar a vigília</button>
+          <p class="sl-nota">Computador: WASD ou setas. Celular: arraste o dedo na tela. P pausa.</p>
+        </div>
+      </div>
+      <div class="vg-tela" id="vg-carregando" hidden><p class="k">Acendendo as brasas...</p></div>
+      <div class="vg-tela vg-up" id="vg-up" hidden><div><h3>Nível 2</h3><p class="k">Escolha uma melhoria</p><div class="ups"></div></div></div>
+      <div class="vg-tela" id="vg-pausado" hidden><div class="vg-menu-in"><h3 class="vg-tit">Pausa</h3><div class="btns" style="justify-content:center"><button type="button" class="btn red" id="vg-continuar">Continuar</button><button type="button" class="btn" id="vg-sair">Desistir</button></div></div></div>
+      <div class="vg-tela" id="vg-fim" hidden>
+        <div class="vg-menu-in">
+          <h3 class="vg-tit" id="vg-fim-tit">Você caiu.</h3>
+          <p id="vg-fim-sub"></p>
+          <div class="vg-res"><div><b id="vg-fim-pts">0</b><span>pontos</span></div><div><b id="vg-fim-abates">0</b><span>abates</span></div><div><b id="vg-fim-nivel">1</b><span>nível</span></div></div>
+          <form id="vg-form" class="vg-envio"><div id="vg-envio"><button type="submit" class="btn red" id="vg-enviar">Enviar para o ranking da live</button></div></form>
+          <p class="ok" id="vg-enviado" aria-live="polite"></p>
+          <div class="btns" style="justify-content:center"><button type="button" class="btn" id="vg-denovo">Jogar de novo</button><button type="button" class="btn" id="vg-trocar">Trocar herói</button><button type="button" class="btn" id="vg-compartilhar">Desafiar amigos</button></div>
+        </div>
+      </div>
+      <button type="button" class="vg-cheia" id="vg-cheia" aria-label="Tela cheia">⛶</button>
+    </div>
+    <input type="hidden" id="vg-nick">
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="sl-bloco trava">
+    <header class="sec"><span>Quiz</span><h2>Qual herói é você?</h2></header>
+    <p class="lead">Oito perguntas sob a Lua Rubra. No fim, um dos doze heróis vai reconhecer você.</p>
+    <div class="qz" id="qz"></div>
+  </section>
+
+  <!-- CHEFES -->
+  <section id="chefes" class="sl-bloco trava">
+    <header class="sec"><span>Desafio</span><h2>Que chefe é esse?</h2></header>
+    <p class="lead">Dez silhuetas, dez segundos cada. Reconheça os chefes de Ashem Vow antes que eles reconheçam você.</p>
+    <div class="ch" id="ch"></div>
+  </section>
+
+  <!-- RANKING -->
+  <section id="ranking">
+    <header class="sec"><span>Vigília das Cinzas</span><h2>Ranking</h2></header>
+    <div class="abas" id="rk-abas"><button type="button" class="on" data-r="live">Live de hoje</button><button type="button" data-r="geral">Geral</button></div>
+    <ol class="rk" id="rk"></ol>
+  </section>
+
+  <section class="final">
+    <p class="final-k">Teste fechado · Android</p>
+    <h2>Jogue o Ashem Vow de verdade.</h2>
+    <a class="btn red grande" href="index.html#inscricao">Quero jogar primeiro</a>
+  </section>
+</main>
+<footer>
+  <img src="assets/emblema.webp" alt="" width="72" height="72">
+  <p class="f-title">Ashem Vow</p>
+  <p class="f-links"><a href="index.html">Site do jogo</a> · <a href="index.html#inscricao">Inscrição</a> · <a href="privacidade.html">Privacidade</a></p>
+  <p>© <span id="ano"></span> Ashem Vow. Todos os direitos reservados.</p>
+</footer>
+<script src="content.js"></script><script src="salao.js"></script><script src="vigilia.js"></script>
+</body></html>

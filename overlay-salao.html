@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Overlay · Salão do Juramento</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Fonte de navegador no OBS: 1920x1080, fundo transparente. Fica invisível com o Salão fechado. */
+*{margin:0;box-sizing:border-box}html,body{width:1920px;height:1080px;overflow:hidden;background:transparent;font-family:"IM Fell English",Georgia,serif;color:#d8cdbb}
+[hidden]{display:none!important}
+#painel{position:absolute;right:40px;top:40px;width:430px;padding:20px 22px 18px;background:linear-gradient(180deg,rgba(26,22,21,.94),rgba(12,10,9,.94));border:1px solid rgba(199,154,79,.6);border-top:3px solid #c22a2d;box-shadow:0 14px 40px rgba(0,0,0,.6);transition:opacity .6s,transform .6s}
+#painel.off{opacity:0;transform:translateX(40px)}
+.k{font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#c8742a;display:flex;align-items:center;gap:10px}
+.k i{width:10px;height:10px;border-radius:50%;background:#e04b3c;box-shadow:0 0 10px #e04b3c;animation:p 1.6s infinite}@keyframes p{50%{opacity:.3}}
+h1{font-family:"Pirata One",serif;font-weight:400;font-size:44px;line-height:1;margin:6px 0 2px;text-shadow:0 0 24px rgba(155,28,31,.8)}
+.url{font-size:20px;color:#c9bfae}.url b{font-family:"Pirata One",serif;font-weight:400;font-size:26px;color:#d8cdbb;background:#9b1c1f;border:1px solid #c22a2d;padding:0 10px;margin-left:4px}
+.ev{margin-top:8px;font-style:italic;color:#c79a4f;font-size:19px}
+ol{list-style:none;margin-top:14px;display:grid;gap:6px}
+li{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:6px 10px;background:rgba(0,0,0,.45);border:1px solid #2a2220;font-size:21px;transition:background .6s}
+li .p{font-family:"Pirata One",serif;font-size:26px;color:#c79a4f}li .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}li .n small{color:#8f8576;font-size:15px;margin-left:6px}li .s{font-family:"Pirata One",serif;font-size:26px;color:#c8742a}
+li.novo{background:rgba(155,28,31,.45)}
+li.vz{display:block;color:#8f8576;font-size:18px;text-align:center}
+#toasts{position:absolute;left:40px;bottom:120px;display:grid;gap:12px;width:620px}
+.t{display:flex;gap:16px;align-items:center;padding:14px 20px;background:linear-gradient(90deg,rgba(12,10,9,.95),rgba(26,22,21,.92));border:1px solid rgba(199,154,79,.6);border-left:5px solid #c22a2d;box-shadow:0 12px 30px rgba(0,0,0,.6);font-size:26px;animation:in .6s cubic-bezier(.2,.8,.2,1);transition:opacity .6s,transform .6s}
+.t.sai{opacity:0;transform:translateX(-40px)}
+.t img{width:62px;height:62px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.9))}
+.t b{color:#ffd27a;font-weight:400}.t .x{font-family:"Pirata One",serif;color:#c79a4f;font-size:30px}
+@keyframes in{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="painel" class="off">
+  <div class="k"><i></i>Salão do Juramento · ao vivo</div>
+  <h1>Jogue com a live</h1>
+  <div class="url">Entre em <b>ashemvow.github.io/salao</b></div>
+  <div class="ev" id="ev"></div>
+  <ol id="top"><li class="vz">Ninguém no ranking ainda.</li></ol>
+</div>
+<div id="toasts"></div>
+<script src="content.js"></script>
+<script>
+const S = window.SITE, I = S.inscricao, $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const rpc = async (n, b) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); if (!r.ok) throw new Error(await r.text()); return r.json(); };
+const RET = Object.fromEntries(S.personagens.map(p => [p.nome, p.skins[0].img]));
+let st = { aberto: false, sessao: -1 }, ultimo = 0, primeiro = true, topAnt = '';
+async function status() {
+  try { const s = await rpc('salao_status');
+    if (s.sessao !== st.sessao) { ultimo = 0; primeiro = true; }
+    st = s; $('painel').classList.toggle('off', !s.aberto); $('ev').textContent = s.evento ? `Esta noite: ${s.evento}` : '';
+    if (!s.aberto) $('toasts').innerHTML = ''; } catch (e) { }
+}
+async function top() {
+  if (!st.aberto) return;
+  try { const l = await rpc('top_vigilia', { p_limit: 5, p_sessao: st.sessao }); const key = JSON.stringify(l); if (key === topAnt) return; const antes = topAnt ? JSON.parse(topAnt).map(r => r.nick + r.pontos) : []; topAnt = key;
+    $('top').innerHTML = l.length ? l.map((r, i) => `<li class="${antes.includes(r.nick + r.pontos) ? '' : 'novo'}"><span class="p">${i + 1}</span><span class="n">${esc(r.nick)}<small>${esc(r.heroi)}</small></span><span class="s">${r.pontos.toLocaleString('pt-BR')}</span></li>`).join('') : '<li class="vz">Ninguém no ranking ainda.</li>';
+    setTimeout(() => document.querySelectorAll('li.novo').forEach(x => x.classList.remove('novo')), 2500); } catch (e) { }
+}
+async function eventos() {
+  if (!st.aberto) return;
+  try { const l = await rpc('eventos_salao', { p_apos: ultimo }); if (!l.length) return; ultimo = Math.max(ultimo, ...l.map(v => v.id));
+    if (primeiro) { primeiro = false; return; } // não repete o que já tinha acontecido antes de abrir o overlay
+    l.reverse().slice(-4).forEach((v, i) => setTimeout(() => toast(v), i * 1800)); } catch (e) { }
+}
+function toast(v) {
+  const img = v.tipo === 'vigilia' || v.tipo === 'quiz' ? RET[v.texto] : 'assets/emblema.webp';
+  const txt = v.tipo === 'vigilia' ? `<b>${esc(v.nick)}</b> fez <span class="x">${v.pontos.toLocaleString('pt-BR')}</span> pontos com ${esc(v.texto)}`
+    : v.tipo === 'quiz' ? `<b>${esc(v.nick)}</b> descobriu que é <span class="x">${esc(v.texto)}</span>`
+    : `<b>${esc(v.nick)}</b> reconheceu <span class="x">${v.pontos}/10</span> chefes e virou ${esc(v.texto)}`;
+  const d = document.createElement('div'); d.className = 't'; d.innerHTML = `${img ? `<img src="${esc(img)}" alt="">` : ''}<div>${txt}</div>`;
+  const box = $('toasts'); box.append(d); while (box.children.length > 3) box.firstChild.remove();
+  setTimeout(() => { d.classList.add('sai'); setTimeout(() => d.remove(), 700); }, 7000);
+}
+(async () => { await status(); top(); eventos(); setInterval(status, 10000); setInterval(top, 6000); setInterval(eventos, 4000); })();
+</script>
+</body></html>
