@@ -79,11 +79,13 @@ ${conhecimento()}`;
       const versao = n => { const v = n.match(/gemini-(\d+(?:\.\d+)?)/); return v ? parseFloat(v[1]) : (/latest/.test(n) ? 99 : 0); };
       const ord = arr => arr.sort((a, b) => versao(b) - versao(a) || (/preview|exp/.test(a) ? 1 : 0) - (/preview|exp/.test(b) ? 1 : 0));
       // modelos estáveis primeiro (os novos e "preview" muitas vezes não têm cota grátis); "lite" por último, que costuma ter mais cota grátis
-      const estavel = n => !/preview|exp/.test(n);
+      const estavel = n => !/preview|exp|latest/.test(n), apelido = n => /latest/.test(n);
       const pro = ord(nomes.filter(n => /pro/.test(n))), flash = ord(nomes.filter(n => /flash/.test(n) && !/lite/.test(n))), lite = ord(nomes.filter(n => /flash-lite/.test(n)));
-      if (pro.length) PRO = [...pro.filter(estavel), ...pro.filter(n => !estavel(n))].slice(0, 4);
-      if (flash.length || lite.length) FLASH = [...flash.filter(estavel), ...flash.filter(n => !estavel(n)), ...lite.filter(estavel), ...lite.filter(n => !estavel(n))];
-      luz('l-ia', 'Chave ok', 'ok'); anotar('s', `Chave funcionando. Modelos: ${esc([PRO[0], FLASH[0]].filter(Boolean).join(' e '))}.`);
+      // os apelidos "-latest" apontam para o modelo mais novo, que quase nunca tem cota grátis: ficam por último
+      const ordem = arr => [...arr.filter(estavel), ...arr.filter(n => !estavel(n) && !apelido(n)), ...arr.filter(apelido)];
+      if (pro.length) PRO = ordem(pro).slice(0, 4);
+      if (flash.length || lite.length) FLASH = [...ordem(flash), ...ordem(lite)];
+      luz('l-ia', 'Chave ok', 'ok'); anotar('s', `Chave funcionando (versão 3). Vou tentar nesta ordem: ${esc([...PRO.slice(0, 2), ...FLASH.slice(0, 4)].join(', '))}...`);
     } catch (e) { luz('l-ia', 'Sem conexão', 'erro'); anotar('s', 'Não consegui falar com o Google para conferir a chave. Veja se a internet ou algum bloqueador está impedindo.'); }
   }
   const sumiu = new Set(), funciona = {}, semCota = {}; let ultimaMsg = ''; let proDescansa = 0; const historia = [];
