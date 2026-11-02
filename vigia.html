@@ -44,6 +44,7 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <div class="luz" id="l-obs"><span>OBS</span><b>...</b></div>
       <div class="luz" id="l-salao"><span>Salão</span><b>...</b></div>
       <div class="luz" id="l-live"><span>Legenda na live</span><b>...</b></div>
+      <div class="luz" id="l-yt"><span>YouTube</span><b>...</b></div>
     </div>
     <button class="btn red" id="modo">Estou aqui · Vigia em silêncio</button>
     <p class="nota" id="modo-nota">Clique quando sair. Se ligar o OBS abaixo, ele troca sozinho pela cena.</p>
@@ -94,6 +95,14 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <label>Conta conectada<span class="row"><input id="tw-quem" disabled placeholder="nenhuma"><button class="btn" id="tw-conectar" type="button">Conectar</button></span></label>
     </div>
     <p class="nota">Se o chat bloqueia links, dê moderador para a conta do bot: digite /mod nome_do_bot no chat.</p>
+    <span class="k" style="margin-top:.6rem">Live no YouTube também (opcional)</span>
+    <p class="nota">O Vigia lê o chat da live do YouTube e responde em voz e na legenda. No chat do YouTube ele não escreve: os links aparecem na tela. 1. Abra <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">a página da YouTube Data API v3</a> com sua conta Google e clique em Ativar. 2. Vá em Credenciais › Criar credenciais › Chave de API e copie. 3. Para proteger, abra a chave, em "Restrições de aplicativo" escolha Sites e adicione <b>ashemvow.github.io/*</b>.</p>
+    <div class="dupla">
+      <label>Chave da API do YouTube<input id="c-ytchave" type="password" placeholder="começa com AIza" autocomplete="off"></label>
+      <label>Seu canal do YouTube<input id="c-ytcanal" placeholder="@seucanal" autocomplete="off"></label>
+    </div>
+    <label>Link da live do YouTube (opcional, só se ele não achar sozinho)<input id="c-ytlive" placeholder="https://youtube.com/live/..." autocomplete="off"></label>
+    <p class="nota">Ele acha a live sozinho quando a live da Twitch entra no ar, e só lê o chat do YouTube enquanto você está fora. A cota grátis do YouTube dá para cerca de 5 horas de Vigia por dia.</p>
     <span class="k" style="margin-top:.6rem">Salão e Corrida sem você</span>
     <div class="dupla">
       <label>Código do Salão<input id="c-codigo" type="password" placeholder="o mesmo da página de controle" autocomplete="off"></label>
@@ -127,5 +136,5 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=14"></script>
+<script src="vigia.js?v=15"></script>
 </body></html>

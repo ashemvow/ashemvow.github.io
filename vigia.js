@@ -4,7 +4,7 @@
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4' };
+  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4', ytChave: '', ytCanal: '', ytLive: '' };
   let cfg = Object.assign({}, PADRAO, JSON.parse(ls.get('vigia-cfg') || '{}'));
   if (!cfg.legenda) { cfg.legenda = Math.random().toString(36).slice(2, 12); ls.set('vigia-cfg', JSON.stringify(cfg)); }
   const BOTS = ['nightbot', 'streamelements', 'moobot', 'fossabot', 'wizebot', 'soundalerts', 'streamlabs', 'sery_bot', 'kofistreambot'];
@@ -59,7 +59,7 @@
     return S2.filter(s => s[0] === 'base' || temas.includes(s[0])).map(s => s[1]).join('\n\n');
   }
   function sistema(pergunta) {
-    return `Você é o Vigia, a voz que cuida do chat da live do canal ${cfg.canal} na Twitch enquanto ${cfg.nome} está ausente. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
+    return `Você é o Vigia, a voz que cuida do chat da live do canal ${cfg.canal} na Twitch enquanto ${cfg.nome} está ausente${cfg.ytChave ? ' (a mesma live também passa no YouTube)' : ''}. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
 Como responder:
 - Português do Brasil, tom amigável e um pouco sombrio, combinando com o jogo (um vigia de cemitério sob a lua vermelha), nunca assustador de verdade.
 - Pense antes de responder: entenda o que a pessoa realmente quer saber, use a conversa recente do chat como contexto e responda de forma específica e útil, com detalhes reais do jogo (nomes de heróis, habilidades, chefes, fases, recursos) quando for sobre o jogo.
@@ -252,14 +252,14 @@ ${conhecimento(pergunta)}`;
     fila.sort((a, b) => (a.tipo === 'evento' ? 0 : 1) - (b.tipo === 'evento' ? 0 : 1));
     const it = fila.shift(); ocupado = true;
     let resp;
-    if (it.tipo === 'aviso') { ocupado = false; const fala = paraFala(it.texto); anotar('v', `<b>Vigia:</b> ${esc(fala)}`); legenda('f', { n: '', p: '', r: fala, e: 1 }); await falar(fala); processar(); return; }
+    if (it.tipo === 'aviso') { ocupado = false; const fala = paraFala(it.texto); anotar('v', `<b>Vigia:</b> ${esc(fala)}`); legenda('f', { n: '', p: '', r: fala, l: it.l || '', e: 1 }); await falar(fala); processar(); return; }
     const conversa = recentes.length ? `Conversa recente no chat (do mais antigo ao mais novo):\n${recentes.join('\n')}\n\n` : '';
-    try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}Responda agora a mensagem de ${it.nick}: "${it.texto}"`); }
+    try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}Responda agora a mensagem de ${it.nick}${it.yt ? ' (que está assistindo pelo YouTube: lá você não escreve no chat, então diga que o link aparece na tela, e mesmo assim use a linha CHAT: para o link aparecer na tela)' : ''}: "${it.texto}"`); }
     catch (e) { resp = pronta(it.tipo === 'evento' ? 'evento' : 'chat', it.nick); luz('l-ia', e.message === 'sem_chave' ? 'Sem chave' : e.message === 'RESOURCE_EXHAUSTED' ? 'Limite do dia' : 'Com erro', e.message === 'sem_chave' ? 'meio' : 'erro');
       anotar('s', `Usei uma frase pronta porque a inteligência não respondeu (${esc(e.message)}${ultimaMsg ? ' · ' + esc(ultimaMsg.slice(0, 220)) : ''}).`); }
     const partes = String(resp).split(/\n?\s*CHAT:\s*/i), fala = paraFala(partes[0]), msgChat = partes[1] ? partes.slice(1).join(' ').replace(/\s+/g, ' ').trim().slice(0, 450) : '';
     anotar('v', `<b>Vigia:</b> ${esc(fala)}${msgChat ? `<br><small>No chat: ${esc(msgChat)}</small>` : ''}`);
-    if (msgChat) escrever(`@${it.nick} ${msgChat}`);
+    if (msgChat && !it.yt) escrever(`@${it.nick} ${msgChat}`);
     legenda('f', { n: it.nick, p: String(it.texto).slice(0, 120), r: fala, l: msgChat, e: it.tipo === 'evento' ? 1 : 0 });
     ocupado = false; await falar(fala); processar();
   }
@@ -404,6 +404,83 @@ ${conhecimento(pergunta)}`;
   }
   const nomeDoacao = t => { const m = String(t).match(/^([\p{L}\p{N}_.-]{2,25})\s+(?:doou|enviou|mandou|apoiou)/iu) || String(t).match(/(?:de|por)\s+([\p{L}\p{N}_.-]{2,25})/iu); return m ? m[1] : ''; };
 
+  // ---------- chat do YouTube (só leitura, com uma chave grátis da YouTube Data API) ----------
+  const YT = 'https://www.googleapis.com/youtube/v3/';
+  let yt = { canalId: '', chatId: '', token: '', pular: true, timer: 0, procurado: 0 };
+  async function ytGet(rota, q) {
+    const r = await fetch(YT + rota + '?' + new URLSearchParams(Object.assign({ key: cfg.ytChave }, q)));
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { const er = j.error || {}, e = new Error((er.errors && er.errors[0] && er.errors[0].reason) || (er.details && er.details[0] && er.details[0].reason) || ('erro ' + r.status)); e.status = r.status; throw e; }
+    return j;
+  }
+  const idVideo = s => { s = String(s || '').trim(); const m = s.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/)([\w-]{11})/) || s.match(/^([\w-]{11})$/); return m ? m[1] : ''; };
+  async function ytCanal() {
+    const c = String(cfg.ytCanal || '').trim(); if (!c) return '';
+    const uc = c.match(/(UC[\w-]{22})/); if (uc) return uc[1];
+    const h = (c.match(/@([\w.-]+)/) || [0, c.replace(/^.*\//, '')])[1];
+    const j = await ytGet('channels', { part: 'id', forHandle: '@' + h }); return (j.items && j.items[0] && j.items[0].id) || '';
+  }
+  function ytLigar() {
+    clearTimeout(yt.timer); yt = { canalId: '', chatId: '', token: '', pular: true, timer: 0, procurado: 0 };
+    if (!cfg.ytChave || (!cfg.ytCanal && !cfg.ytLive)) { luz('l-yt', 'Desligado', ''); return; }
+    luz('l-yt', 'Procurando a live', 'meio'); yt.timer = setTimeout(ytCiclo, 800);
+  }
+  let ytOcupado = false;
+  async function ytCiclo() { if (ytOcupado) return; ytOcupado = true; try { await ytCiclo2(); } finally { ytOcupado = false; } }
+  async function ytCiclo2() {
+    clearTimeout(yt.timer);
+    const mais = (ms, txt, tipo) => { if (txt) luz('l-yt', txt, tipo); yt.timer = setTimeout(ytCiclo, ms); };
+    try {
+      if (!yt.chatId) {
+        let vid = idVideo(cfg.ytLive);
+        if (!vid) {
+          // procurar a live gasta muita cota: só quando a live da Twitch está no ar ou você está fora, no máximo a cada 5 minutos
+          if (!(noAr || ausente) || Date.now() - yt.procurado < 5 * 60000) return mais(30000, 'Esperando a live', 'meio');
+          yt.procurado = Date.now();
+          if (!yt.canalId) yt.canalId = await ytCanal();
+          if (!yt.canalId) { luz('l-yt', 'Canal não encontrado', 'erro'); anotar('s', 'Não achei seu canal do YouTube. Confira o @ do canal na configuração.'); return; }
+          const s = await ytGet('search', { part: 'id', channelId: yt.canalId, eventType: 'live', type: 'video', maxResults: 1 });
+          vid = s.items && s.items[0] && s.items[0].id && s.items[0].id.videoId;
+          if (!vid) return mais(30000, 'Live não está no ar', 'meio');
+        }
+        const v = await ytGet('videos', { part: 'liveStreamingDetails', id: vid });
+        const chat = v.items && v.items[0] && v.items[0].liveStreamingDetails && v.items[0].liveStreamingDetails.activeLiveChatId;
+        if (!chat) { yt.procurado = Date.now(); return mais(60000, 'Live não está no ar', 'meio'); }
+        yt.chatId = chat; yt.token = ''; yt.pular = true; anotar('s', 'Conectei no chat da live do YouTube.');
+      }
+      // com você aqui, não lê (economiza a cota grátis); quando você sai, ignora o que ficou para trás
+      if (!ausente) { yt.pular = true; yt.token = ''; return mais(4000, 'Conectado · lê quando você sair', 'ok'); }
+      const q = { liveChatId: yt.chatId, part: 'snippet,authorDetails', maxResults: 200 }; if (yt.token) q.pageToken = yt.token;
+      const j = await ytGet('liveChat/messages', q);
+      if (j.nextPageToken) yt.token = j.nextPageToken;
+      if (!yt.pular) (j.items || []).forEach(ytMsg); yt.pular = false;
+      mais(Math.max(10000, j.pollingIntervalMillis || 0), 'Lendo o chat', 'ok');
+    } catch (e) {
+      const m = e.message;
+      if (/liveChatEnded|liveChatNotFound|liveChatDisabled/.test(m)) { yt.chatId = ''; yt.procurado = Date.now(); anotar('s', 'A live do YouTube acabou.'); return mais(60000, 'Live terminou', 'meio'); }
+      if (/quota|rateLimit/i.test(m)) { anotar('s', 'O YouTube chegou no limite grátis do dia. Amanhã volta sozinho.'); return mais(30 * 60000, 'Limite do dia', 'erro'); }
+      if (e.status === 400 || e.status === 403) { luz('l-yt', /accessNotConfigured|SERVICE_DISABLED/.test(m) ? 'API não ativada' : 'Chave com problema', 'erro'); anotar('s', `O YouTube recusou a chave (${esc(m)}). Confira se a YouTube Data API v3 está ativada e se a chave foi copiada inteira.`); return; }
+      mais(20000, 'Reconectando', 'erro');
+    }
+  }
+  function ytMsg(m) {
+    const s = m.snippet || {}, a = m.authorDetails || {}, nick = a.displayName || 'alguém do YouTube';
+    const texto = String((s.textMessageDetails && s.textMessageDetails.messageText) || s.displayMessage || '').trim();
+    if (s.type === 'superChatEvent' || s.type === 'superStickerEvent') {
+      const d = s.superChatDetails || s.superStickerDetails || {}, valor = d.amountDisplayString || '';
+      anotar('s', `${esc(nick)} mandou um Super Chat de ${esc(valor)} no YouTube`);
+      entrar({ tipo: 'evento', nick, yt: 1, texto: `${nick} mandou um Super Chat de ${valor} no YouTube${d.userComment ? ' com a mensagem "' + d.userComment + '"' : ''}` }); return;
+    }
+    if (s.type === 'newSponsorEvent' || s.type === 'memberMilestoneChatEvent' || s.type === 'membershipGiftingEvent') { anotar('s', `${esc(nick)} virou membro no YouTube`); entrar({ tipo: 'evento', nick, yt: 1, texto: `${nick} virou membro do canal no YouTube` }); return; }
+    if (s.type !== 'textMessageEvent' || !texto || BOTS.includes(sem(nick).replace(/^@/, ''))) return;
+    if (/^!(jogar|corrida|salao|salão|como)/i.test(texto)) { entrar({ tipo: 'aviso', nick: '', l: `${SITE_URL}/salao`, texto: `${nick}, para jogar a Corrida das Cinzas: abra o Salão no site, o link está na tela. Escreva seu nome no topo, toque em Entrar no Salão, desça até a Corrida, escolha um vigia e toque em Entrar na corrida.` }); return; }
+    if (/^!(links?|site|inscri)/i.test(texto)) { entrar({ tipo: 'aviso', nick: '', l: LISTA_LINKS(), texto: `${nick}, os links estão aparecendo na tela agora.` }); return; }
+    if (texto.startsWith('!')) return;
+    anotar('', `<b>${esc(nick)}</b> <small>(YouTube)</small>: ${esc(texto)}`); recentes.push(`${nick} (YouTube): ${texto.slice(0, 200)}`); if (recentes.length > 20) recentes.shift();
+    if (cfg.quem === 'chamado' && !/vigia|\?/i.test(texto)) return;
+    entrar({ tipo: 'chat', nick, yt: 1, texto: texto.slice(0, 300) });
+  }
+
   // ---------- apresentação (toda vez que assume o chat, e de tempos em tempos) ----------
   const LINKS_APRES = () => `Inscrição no teste: ${SITE_URL}/#inscricao · Apoie por Pix: https://livepix.gg/teecki · Corrida das Cinzas: ${SITE_URL}/salao`;
   const APRES_PRONTA = () => `Oi, chat! Eu sou o Vigia, o guardião desta live enquanto ${cfg.nome} dá uma saída. Aqui a gente acompanha Ashem Vow, um jogo de ação e sobrevivência em pixel art dark fantasy para Android, com doze heróis, seis cenários e dezoito chefes, feito do zero por um desenvolvedor independente. O teste fechado está com inscrições abertas no site do jogo. Se quiser ajudar Ashem Vow a nascer, qualquer Pix faz diferença, e o QR code está aqui na tela. E enquanto ${cfg.nome} não volta, vem correr com o chat na Corrida das Cinzas, lá no Salão do site.`;
@@ -432,6 +509,7 @@ ${conhecimento(pergunta)}`;
     $('modo-nota').textContent = origem === 'obs' ? 'Trocado pela cena do OBS.' : v ? 'Clique quando voltar.' : 'Clique quando sair.';
     anotar('s', v ? 'Vigia assumiu o chat.' : 'Vigia ficou em silêncio.');
     fila.length = 0;
+    if (v && cfg.ytChave && (cfg.ytCanal || cfg.ytLive)) { clearTimeout(yt.timer); yt.timer = setTimeout(ytCiclo, 500); }
     if (v) { ultimaTroca = Date.now(); apresentar(); if (!salao.aberto && cfg.autoSalao !== 'nao') abrirSalao('você saiu'); }
     else { try { speechSynthesis.cancel(); } catch (e) { } legenda('x', {}); }
     legenda('m', { a: v ? 1 : 0 });
@@ -484,13 +562,13 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- configuração ----------
-  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente' };
+  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
     for (const [k, id] of Object.entries(CAMPOS)) cfg[k] = $(id).value.trim();
     const marc = [...document.querySelectorAll('#c-rodizio input:checked')].map(i => i.value); if (document.querySelector('#c-rodizio input')) cfg.rodizio = marc.join('|');
     ls.set('vigia-cfg', JSON.stringify(cfg)); $('salvo').textContent = 'Salvo.'; setTimeout(() => $('salvo').textContent = '', 2500);
-    carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); luz('l-ia', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'Pronta' : 'Sem chave', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'ok' : 'meio');
+    carregarVozes(); conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); ytLigar(); luz('l-ia', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'Pronta' : 'Sem chave', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'ok' : 'meio');
     if (cfg.chave && cfg.canal) $('cfg').open = false;
   };
   $('voz-teste').onclick = () => { cfg.voz = $('c-voz').value; cfg.vel = $('c-vel').value; falar(`Oi, chat! Eu sou o Vigia e cuido de vocês enquanto ${$('c-nome').value || cfg.nome} não volta.`); };
@@ -502,6 +580,6 @@ ${conhecimento(pergunta)}`;
 
   luz('l-ia', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'Pronta' : 'Sem chave', (cfg.provedor === 'groq' ? cfg.groq : cfg.chave) ? 'ok' : 'meio');
   if (cfg.chave && cfg.canal) $('cfg').open = false;
-  conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos();
-  window.__vigia = { apresentar, sistema, linha, estado: () => ({ ausente, fila: fila.length, falando, cfg }), definirAusente, paraFala };
+  conectarChat(); conectarOBS(); prepararTwitch(); descobrirModelos(); ytLigar();
+  window.__vigia = { ytMsg, ytCiclo, apresentar, sistema, linha, estado: () => ({ ausente, fila: fila.length, falando, cfg }), definirAusente, paraFala };
 })();
