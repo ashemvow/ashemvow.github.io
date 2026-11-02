@@ -222,9 +222,9 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- legenda para o OBS ----------
-  let canalLegenda = null;
+  let canalLegenda = null; // promessa da conexão (uma só, mesmo com várias mensagens ao mesmo tempo)
   async function legenda(ev, dados) {
-    try { if (!canalLegenda) canalLegenda = await window.REDE.canal('voz-' + cfg.legenda, () => { }); canalLegenda.enviar(ev, dados); } catch (e) { canalLegenda = null; }
+    try { if (!canalLegenda) canalLegenda = window.REDE.canal('voz-' + cfg.legenda, () => { }); (await canalLegenda).enviar(ev, dados); } catch (e) { canalLegenda = null; }
   }
   $('url-cam').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-cam.html#canal=${cfg.legenda}`;
   $('url-legenda').textContent = `${location.origin}${location.pathname.replace(/vigia\.html$/, '')}vigia-overlay.html#canal=${cfg.legenda}`;

@@ -32,7 +32,7 @@
 <div id="nome" class="off">Vigia</div>
 <div id="balao" class="off"><div class="perg" id="perg" hidden></div><div class="resp" id="resp"></div><div class="link" id="link" hidden></div></div>
 <script src="content.js"></script>
-<script src="rede.js"></script>
+<script src="rede.js?v=2"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id), canal = (location.hash.match(/canal=([a-z0-9]+)/) || [])[1];
@@ -47,10 +47,12 @@
     $('balao').classList.remove('off'); $('vigia').classList.add('falando');
   }
   function calar() { $('vigia').classList.remove('falando'); clearTimeout(some); some = setTimeout(() => { $('balao').classList.add('off'); if (!ativo) sair = setTimeout(() => aparecer(false), 800); }, 2600); }
-  if (canal) window.REDE.canal('voz-' + canal, (ev, d) => {
+  const ouvir = (ev, d) => {
     if (ev === 'f') mostrar(d); else if (ev === 'x') calar();
     else if (ev === 'm') { ativo = !!d.a; if (ativo) aparecer(true); else if ($('balao').classList.contains('off')) aparecer(false); }
-  }).catch(() => { });
+  };
+  const ligar = () => window.REDE.canal('voz-' + canal, ouvir).catch(() => setTimeout(ligar, 5000)); // tenta de novo até conectar
+  if (canal) ligar();
 })();
 </script>
 </body></html>

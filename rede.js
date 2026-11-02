@@ -14,7 +14,18 @@
     return cliente;
   }
   // abre um canal; onMsg(evento, dados). Resolve quando estiver conectado.
+  const abertos = {};
   function canal(topico, onMsg) {
+    if (!window.REDE_LOCAL) {
+      // mesmo tópico na mesma página: reaproveita a conexão e soma quem escuta
+      if (abertos[topico]) { abertos[topico].ouvintes.push(onMsg); return abertos[topico].p; }
+      const reg = abertos[topico] = { ouvintes: [onMsg] };
+      reg.p = abrir(topico, (ev, d) => reg.ouvintes.forEach(f => { try { f(ev, d); } catch (e) { } }), reg).catch(e => { delete abertos[topico]; throw e; });
+      return reg.p;
+    }
+    return abrir(topico, onMsg);
+  }
+  function abrir(topico, onMsg, reg) {
     if (window.REDE_LOCAL) {
       const bc = new BroadcastChannel('rede-' + topico);
       bc.onmessage = e => onMsg(e.data.ev, e.data.p);
@@ -25,8 +36,13 @@
       ch.on('broadcast', { event: '*' }, m => onMsg(m.event, m.payload));
       let feito = false;
       ch.subscribe(st => {
-        if (st === 'SUBSCRIBED' && !feito) { feito = true; ok({ enviar: (ev, p) => ch.send({ type: 'broadcast', event: ev, payload: p }), sair: () => sb().removeChannel(ch) }); }
+        if (st === 'SUBSCRIBED' && !feito) { feito = true; ok({ enviar: (ev, p) => ch.send({ type: 'broadcast', event: ev, payload: p }), sair: () => { if (reg) delete abertos[topico]; sb().removeChannel(ch); } }); }
         else if ((st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') && !feito) { feito = true; sb().removeChannel(ch); falha(new Error('rede_' + st)); }
+        else if ((st === 'CHANNEL_ERROR' || st === 'TIMED_OUT' || st === 'CLOSED') && feito && reg && abertos[topico] === reg) {
+          // caiu depois de conectar: refaz a conexão sozinho
+          delete abertos[topico]; sb().removeChannel(ch);
+          setTimeout(() => { const ouv = reg.ouvintes; canal(topico, ouv[0]).then(c => { ouv.slice(1).forEach(f => abertos[topico] && abertos[topico].ouvintes.push(f)); reg.p = Promise.resolve(c); }).catch(() => { }); }, 3000);
+        }
       });
     }));
   }
