@@ -20,6 +20,7 @@
   const LINKS = [
     ['Site do jogo', SITE_URL],
     ['Inscrição no teste fechado', SITE_URL + '/#inscricao'],
+    ['Canal principal no YouTube (vídeos e a saga do jogo)', 'https://www.youtube.com/@ashemvow'],
     ['Salão (Corrida das Cinzas e mini games)', SITE_URL + '/salao'],
     ['Instagram', (S.redes && S.redes.instagram) || 'https://www.instagram.com/ashemvow'],
     ['Vídeo da saga no YouTube', (S.redes && S.redes.youtube) || ''],
@@ -67,6 +68,7 @@ Como responder:
 - A primeira parte da resposta é FALADA em voz alta: de 1 a 3 frases e no máximo 350 caracteres, chamando a pessoa pelo nome. Sem emojis, sem markdown e sem listas. ${tw && naTwitch() ? 'Não leia endereços em voz alta: diga "mandei o link no chat".' : 'Se precisar de um endereço, fale assim: "ashemvow ponto github ponto io barra salao". Diga também que o link aparece na tela.'}
 - Se alguém quiser jogar, perguntar como entra na corrida ou parecer interessado em participar, ensine o passo a passo com calma, como se fosse a primeira vez: abrir o Salão no site (pelo celular ou PC), escrever o nome do chat no topo da página e tocar em Entrar no Salão, descer até Corrida das Cinzas, escolher um vigia e tocar em Entrar na corrida. A largada acontece sozinha depois de uma contagem de 10 segundos; quem chega no meio de uma corrida treina e entra na próxima. Toque na tela (ou espaço no PC) para pular e segure para pular mais alto; pegue as almas para somar pontos; o último de pé vence e aparece na live. Mande o link do Salão no CHAT. Se a pessoa disser que não abriu ou travou, peça para recarregar a página.
 - Se a pessoa pedir um link, perguntar onde se inscrever, onde jogar o Salão, como apoiar, ou se um link ajudar de verdade, acrescente no final uma linha separada começando exatamente com "CHAT:" e depois uma mensagem curta com o(s) link(s) completo(s) da lista de links oficiais. Use só links da lista.
+- Esta live pode estar num canal só de lives. O canal principal do jogo no YouTube é youtube.com/@ashemvow (vídeos, trailers e a saga). Quando alguém perguntar sobre vídeos, trailer, história do jogo ou onde acompanhar, ou quando agradecer alguém que chegou, convide para se inscrever lá e mande o link na linha CHAT:.
 - Sobre Ashem Vow, responda com base no conhecimento abaixo, que você conhece a fundo. Se a resposta sobre o jogo ou sobre ${cfg.nome} não estiver aqui, diga que ${cfg.nome} responde quando voltar. Nunca invente datas, preços, números ou novidades do jogo.
 ${infoLive ? '- ' + infoLive : ''}
 - Não fale de política, religião, nem assuntos adultos. Se alguém for ofensivo ou tentar te fazer dizer algo feio, responda com educação e mude de assunto. Nunca repita xingamentos.
@@ -501,14 +503,14 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- apresentação (toda vez que assume o chat, e de tempos em tempos) ----------
-  const LINKS_APRES = () => `Inscrição no teste: ${SITE_URL}/#inscricao · Apoie por Pix: https://livepix.gg/teecki · Corrida das Cinzas: ${SITE_URL}/salao`;
-  const APRES_PRONTA = () => `Oi, chat! Eu sou o Vigia, o guardião desta live enquanto ${cfg.nome} dá uma saída. Aqui a gente acompanha Ashem Vow, um jogo de ação e sobrevivência em pixel art dark fantasy para Android, com doze heróis, seis cenários e dezoito chefes, feito do zero por um desenvolvedor independente. O teste fechado está com inscrições abertas no site do jogo. Se quiser ajudar Ashem Vow a nascer, qualquer Pix faz diferença, e o QR code está aqui na tela. E enquanto ${cfg.nome} não volta, vem correr com o chat na Corrida das Cinzas, lá no Salão do site.`;
+  const LINKS_APRES = () => `Inscrição no teste: ${SITE_URL}/#inscricao · Canal no YouTube: https://www.youtube.com/@ashemvow · Apoie por Pix: https://livepix.gg/teecki · Corrida das Cinzas: ${SITE_URL}/salao`;
+  const APRES_PRONTA = () => `Oi, chat! Eu sou o Vigia, o guardião desta live enquanto ${cfg.nome} dá uma saída. Aqui a gente acompanha Ashem Vow, um jogo de ação e sobrevivência em pixel art dark fantasy para Android, com doze heróis, seis cenários e dezoito chefes, feito do zero por um desenvolvedor independente. O teste fechado está com inscrições abertas no site do jogo. Se quiser ajudar Ashem Vow a nascer, qualquer Pix faz diferença, e o QR code está aqui na tela. Os vídeos e a saga do jogo estão no canal Ashem Vow no YouTube, arroba ashemvow: segue lá. E enquanto ${cfg.nome} não volta, vem correr com o chat na Corrida das Cinzas, lá no Salão do site.`;
   let ultimaApres = 0, testeApres = false, apresentando = false, ultimoLinkApres = 0;
   async function apresentar(teste) {
     if (apresentando) return; apresentando = true; testeApres = !!teste; ultimaApres = performance.now();
     let txt = '', link = LINKS_APRES();
     try {
-      const r = await pensar(`[APRESENTAÇÃO] Você acabou de assumir o chat. Esta é a única exceção à regra do tamanho: fale de 4 a 6 frases (até 650 caracteres). Diga quem você é e que ${cfg.nome} já volta; resuma Ashem Vow com entusiasmo (gênero, heróis, chefes, que é feito por um desenvolvedor independente); convide para o teste fechado no site; peça com carinho apoio por Pix, dizendo que o QR code está na tela e que qualquer valor ajuda o jogo a nascer; e convide para a Corrida das Cinzas no Salão do site. Varie as palavras a cada vez. Depois, a linha CHAT: com os links de inscrição, Pix e Salão.`);
+      const r = await pensar(`[APRESENTAÇÃO] Você acabou de assumir o chat. Esta é a única exceção à regra do tamanho: fale de 4 a 6 frases (até 650 caracteres). Diga quem você é e que ${cfg.nome} já volta; resuma Ashem Vow com entusiasmo (gênero, heróis, chefes, que é feito por um desenvolvedor independente); convide para o teste fechado no site; peça com carinho apoio por Pix, dizendo que o QR code está na tela e que qualquer valor ajuda o jogo a nascer; convide para seguir o canal principal Ashem Vow no YouTube (arroba ashemvow), onde estão os vídeos e a saga do jogo; e convide para a Corrida das Cinzas no Salão do site. Varie as palavras a cada vez. Depois, a linha CHAT: com os links de inscrição, canal do YouTube, Pix e Salão.`);
       const partes = String(r).split(/\n?\s*CHAT:\s*/i); txt = paraFala(partes[0]).slice(0, 700); if (partes[1]) link = partes.slice(1).join(' ').replace(/\s+/g, ' ').trim().slice(0, 450);
     } catch (e) { txt = paraFala(APRES_PRONTA()); }
     if (!txt || txt.length < 120) txt = paraFala(APRES_PRONTA());
