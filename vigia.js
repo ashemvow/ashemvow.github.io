@@ -202,13 +202,34 @@ ${conhecimento(pergunta)}`;
   }
   const vozAtual = () => vozes.find(v => v.name === cfg.voz) || vozes[0] || null;
   if ('speechSynthesis' in window) { carregarVozes(); speechSynthesis.onvoiceschanged = carregarVozes; } else luz('l-voz', 'Sem voz', 'erro');
-  let falando = false, ultimaFala = -1e9;
+  let falando = false, ultimaFala = -1e9, vozBloqueada = false;
+  // o Edge bloqueia a voz até alguém clicar na página (depois de abrir ou recarregar)
+  function avisoVoz() {
+    let el = $('voz-bloq');
+    if (!el) { el = document.createElement('button'); el.id = 'voz-bloq'; el.className = 'btn red'; el.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99;font-size:1.15rem;padding:1rem 1.4rem;box-shadow:0 10px 30px rgba(0,0,0,.7)'; el.textContent = 'A voz está bloqueada: clique aqui para liberar a voz do Vigia'; document.body.append(el); }
+    el.hidden = !vozBloqueada;
+    if (vozBloqueada) { luz('l-voz', 'Clique na página', 'erro'); anotar('s', 'O navegador bloqueou a voz. Clique em qualquer lugar desta página para liberar.'); }
+    else carregarVozes();
+  }
+  const liberarVoz = () => { if (!vozBloqueada) return; try { const u = new SpeechSynthesisUtterance('Voz liberada.'); u.lang = 'pt-BR'; const v = vozAtual(); if (v) u.voice = v; u.onstart = () => { vozBloqueada = false; avisoVoz(); }; speechSynthesis.speak(u); } catch (e) { } };
+  document.addEventListener('pointerdown', liberarVoz, true); document.addEventListener('keydown', liberarVoz, true);
   function falar(txt) {
     return new Promise(ok => {
       falando = true; let fim = false; const acabar = () => { if (fim) return; fim = true; falando = false; ultimaFala = performance.now(); legenda('x', {}); ok(); setTimeout(processar, 0); };
       try {
-        const u = new SpeechSynthesisUtterance(txt); const v = vozAtual(); if (v) u.voice = v; u.lang = v ? v.lang : 'pt-BR'; u.rate = +cfg.vel || 1;
-        u.onend = acabar; u.onerror = acabar; speechSynthesis.speak(u);
+        const tentar = (simples) => {
+          const u = new SpeechSynthesisUtterance(txt); const v = simples ? vozes.find(x => !/natural|online/i.test(x.name)) : vozAtual(); if (v) u.voice = v; u.lang = v ? v.lang : 'pt-BR'; u.rate = +cfg.vel || 1;
+          const t0 = performance.now();
+          u.onstart = () => { if (vozBloqueada) { vozBloqueada = false; avisoVoz(); } };
+          u.onend = () => { if (performance.now() - t0 < 300 && txt.length > 20 && !simples) return tentar(true); acabar(); };
+          u.onerror = e => {
+            if (e.error === 'not-allowed') { vozBloqueada = true; avisoVoz(); return acabar(); }  // o navegador só deixa falar depois de um clique na página
+            if (!simples && e.error !== 'interrupted' && e.error !== 'canceled') { anotar('s', `A voz escolhida falhou (${esc(e.error)}); usei outra voz.`); return tentar(true); }
+            acabar();
+          };
+          speechSynthesis.cancel(); speechSynthesis.speak(u);
+        };
+        tentar(false);
       } catch (e) { }
       setTimeout(acabar, 4000 + txt.length * 95); // segurança: alguns navegadores esquecem de avisar que terminou
     });
