@@ -393,8 +393,8 @@ ${conhecimento(pergunta)}`;
       if (tags.bits) { anotar('s', `${esc(nick)} mandou ${tags.bits} bits`); entrar({ tipo: 'evento', nick, texto: `${nick} mandou ${tags.bits} bits com a mensagem "${texto.replace(/cheer\d+/gi, '').trim()}"` }); return; }
       if (BOTS.includes(login)) return;
       if (tw && login === sem(tw.login) && foiEu(texto)) return; // mensagem que o próprio Vigia mandou
-      if (/^!(jogar|corrida|salao|sal\u00e3o|como)/i.test(texto)) { escrever(`@${nick} ${PASSO_A_PASSO()}`); return; }
-      if (/^!(links?|site|inscri)/i.test(texto)) { escrever(`@${nick} ${LISTA_LINKS()}`); return; }
+      if (/^!(jogar|corrida|salao|sal\u00e3o|como)/i.test(texto)) { comando('jogar', nick, PASSO_A_PASSO()); return; }
+      if (/^!(links?|site|inscri)/i.test(texto)) { comando('links', nick, LISTA_LINKS()); return; }
       if (texto.startsWith('!')) return;
       anotar('', `<b>${esc(nick)}:</b> ${esc(texto)}`); recentes.push(`${nick}: ${texto.slice(0, 200)}`); if (recentes.length > 20) recentes.shift();
       if (cfg.quem === 'chamado' && !/vigia|\?/i.test(texto)) return;
@@ -405,6 +405,15 @@ ${conhecimento(pergunta)}`;
         anotar('s', esc(sys || id)); entrar({ tipo: 'evento', nick: tags['msg-param-displayName'] || nick, texto: `${sys}${texto ? ' Mensagem: ' + texto : ''}` });
       }
     }
+  }
+  // comandos com chat cheio: o mesmo comando responde no máximo a cada 30 s e marca todo mundo que pediu
+  const cmdEspera = {};
+  function comando(qual, nick, msg) {
+    const c = cmdEspera[qual] || (cmdEspera[qual] = { ultimo: 0, nomes: [], timer: 0 });
+    if (!c.nomes.includes(nick)) c.nomes.push(nick);
+    if (c.timer) return;
+    const falta = Math.max(0, 30000 - (Date.now() - c.ultimo));
+    c.timer = setTimeout(() => { const nomes = c.nomes.slice(0, 5).map(n => '@' + n).join(' '); c.nomes = []; c.timer = 0; c.ultimo = Date.now(); escrever(`${nomes} ${msg}`); }, falta);
   }
   const nomeDoacao = t => { const m = String(t).match(/^([\p{L}\p{N}_.-]{2,25})\s+(?:doou|enviou|mandou|apoiou)/iu) || String(t).match(/(?:de|por)\s+([\p{L}\p{N}_.-]{2,25})/iu); return m ? m[1] : ''; };
 
@@ -470,6 +479,7 @@ ${conhecimento(pergunta)}`;
       mais(20000, 'Reconectando', 'erro');
     }
   }
+  const ytCmd = {};
   function ytMsg(m) {
     const s = m.snippet || {}, a = m.authorDetails || {}, nick = a.displayName || 'alguém do YouTube';
     const texto = String((s.textMessageDetails && s.textMessageDetails.messageText) || s.displayMessage || '').trim();
@@ -480,6 +490,8 @@ ${conhecimento(pergunta)}`;
     }
     if (s.type === 'newSponsorEvent' || s.type === 'memberMilestoneChatEvent' || s.type === 'membershipGiftingEvent') { anotar('s', `${esc(nick)} virou membro no YouTube`); entrar({ tipo: 'evento', nick, yt: 1, texto: `${nick} virou membro do canal no YouTube` }); return; }
     if (s.type !== 'textMessageEvent' || !texto || BOTS.includes(sem(nick).replace(/^@/, ''))) return;
+    if (/^!(jogar|corrida|salao|salão|como|links?|site|inscri)/i.test(texto) && Date.now() - (ytCmd[texto.slice(1, 4).toLowerCase()] || 0) < 60000) return;
+    if (/^!/.test(texto)) ytCmd[texto.slice(1, 4).toLowerCase()] = Date.now();
     if (/^!(jogar|corrida|salao|salão|como)/i.test(texto)) { entrar({ tipo: 'aviso', nick: '', l: `${SITE_URL}/salao`, texto: `${nick}, para jogar a Corrida das Cinzas: abra o Salão no site, o link está na tela. Escreva seu nome no topo, toque em Entrar no Salão, desça até a Corrida, escolha um vigia e toque em Entrar na corrida.` }); return; }
     if (/^!(links?|site|inscri)/i.test(texto)) { entrar({ tipo: 'aviso', nick: '', l: LISTA_LINKS(), texto: `${nick}, os links estão aparecendo na tela agora.` }); return; }
     if (texto.startsWith('!')) return;
