@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vigia · voz do chat</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+[hidden]{display:none!important}
+main.vg-adm{max-width:860px;margin:0 auto;padding:3rem 1.2rem 4rem}
+.vg-adm h1{font-size:3rem;line-height:1}.k{color:var(--ember);letter-spacing:.3em;text-transform:uppercase;font-size:.8rem}
+.card{margin-top:1.2rem;padding:1.3rem;background:linear-gradient(180deg,var(--iron2),var(--iron));border:1px solid var(--line);border-top:3px solid var(--blood2);display:grid;gap:.8rem}
+label{color:var(--gold);display:grid;gap:.3rem;font-size:.95rem}
+input,select{width:100%;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;color:var(--bone);font:16px Georgia,serif}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}@media(max-width:640px){.dupla{grid-template-columns:1fr}}
+.luzes{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}@media(max-width:640px){.luzes{grid-template-columns:1fr 1fr}}
+.luz{padding:.6rem .7rem;background:#0c0a09;border:1px solid var(--line);font-size:.9rem}.luz b{display:block;font:400 1.15rem "Pirata One",serif;color:var(--mut)}
+.luz.ok b{color:#9fe08a}.luz.erro b{color:#ff8f80}.luz.meio b{color:#ffd27a}
+#modo{width:100%;font-size:1.5rem;padding:1.1rem;text-align:center}
+#modo.ausente{background:#1f5a2a;border-color:#3f9a4f}
+.nota{color:var(--mut);font-size:.9rem}.nota a{color:var(--ember)}
+.log{list-style:none;padding:0;margin:0;display:grid;gap:.3rem;max-height:340px;overflow:auto}
+.log li{padding:.45rem .7rem;background:#0c0a09;border:1px solid var(--line);font-size:.95rem}
+.log li.v{border-left:3px solid var(--gold)}.log li.v b{color:var(--gold)}.log li.s{color:var(--mut);font-size:.85rem}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+code.url{display:block;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;word-break:break-all;font-size:.85rem}
+details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;font-size:1.4rem}
+</style>
+</head>
+<body>
+<main class="vg-adm">
+  <p class="k">Só para você · deixe aberto no Microsoft Edge</p>
+  <h1>Vigia do chat</h1>
+  <p class="nota">Quando você estiver ausente, o Vigia responde o chat com voz e agradece bits, inscrições, raids e Pix. A voz sai por esta janela; o OBS pega pelo áudio da área de trabalho.</p>
+
+  <div class="card">
+    <div class="luzes">
+      <div class="luz" id="l-chat"><span>Chat</span><b>...</b></div>
+      <div class="luz" id="l-ia"><span>Inteligência</span><b>...</b></div>
+      <div class="luz" id="l-voz"><span>Voz</span><b>...</b></div>
+      <div class="luz" id="l-obs"><span>OBS</span><b>...</b></div>
+    </div>
+    <button class="btn red" id="modo">Estou aqui · Vigia em silêncio</button>
+    <p class="nota" id="modo-nota">Clique quando sair. Se ligar o OBS abaixo, ele troca sozinho pela cena.</p>
+  </div>
+
+  <div class="card">
+    <span class="k">Conversa</span>
+    <ul class="log" id="log"><li class="s">Nada ainda.</li></ul>
+    <div class="row"><input id="teste-msg" placeholder="Testar: escreva como se fosse alguém do chat" style="flex:1"><button class="btn" id="teste-ok">Testar resposta</button></div>
+  </div>
+
+  <details class="card" id="cfg" open>
+    <summary>Configuração</summary>
+    <div class="dupla">
+      <label>Canal da Twitch<input id="c-canal" placeholder="ashemvow"></label>
+      <label>Como o Vigia chama você<input id="c-nome" placeholder="Teecki"></label>
+    </div>
+    <label>Chave grátis do Google Gemini<input id="c-chave" type="password" placeholder="Cole aqui a chave (começa com AIza...)" autocomplete="off"></label>
+    <p class="nota">Pegue em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> com sua conta Google, sem cartão. A chave fica salva só neste computador.</p>
+    <div class="dupla">
+      <label>Voz<select id="c-voz"></select></label>
+      <label>Velocidade da fala<select id="c-vel"><option value=".9">Calma</option><option value="1" selected>Normal</option><option value="1.12">Rápida</option></select></label>
+    </div>
+    <div class="row"><button class="btn" id="voz-teste">Ouvir a voz</button><span class="nota">As melhores são as "Online (Natural)", que só aparecem no Edge.</span></div>
+    <div class="dupla">
+      <label>Responder<select id="c-quem"><option value="todos">Todas as mensagens (quando ausente)</option><option value="chamado">Só quando chamarem "Vigia" ou perguntarem algo</option></select></label>
+      <label>Intervalo mínimo entre falas<select id="c-int"><option value="6">6 segundos</option><option value="10" selected>10 segundos</option><option value="20">20 segundos</option></select></label>
+    </div>
+    <label>Contas que avisam doação no chat (separe por vírgula)<input id="c-alertas" placeholder="ex.: livepix, streamelements"></label>
+    <p class="nota">Se o LivePix ou outro bot escreve no chat quando chega um Pix, coloque o nome dessa conta aqui e o Vigia agradece em voz.</p>
+    <span class="k" style="margin-top:.6rem">Troca automática pelo OBS (opcional)</span>
+    <p class="nota">No OBS: Ferramentas › Configurações do servidor WebSocket › marque "Ativar servidor WebSocket" e copie a senha.</p>
+    <div class="dupla">
+      <label>Senha do WebSocket do OBS<input id="c-obs" type="password" autocomplete="off"></label>
+      <label>Cenas em que você está ausente<input id="c-cenas" placeholder="tela ja volto, Apresentação do jogo"></label>
+    </div>
+    <div class="row"><button class="btn red" id="salvar">Salvar e conectar</button><span class="nota" id="salvo"></span></div>
+  </details>
+
+  <div class="card">
+    <span class="k">Legenda na live (opcional)</span>
+    <p class="nota">Adicione no OBS uma fonte de navegador 1920 × 1080 com este endereço. Ela mostra o que o Vigia está falando.</p>
+    <code class="url" id="url-legenda"></code>
+  </div>
+</main>
+<script src="content.js"></script>
+<script src="rede.js"></script>
+<script src="vigia.js"></script>
+</body></html>
