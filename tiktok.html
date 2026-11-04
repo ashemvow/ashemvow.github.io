@@ -43,6 +43,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0a09;font-family:
 .cartao h2{font-size:60px;line-height:1;color:#ffd27a;margin:10px 0 12px}
 .cartao p{font-size:31px;line-height:1.25}
 .cartao .url{margin-top:auto;border:2px solid #c79a4f;color:#ffd27a;font-size:34px;padding:8px 14px 10px;text-align:center;background:#000}
+#link{position:absolute;left:544px;top:936px;width:514px;height:404px;padding:30px;background:#140c0b;border:2px solid #ffd27a;border-top:6px solid #ffd27a;box-shadow:0 0 40px rgba(255,170,60,.35);display:flex;flex-direction:column;opacity:0;transform:scale(.96);transition:opacity .5s,transform .5s;z-index:3}
+#link.on{opacity:1;transform:none}
+#link .k{letter-spacing:.28em;text-transform:uppercase;color:#c8742a;font-size:20px}
+#link h2{font-size:52px;line-height:1;color:#ffd27a;margin:10px 0 16px}
+#link .u{font-size:34px;line-height:1.3;color:#fff;overflow-wrap:anywhere}
+#link .u div{border-left:5px solid #c22a2d;padding:4px 0 4px 14px;margin-bottom:12px}
 #pontos{position:absolute;left:544px;width:514px;top:1352px;display:flex;justify-content:center;gap:10px}
 #pontos i{width:46px;height:5px;background:rgba(255,255,255,.18)}#pontos i.on{background:#ffd27a}
 #dica{position:absolute;left:22px;right:22px;top:1384px;text-align:center;font-size:32px;font-style:italic;color:#c9bfae}
@@ -58,11 +64,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0a09;font-family:
 <div id="jogo"><span>o jogo entra aqui (1080 x 608)</span></div>
 <div class="caixa" id="cam"><iframe id="vigia" title="Vigia"></iframe></div>
 <div class="caixa" id="info"></div>
+<div id="link"><div class="k">O Vigia mandou</div><h2 class="pir">Links na tela</h2><div class="u" id="link-u"></div></div>
 <div id="pontos"></div>
 <div id="dica">Pergunte no chat: <b>o Vigia responde com voz</b></div>
 <div id="guia" hidden><div style="left:0;top:0;right:0;height:220px">Topo do TikTok (nome e espectadores)</div><div style="left:0;right:0;top:1400px;bottom:0">Comentários e botões do TikTok ficam por cima desta parte</div></div>
 </div>
 <div id="medida" hidden></div>
+<script src="content.js"></script>
 <script>
 (() => {
   const h = new URLSearchParams(location.hash.slice(1)), $ = id => document.getElementById(id);
@@ -84,6 +92,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0a09;font-family:
   $('info').innerHTML = C.map(c => `<div class="cartao"><div class="k">${c[0]}</div><h2 class="pir">${c[1]}</h2><p>${c[2]}</p>${c[3] ? `<div class="url">${c[3]}</div>` : ''}</div>`).join('');
   $('pontos').innerHTML = C.map(() => '<i></i>').join('');
   let i = -1; const prox = () => { i = (i + 1) % C.length; document.querySelectorAll('.cartao').forEach((e, k) => e.classList.toggle('on', k === i)); document.querySelectorAll('#pontos i').forEach((e, k) => e.classList.toggle('on', k === i)); };
+  // quando o Vigia responde com um link, ele aparece grande aqui por 20 segundos (no TikTok ele não escreve no chat)
+  if (canal && window.SITE && SITE.inscricao) {
+    const I = SITE.inscricao; let apos = 0, some = 0, primeira = true;
+    const mostrar = l => { const partes = String(l).split(/\s*[·|]\s*/).map(s => s.replace(/https?:\/\//g, '').replace(/\/$/, '').trim()).filter(Boolean).slice(0, 4);
+      if (!partes.length) return; $('link-u').innerHTML = partes.map(p => `<div>${p.replace(/[<>&]/g, '')}</div>`).join(''); $('link').classList.add('on'); clearTimeout(some); some = setTimeout(() => $('link').classList.remove('on'), 20000); };
+    const ler = async () => { try { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/vigia_ler`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: canal, p_apos: apos }) });
+      if (r.ok) { const j = await r.json(); if (!primeira) for (const e of j.ev || []) if (e.ev === 'f' && e.d && e.d.l) mostrar(e.d.l); apos = Math.max(apos, j.ultimo || 0); primeira = false; } } catch (e) { } setTimeout(ler, 1500); };
+    ler();
+  }
   prox(); setInterval(prox, +(h.get('tempo') || 9) * 1000);
 })();
 </script>
