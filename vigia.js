@@ -4,7 +4,7 @@
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4', ytChave: '', ytCanal: '', ytLive: '', tiktok: 'nao', assunto: '2', presente: 'agradecer', boasvindas: 'sim' };
+  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4', ytChave: '', ytCanal: '', ytLive: '', tiktok: 'nao', assunto: '2', presente: 'agradecer', boasvindas: 'sim', musica: 'nao', musvol: '15' };
   let cfg = Object.assign({}, PADRAO, JSON.parse(ls.get('vigia-cfg') || '{}'));
   if (!cfg.legenda) { cfg.legenda = Math.random().toString(36).slice(2, 12); ls.set('vigia-cfg', JSON.stringify(cfg)); }
   const BOTS = ['nightbot', 'streamelements', 'moobot', 'fossabot', 'wizebot', 'soundalerts', 'streamlabs', 'sery_bot', 'kofistreambot'];
@@ -223,6 +223,12 @@ ${conhecimento(pergunta)}`;
     } catch (e) { }
   }
   document.addEventListener('pointerdown', manterAcordado, true);
+  // música de fundo tocada por esta página (o LIVE Studio e o OBS pegam pelo som do computador); abaixa quando o Vigia fala
+  const trilha = new Audio('assets/musica-ambiente.mp3'); trilha.loop = true; trilha.volume = 0;
+  const volTrilha = () => cfg.musica === 'sim' ? (+cfg.musvol || 15) / 100 * (falando ? 0.35 : 1) : 0;
+  function tocarTrilha() { if (cfg.musica !== 'sim') { trilha.pause(); return; } if (trilha.paused) trilha.play().then(() => { const el = $('mus-aviso'); if (el) el.hidden = true; }).catch(() => { const el = $('mus-aviso'); if (el) el.hidden = false; }); }
+  setInterval(() => { const a = volTrilha(), v = trilha.volume; trilha.volume = Math.abs(v - a) < 0.01 ? a : v + (a - v) * 0.2; }, 100);
+  document.addEventListener('pointerdown', tocarTrilha, true); setTimeout(tocarTrilha, 500); setInterval(tocarTrilha, 5000);
   try { navigator.locks && navigator.locks.request('vigia-acordado', () => new Promise(() => { })); } catch (e) { }
   function falar(txt) {
     return new Promise(ok => {
@@ -728,7 +734,7 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- configuração ----------
-  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive', tiktok: 'c-tiktok', assunto: 'c-assunto', presente: 'c-presente', boasvindas: 'c-boasvindas' };
+  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive', tiktok: 'c-tiktok', assunto: 'c-assunto', presente: 'c-presente', boasvindas: 'c-boasvindas', musica: 'c-musica', musvol: 'c-musvol' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
     const antes = Object.assign({}, cfg);
