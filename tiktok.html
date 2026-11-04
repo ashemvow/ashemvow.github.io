@@ -92,13 +92,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0a09;font-family:
   $('info').innerHTML = C.map(c => `<div class="cartao"><div class="k">${c[0]}</div><h2 class="pir">${c[1]}</h2><p>${c[2]}</p>${c[3] ? `<div class="url">${c[3]}</div>` : ''}</div>`).join('');
   $('pontos').innerHTML = C.map(() => '<i></i>').join('');
   let i = -1; const prox = () => { i = (i + 1) % C.length; document.querySelectorAll('.cartao').forEach((e, k) => e.classList.toggle('on', k === i)); document.querySelectorAll('#pontos i').forEach((e, k) => e.classList.toggle('on', k === i)); };
+  // música de fundo (#musica=1): toca em loop e abaixa sozinha enquanto o Vigia fala
+  const vol = Math.min(1, Math.max(0, +(h.get('vol') || 0.25))); let musica = null, alvo = vol, volta = 0;
+  function abaixar(fala) { clearTimeout(volta); if (fala) alvo = vol * 0.35; else volta = setTimeout(() => { alvo = vol; }, 1200); }
+  if (h.get('musica') === '1') {
+    musica = new Audio('assets/musica-ambiente.mp3'); musica.loop = true; musica.volume = vol;
+    const tocar = () => musica.play().catch(() => { });
+    tocar(); addEventListener('pointerdown', tocar); setInterval(() => { if (musica.paused) tocar(); }, 5000);
+    setInterval(() => { const v = musica.volume; musica.volume = Math.abs(v - alvo) < 0.02 ? alvo : v + (alvo - v) * 0.25; }, 100);
+  }
   // quando o Vigia responde com um link, ele aparece grande aqui por 20 segundos (no TikTok ele não escreve no chat)
   if (canal && window.SITE && SITE.inscricao) {
     const I = SITE.inscricao; let apos = 0, some = 0, primeira = true;
     const mostrar = l => { const partes = String(l).split(/\s*[·|]\s*/).map(s => s.replace(/https?:\/\//g, '').replace(/\/$/, '').trim()).filter(Boolean).slice(0, 4);
       if (!partes.length) return; $('link-u').innerHTML = partes.map(p => `<div>${p.replace(/[<>&]/g, '')}</div>`).join(''); $('link').classList.add('on'); clearTimeout(some); some = setTimeout(() => $('link').classList.remove('on'), 20000); };
     const ler = async () => { try { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/vigia_ler`, { method: 'POST', headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_canal: canal, p_apos: apos }) });
-      if (r.ok) { const j = await r.json(); if (!primeira) for (const e of j.ev || []) if (e.ev === 'f' && e.d && e.d.l) mostrar(e.d.l); apos = Math.max(apos, j.ultimo || 0); primeira = false; } } catch (e) { } setTimeout(ler, 1500); };
+      if (r.ok) { const j = await r.json(); if (!primeira) for (const e of j.ev || []) { if (e.ev === 'f' && e.d && e.d.l) mostrar(e.d.l); if (e.ev === 'f') abaixar(true); if (e.ev === 'x') abaixar(false); } apos = Math.max(apos, j.ultimo || 0); primeira = false; } } catch (e) { } setTimeout(ler, 1500); };
     ler();
   }
   prox(); setInterval(prox, +(h.get('tempo') || 9) * 1000);
