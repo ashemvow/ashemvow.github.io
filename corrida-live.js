@@ -5,7 +5,11 @@
   const HER = S.vigiliaHerois, { PASSO, VAGAS } = C;
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
   const rpc = async (n, b, keep) => { const r = await fetch(`${I.supabaseUrl}/rest/v1/rpc/${n}`, { method: 'POST', keepalive: !!keep, headers: { apikey: I.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }); const t = await r.text(); if (!r.ok) throw new Error(t); return t ? JSON.parse(t) : null; };
-  const cv = $('cv'), cx = cv.getContext('2d');
+  const cv = $('cv');
+  // modo leve (#leve=1): desenha em meia resolução e a 30 quadros por segundo, para PCs mais fracos e para o LIVE Studio
+  const LEVE = /(^|[#&?])leve=1/.test(location.hash + location.search), ESC = LEVE ? .5 : 1;
+  if (LEVE) { cv.width = 960; cv.height = 540; }
+  const cx = cv.getContext('2d', { alpha: false });
   const ATRASO = 1.3;            // a live mostra a corrida 1,3 s atrás, para os pulos de todos já terem chegado
   const CONTAGEM = 10000, FIM = 11000, MAX = 300;
 
@@ -97,6 +101,8 @@
   function painel(x, y, w, h) { cx.fillStyle = 'rgba(12,10,9,.84)'; cx.fillRect(x, y, w, h); cx.strokeStyle = 'rgba(199,154,79,.55)'; cx.lineWidth = 1.5; cx.strokeRect(x + .5, y + .5, w - 1, h - 1); cx.fillStyle = '#c22a2d'; cx.fillRect(x, y, w, 4); }
   let tAnim = 0, ultQ = performance.now();
   function quadro(agora) {
+    if (LEVE && agora - ultQ < 30) { requestAnimationFrame(quadro); return; }
+    cx.setTransform(ESC, 0, 0, ESC, 0, 0);
     const dt = Math.min(.1, (agora - ultQ) / 1000); ultQ = agora; tAnim += dt;
     const correndo = G.estado === 'corrida' || G.estado === 'fim';
     const tv = G.estado === 'corrida' ? Math.max(0, tCorrida() - ATRASO) : 0, passoV = Math.floor(tv / PASSO);
@@ -126,7 +132,7 @@
     if (rot.length > 8) C.rotulo(cx, `+${rot.length - 8}`, RX + 20, CHAO - (topo + 96) * Z - 8 * 26, false);
     // quedas anunciadas quando a live chega nelas
     for (const q of G.quedas) if (!q.mostrada && q.passo <= passoV) { q.mostrada = true; q.em = tAnim; }
-    const vg = cx.createRadialGradient(960, 540, 420, 960, 540, 1150); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.5)'); cx.fillStyle = vg; cx.fillRect(0, 0, 1920, 1080);
+    if (!LEVE) { const vg = cx.createRadialGradient(960, 540, 420, 960, 540, 1150); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.5)'); cx.fillStyle = vg; cx.fillRect(0, 0, 1920, 1080); }
     hud(tv, lista);
     requestAnimationFrame(quadro);
   }
