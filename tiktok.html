@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ashem Vow · tela da live no TikTok</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Fonte de navegador no OBS: 1080 x 1920 (tela em pé do TikTok). É a camada de baixo:
+   o jogo (ou a Corrida, ou o vídeo) vai por cima, no retângulo x 0, y 300, 1080 x 608. */
+*{margin:0;box-sizing:border-box}[hidden]{display:none!important}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0c0a09;font-family:"IM Fell English",Georgia,serif;color:#efe4d0}
+.pir{font-family:"Pirata One",serif;font-weight:400}
+#fundo{position:absolute;inset:0;background:
+  radial-gradient(60% 30% at 50% 22%,rgba(194,42,45,.35),rgba(0,0,0,0) 70%),
+  radial-gradient(70% 25% at 50% 72%,rgba(150,30,22,.35),rgba(0,0,0,0) 70%),
+  linear-gradient(#120d0c,#0c0a09 45%,#160b0a)}
+.lua{position:absolute;right:-140px;top:40px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#c8322c,#6d1714 72%);opacity:.35}
+.serra{position:absolute;left:0;right:0;bottom:0;height:640px;background:#070505;clip-path:polygon(0 40%,10% 28%,20% 44%,32% 22%,44% 38%,56% 18%,66% 36%,78% 26%,90% 40%,100% 28%,100% 100%,0 100%)}
+.brasa{position:absolute;bottom:-10px;width:7px;height:7px;border-radius:50%;background:#ffab5c;box-shadow:0 0 12px 4px rgba(255,110,40,.7);opacity:0;animation:sobe linear infinite}
+@keyframes sobe{0%{transform:translateY(0);opacity:0}10%{opacity:.85}100%{transform:translateY(-1900px);opacity:0}}
+/* topo */
+#topo{position:absolute;left:0;right:0;top:226px;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+#topo .nome{font-size:54px;color:#ffd27a;text-shadow:0 4px 0 #3a0e0c}
+#topo .vivo{display:flex;align-items:center;gap:12px;background:#c22a2d;color:#fff;font-family:"Pirata One",serif;font-size:34px;padding:2px 20px 6px}
+#topo .vivo i{width:14px;height:14px;border-radius:50%;background:#fff;animation:pisca 1.6s infinite}
+@keyframes pisca{50%{opacity:.3}}
+/* moldura do jogo */
+#jogo{position:absolute;left:0;top:300px;width:1080px;height:608px;background:#000}
+#jogo::before,#jogo::after{content:"";position:absolute;left:0;right:0;height:4px;background:linear-gradient(90deg,#c22a2d,#ffd27a,#c22a2d)}
+#jogo::before{top:-4px}#jogo::after{bottom:-4px}
+#jogo span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#5d544a;font-size:34px}
+/* parte de baixo */
+.caixa{position:absolute;top:936px;height:404px;border:2px solid rgba(199,154,79,.7);background:rgba(12,10,9,.92);box-shadow:0 20px 50px rgba(0,0,0,.7);overflow:hidden}
+#cam{left:22px;width:500px}
+#cam iframe{width:100%;height:100%;border:0;display:block;background:transparent}
+#info{left:544px;width:514px;padding:30px 30px 26px;border-top:6px solid #c22a2d}
+.cartao{position:absolute;inset:30px 30px 26px;display:flex;flex-direction:column;opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.cartao.on{opacity:1;transform:none}
+.cartao .k{letter-spacing:.28em;text-transform:uppercase;color:#c8742a;font-size:20px}
+.cartao h2{font-size:60px;line-height:1;color:#ffd27a;margin:10px 0 12px}
+.cartao p{font-size:31px;line-height:1.25}
+.cartao .url{margin-top:auto;border:2px solid #c79a4f;color:#ffd27a;font-size:34px;padding:8px 14px 10px;text-align:center;background:#000}
+#pontos{position:absolute;left:544px;width:514px;top:1352px;display:flex;justify-content:center;gap:10px}
+#pontos i{width:46px;height:5px;background:rgba(255,255,255,.18)}#pontos i.on{background:#ffd27a}
+#dica{position:absolute;left:22px;right:22px;top:1384px;text-align:center;font-size:32px;font-style:italic;color:#c9bfae}
+#dica b{font-family:"Pirata One",serif;font-weight:400;font-style:normal;color:#ffd27a;font-size:38px}
+#guia{position:absolute;inset:0;pointer-events:none}
+#guia div{position:absolute;border:3px dashed rgba(80,200,255,.7);color:#7fd3ff;font:24px sans-serif;padding:6px}
+</style>
+</head>
+<body>
+<div id="fundo"></div><div class="lua"></div><div class="serra"></div><div id="brasas"></div>
+<div id="topo"><div class="nome pir">Ashem Vow</div><div class="vivo"><i></i>AO VIVO</div></div>
+<div id="jogo"><span>o jogo entra aqui (1080 x 608)</span></div>
+<div class="caixa" id="cam"><iframe id="vigia" title="Vigia"></iframe></div>
+<div class="caixa" id="info"></div>
+<div id="pontos"></div>
+<div id="dica">Pergunte no chat: <b>o Vigia responde com voz</b></div>
+<div id="guia" hidden><div style="left:0;top:0;right:0;height:220px">Topo do TikTok (nome e espectadores)</div><div style="left:0;right:0;top:1400px;bottom:0">Comentários e botões do TikTok ficam por cima desta parte</div></div>
+<script>
+(() => {
+  const h = new URLSearchParams(location.hash.slice(1)), $ = id => document.getElementById(id);
+  const canal = (h.get('canal') || '').toLowerCase().replace(/1/g, 'l').replace(/0/g, 'o');
+  if (canal) $('vigia').src = 'vigia-cam.html#canal=' + canal; else $('cam').innerHTML = '<p style="padding:30px;font-size:28px">Coloque #canal=SEU_CODIGO no endereço para o Vigia aparecer aqui.</p>';
+  if (h.get('guia') === '1') $('guia').hidden = false;
+  $('jogo').querySelector('span').hidden = h.get('guia') !== '1';
+  for (let i = 0; i < 18; i++) { const b = document.createElement('i'); b.className = 'brasa'; b.style.left = (Math.random() * 100) + '%'; b.style.animationDuration = (9 + Math.random() * 9) + 's'; b.style.animationDelay = (-Math.random() * 18) + 's'; $('brasas').append(b); }
+  const C = [
+    ['Jogue com a gente', 'Corrida das Cinzas', 'Todo mundo corre na mesma pista, pelo celular. O último de pé aparece aqui na live.', 'ashemvow.github.io/salao'],
+    ['Teste fechado', 'Jogue antes', 'Inscreva-se para jogar Ashem Vow no Android antes de todo mundo.', 'ashemvow.github.io'],
+    ['O jogo', '12 heróis, 18 chefes', 'Ação e sobrevivência em pixel art dark fantasy, feito do zero por um desenvolvedor independente.', ''],
+    ['Curtiu?', 'Siga o perfil', 'Siga e compartilhe a live para mais gente conhecer o jogo. Vídeos e a saga: YouTube @ashemvow.', ''],
+    ['No chat', 'Fale com o Vigia', 'Pergunte qualquer coisa sobre o jogo. Digite !jogar para aprender a entrar na corrida.', ''],
+  ];
+  $('info').innerHTML = C.map(c => `<div class="cartao"><div class="k">${c[0]}</div><h2 class="pir">${c[1]}</h2><p>${c[2]}</p>${c[3] ? `<div class="url">${c[3]}</div>` : ''}</div>`).join('');
+  $('pontos').innerHTML = C.map(() => '<i></i>').join('');
+  let i = -1; const prox = () => { i = (i + 1) % C.length; document.querySelectorAll('.cartao').forEach((e, k) => e.classList.toggle('on', k === i)); document.querySelectorAll('#pontos i').forEach((e, k) => e.classList.toggle('on', k === i)); };
+  prox(); setInterval(prox, +(h.get('tempo') || 9) * 1000);
+})();
+</script>
+</body></html>

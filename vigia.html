@@ -46,6 +46,7 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <div class="luz" id="l-salao"><span>Salão</span><b>...</b></div>
       <div class="luz" id="l-live"><span>Legenda na live</span><b>...</b></div>
       <div class="luz" id="l-yt"><span>YouTube</span><b>...</b></div>
+      <div class="luz" id="l-tk"><span>TikTok</span><b>...</b></div>
     </div>
     <button class="btn red" id="modo">Estou aqui · Vigia em silêncio</button>
     <p class="nota" id="modo-nota">Clique quando sair. Se ligar o OBS abaixo, ele troca sozinho pela cena.</p>
@@ -104,6 +105,9 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     </div>
     <label>Link da live do YouTube (opcional, só se ele não achar sozinho)<input id="c-ytlive" placeholder="https://youtube.com/live/..." autocomplete="off"></label>
     <p class="nota">Pode fazer live numa plataforma de cada vez: quando você sai, ele vê se a live da Twitch está no ar; se não estiver, procura a live do YouTube sozinho e cuida dela. No chat da Twitch ele só escreve quando a live da Twitch está no ar. A cota grátis do YouTube dá para cerca de 5 horas de Vigia por dia.</p>
+    <span class="k" style="margin-top:.6rem">Live no TikTok (opcional)</span>
+    <p class="nota">O Vigia lê o chat, os presentes e os novos seguidores da live do TikTok pelo <a href="https://tikfinity.zerody.one" target="_blank" rel="noopener">TikFinity</a> (programa grátis para Windows). Deixe o TikFinity aberto e conectado na sua live. No TikTok ele responde em voz e na tela; não escreve no chat, e não fala de Pix.</p>
+    <label>Ler a live do TikTok<select id="c-tiktok"><option value="nao" selected>Não</option><option value="sim">Sim, pelo TikFinity aberto neste PC</option></select></label>
     <span class="k" style="margin-top:.6rem">Salão e Corrida sem você</span>
     <div class="dupla">
       <label>Código do Salão<input id="c-codigo" type="text" class="segredo" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="o mesmo da página de controle" autocomplete="off"></label>
@@ -133,9 +137,11 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
     <div class="row" style="margin-top:.6rem"><button class="btn" id="leg-teste" type="button">Testar a legenda na live</button><span class="nota">Aparece uma frase de teste na legenda e no quadro AO VIVO por 6 segundos.</span></div>
     <p class="nota" style="margin-top:.6rem">Para o Vigia aparecer no quadro "AO VIVO" (no lugar da câmera), use este outro endereço numa fonte de navegador de 480 × 300:</p>
     <code class="url" id="url-cam"></code>
+    <p class="nota" style="margin-top:.6rem">Live em pé no TikTok (tela 1080 × 1920): use este endereço numa fonte de navegador 1080 × 1920, como camada de baixo. O jogo vai por cima, em x 0, y 300, tamanho 1080 × 608. Ponha <b>&amp;guia=1</b> no fim para ver as áreas que o TikTok cobre.</p>
+    <code class="url" id="url-tiktok"></code>
   </div>
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=21"></script>
+<script src="vigia.js?v=23"></script>
 </body></html>
