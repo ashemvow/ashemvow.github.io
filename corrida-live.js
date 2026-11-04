@@ -63,6 +63,7 @@
     G.res = { v: venc ? [venc.nick, HER[venc.h].nome, pts(venc)] : null, l: ord.slice(0, 10).map(o => [o.r.nick, HER[o.r.h].nome, o.p]) };
     G.estado = 'fim'; G.fimEm = performance.now() + FIM; enviar(true);
     const top = ord[0]; if (top && aberto) rpc('arena_resultado', { p_codigo: codigo, p_nick: top.r.nick, p_texto: 'corrida', p_pontos: top.p }).catch(() => { });
+    if (ord.length && aberto) rpc('corrida_resultados', { p_codigo: codigo, p_lista: ord.slice(0, 20).map(o => [o.r.nick, HER[o.r.h].nome, o.p]) }).catch(() => { }); // ranking da Corrida no Salão
   }
   function passo() {
     const agora = performance.now();

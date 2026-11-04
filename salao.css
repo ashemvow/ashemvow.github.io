@@ -146,3 +146,5 @@
 .vg.cc .vg-l{display:flex;gap:1rem;width:auto}
 @media(max-width:860px){.vg.cc{aspect-ratio:4/3}}
 @media(max-width:560px){.vg.cc{aspect-ratio:1/1}}
+#rk-jogo{margin-bottom:.6rem}#rk-jogo button{font-size:1.05rem}
+@media(min-width:861px){.rk li{grid-template-columns:3rem 1fr auto auto 6rem}}.rk .tm{white-space:nowrap}

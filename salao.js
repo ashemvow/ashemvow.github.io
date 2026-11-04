@@ -50,14 +50,21 @@
   async function registrar(tipo, texto, pontos) { if (!estado.aberto || !nick()) return; try { await rpc('registrar_salao', { p_tipo: tipo, p_nick: nick(), p_texto: texto, p_pontos: pontos || 0 }); } catch (e) { } }
 
   // ---------- ranking ----------
-  let aba = 'live';
+  let aba = 'live', jogo = 'corrida';
   $('rk-abas').onclick = e => { const b = e.target.closest('button'); if (!b) return; aba = b.dataset.r; $('rk-abas').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); ranking(); };
+  $('rk-jogo').onclick = e => { const b = e.target.closest('button'); if (!b) return; jogo = b.dataset.j; $('rk-jogo').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); $('rk-k').textContent = jogo === 'corrida' ? 'Corrida das Cinzas · quem fez mais pontos' : 'Vigília das Cinzas · quem sobreviveu mais'; ranking(); };
   async function ranking() {
     const box = $('rk');
-    if (aba === 'live' && !estado.aberto) { box.innerHTML = '<li class="vazio">O ranking da live aparece quando o Salão abrir.</li>'; return; }
+    if (aba === 'live' && !estado.aberto) { box.innerHTML = '<li class="vazio">O ranking da live aparece quando o Salão abrir. Veja o Geral enquanto isso.</li>'; return; }
     try {
-      const rows = await rpc('top_vigilia', { p_limit: 10, p_sessao: aba === 'live' ? estado.sessao : null });
-      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.nick === nick() ? 'eu' : ''}"><span class="pos">${i + 1}</span><b>${esc(r.nick)}</b><span class="hr">${esc(r.heroi)}</span><span class="tm">${Math.floor(r.tempo / 60)}:${String(r.tempo % 60).padStart(2, '0')}</span><span class="pt">${r.pontos.toLocaleString('pt-BR')}</span></li>`).join('') : '<li class="vazio">Ninguém sobreviveu ainda. Seja o primeiro.</li>';
+      const sessao = aba === 'live' ? estado.sessao : null;
+      if (jogo === 'corrida') {
+        const rows = await rpc('top_corrida', { p_limit: 10, p_sessao: sessao });
+        box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.nick === nick() ? 'eu' : ''}"><span class="pos">${i + 1}</span><b>${esc(r.nick)}</b><span class="hr">${esc(r.heroi || '')}</span><span class="tm">${r.corridas} ${r.corridas == 1 ? 'corrida' : 'corridas'}</span><span class="pt">${r.pontos.toLocaleString('pt-BR')}</span></li>`).join('') : '<li class="vazio">Ninguém correu ainda. Seja o primeiro a entrar na Corrida.</li>';
+      } else {
+        const rows = await rpc('top_vigilia', { p_limit: 10, p_sessao: sessao });
+        box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.nick === nick() ? 'eu' : ''}"><span class="pos">${i + 1}</span><b>${esc(r.nick)}</b><span class="hr">${esc(r.heroi)}</span><span class="tm">${Math.floor(r.tempo / 60)}:${String(r.tempo % 60).padStart(2, '0')}</span><span class="pt">${r.pontos.toLocaleString('pt-BR')}</span></li>`).join('') : '<li class="vazio">Ninguém sobreviveu ainda. Seja o primeiro.</li>';
+      }
     } catch (e) { box.innerHTML = '<li class="vazio">Não deu para carregar o ranking agora.</li>'; }
   }
 
