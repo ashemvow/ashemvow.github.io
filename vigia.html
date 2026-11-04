@@ -88,6 +88,11 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
       <label>Responder<select id="c-quem"><option value="todos">Todas as mensagens (quando ausente)</option><option value="chamado">Só quando chamarem "Vigia" ou perguntarem algo</option></select></label>
       <label>Intervalo mínimo entre falas<select id="c-int"><option value="6">6 segundos</option><option value="10" selected>10 segundos</option><option value="20">20 segundos</option></select></label>
     </div>
+    <div class="dupla">
+      <label>Puxar assunto quando o chat fica quieto (você fora)<select id="c-assunto"><option value="0">Não</option><option value="1">Depois de 1 minuto quieto</option><option value="2" selected>Depois de 2 minutos quieto</option><option value="4">Depois de 4 minutos quieto</option></select></label>
+      <label>Com você na live<select id="c-presente"><option value="agradecer" selected>Dá boas-vindas e agradece presentes (não responde perguntas)</option><option value="silencio">Fica em silêncio total</option></select></label>
+    </div>
+    <label>Dar boas-vindas a quem entra na live do TikTok<select id="c-boasvindas"><option value="sim" selected>Sim (junta os nomes e fala de tempos em tempos)</option><option value="nao">Não</option></select></label>
     <label>O que mais o Vigia deve saber (opcional)<textarea id="c-extra" rows="6" placeholder="Escreva aqui qualquer coisa que o chat costuma perguntar: dicas, histórias do mundo, horários das lives, o que vem na próxima versão, seu setup..." style="width:100%;padding:.6rem .8rem;background:#000;border:1px solid #3a302d;color:var(--bone);font:15px Georgia,serif;resize:vertical"></textarea></label>
     <p class="nota">Ele já sabe tudo o que está no site: heróis e habilidades, fases, criaturas e chefes, recursos, novidades, perguntas frequentes e os links.</p>
     <span class="k" style="margin-top:.6rem">Escrever no chat (para mandar os links)</span>
@@ -143,5 +148,5 @@ details summary{cursor:pointer;color:var(--gold);font-family:"Pirata One",serif;
 </main>
 <script src="content.js"></script>
 <script src="rede.js?v=2"></script>
-<script src="vigia.js?v=23"></script>
+<script src="vigia.js?v=25"></script>
 </body></html>

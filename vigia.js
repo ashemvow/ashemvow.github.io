@@ -4,7 +4,7 @@
   const S = window.SITE, $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
-  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4', ytChave: '', ytCanal: '', ytLive: '', tiktok: 'nao' };
+  const PADRAO = { canal: 'ashemvow', nome: (S.criador && S.criador.nome) || 'o dev', chave: '', voz: '', vel: '1', quem: 'todos', int: '10', alertas: '', obs: '', cenas: 'tela ja volto', legenda: '', extra: '', cliente: '', token: '', lembrete: '15', cerebro: 'pro', busca: 'sim', provedor: 'groq', groq: '', codigo: '', autoSalao: 'sim', avisarCorrida: 'sim', rodizio: '', rodizioMin: '4', ytChave: '', ytCanal: '', ytLive: '', tiktok: 'nao', assunto: '2', presente: 'agradecer', boasvindas: 'sim' };
   let cfg = Object.assign({}, PADRAO, JSON.parse(ls.get('vigia-cfg') || '{}'));
   if (!cfg.legenda) { cfg.legenda = Math.random().toString(36).slice(2, 12); ls.set('vigia-cfg', JSON.stringify(cfg)); }
   const BOTS = ['nightbot', 'streamelements', 'moobot', 'fossabot', 'wizebot', 'soundalerts', 'streamlabs', 'sery_bot', 'kofistreambot'];
@@ -60,7 +60,7 @@
     return S2.filter(s => s[0] === 'base' || temas.includes(s[0])).map(s => s[1]).join('\n\n');
   }
   function sistema(pergunta) {
-    return `Você é o Vigia, a voz que cuida do chat da live de ${cfg.nome} ${tkAoVivo ? 'no TikTok' : naTwitch() ? 'na Twitch (canal ' + cfg.canal + ')' : 'no YouTube'} enquanto ${cfg.nome} está ausente. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
+    return `Você é o Vigia, a voz que cuida do chat da live de ${cfg.nome} ${tkAoVivo ? 'no TikTok' : naTwitch() ? 'na Twitch (canal ' + cfg.canal + ')' : 'no YouTube'} ${ausente ? 'enquanto ' + cfg.nome + ' está ausente' : 'ao lado de ' + cfg.nome + ', que está na live jogando agora (então seja bem breve, uma frase, e não diga que ele já volta)'}. ${cfg.nome} é o desenvolvedor independente do jogo Ashem Vow e já volta.
 Como responder:
 - Português do Brasil, tom amigável e um pouco sombrio, combinando com o jogo (um vigia de cemitério sob a lua vermelha), nunca assustador de verdade.
 - Pense antes de responder: entenda o que a pessoa realmente quer saber, use a conversa recente do chat como contexto e responda de forma específica e útil, com detalhes reais do jogo (nomes de heróis, habilidades, chefes, fases, recursos) quando for sobre o jogo.
@@ -181,7 +181,7 @@ ${conhecimento(pergunta)}`;
   // respostas prontas para quando a inteligência não responde
   const PRONTAS = {
     chat: ['{n}, {d} já volta! Enquanto isso, corre com a gente na Corrida das Cinzas, em ashemvow ponto github ponto io barra salao.', 'Oi, {n}! Eu sou o Vigia e cuido do chat até {d} voltar. Que tal se inscrever no teste fechado de Ashem Vow?', 'Boa, {n}! Guarda essa que {d} responde quando voltar. Segue o canal para não perder nada.'],
-    evento: ['Valeu demais, {n}! Isso ajuda muito Ashem Vow a nascer. {d} vai ficar feliz quando voltar.', '{n}, obrigado pelo apoio! A lua vermelha brilha mais forte hoje.']
+    evento: ['Valeu demais, {n}! Isso ajuda muito Ashem Vow a nascer.', '{n}, obrigado pelo apoio! A lua vermelha brilha mais forte hoje.', 'Que presente, {n}! A vigília agradece.']
   };
   let iPronta = 0;
   const pronta = (tipo, n) => PRONTAS[tipo][iPronta++ % PRONTAS[tipo].length].replace(/\{n\}/g, n).replace(/\{d\}/g, cfg.nome);
@@ -276,9 +276,10 @@ ${conhecimento(pergunta)}`;
     if ($('url-tiktok')) $('url-tiktok').textContent = `${base}tiktok.html#canal=${c}`; }
 
   // ---------- fila ----------
-  let ausente = false; const fila = [], recentes = [];
+  let ausente = false; const fila = [], recentes = [], falouAntes = new Set();
   function entrar(item) {
-    if (!ausente && !item.teste) return;
+    if (!ausente && !item.teste && !(item.leve && cfg.presente === 'agradecer')) return;
+    if (item.tipo === 'chat' && !falouAntes.has(sem(item.nick))) { falouAntes.add(sem(item.nick)); item.primeira = 1; }
     if (item.tipo === 'chat') { const chats = fila.filter(f => f.tipo === 'chat'); if (chats.length >= 3) fila.splice(fila.indexOf(chats[0]), 1); }
     fila.push(item); processar();
   }
@@ -290,9 +291,10 @@ ${conhecimento(pergunta)}`;
     fila.sort((a, b) => (a.tipo === 'evento' ? 0 : 1) - (b.tipo === 'evento' ? 0 : 1));
     const it = fila.shift(); ocupado = true;
     let resp;
+    if (it.tipo === 'assunto') { ocupado = false; await puxarAssunto(); processar(); return; }
     if (it.tipo === 'aviso') { ocupado = false; const fala = paraFala(it.texto); anotar('v', `<b>Vigia:</b> ${esc(fala)}`); legenda('f', { n: '', p: '', r: fala, l: it.l || '', e: 1 }); await falar(fala); processar(); return; }
     const conversa = recentes.length ? `Conversa recente no chat (do mais antigo ao mais novo):\n${recentes.join('\n')}\n\n` : '';
-    try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}Responda agora a mensagem de ${it.nick}${it.tk ? ' (que está assistindo pelo TikTok: lá você não escreve no chat, então diga que o link aparece na tela, e mesmo assim use a linha CHAT: para o link aparecer na tela)' : ''}${it.yt ? ' (que está assistindo pelo YouTube: lá você não escreve no chat, então diga que o link aparece na tela, e mesmo assim use a linha CHAT: para o link aparecer na tela)' : ''}: "${it.texto}"`); }
+    try { resp = await pensar(it.tipo === 'evento' ? `[ACONTECEU NA LIVE] ${it.texto}. Agradeça ${it.nick} em uma frase curta e calorosa.` : `${conversa}${it.primeira ? `É a primeira mensagem de ${it.nick} nesta live: dê as boas-vindas pelo nome antes de responder. ` : ''}Responda agora a mensagem de ${it.nick}${it.tk ? ' (que está assistindo pelo TikTok: lá você não escreve no chat, então diga que o link aparece na tela, e mesmo assim use a linha CHAT: para o link aparecer na tela)' : ''}${it.yt ? ' (que está assistindo pelo YouTube: lá você não escreve no chat, então diga que o link aparece na tela, e mesmo assim use a linha CHAT: para o link aparecer na tela)' : ''}: "${it.texto}"`); }
     catch (e) { resp = pronta(it.tipo === 'evento' ? 'evento' : 'chat', it.nick); luz('l-ia', e.message === 'sem_chave' ? 'Sem chave' : e.message === 'RESOURCE_EXHAUSTED' ? 'Limite do dia' : 'Com erro', e.message === 'sem_chave' ? 'meio' : 'erro');
       anotar('s', `Usei uma frase pronta porque a inteligência não respondeu (${esc(e.message)}${ultimaMsg ? ' · ' + esc(ultimaMsg.slice(0, 220)) : ''}).`); }
     const partes = String(resp).split(/\n?\s*CHAT:\s*/i), fala = paraFala(partes[0]), msgChat = partes[1] ? partes.slice(1).join(' ').replace(/\s+/g, ' ').trim().slice(0, 450) : '';
@@ -427,8 +429,8 @@ ${conhecimento(pergunta)}`;
     const nick = tags['display-name'] || quem, login = sem(quem);
     if (cmd === 'PRIVMSG') {
       const alertas = cfg.alertas.split(',').map(sem).filter(Boolean);
-      if (alertas.includes(login)) { anotar('s', `Doação: ${esc(texto)}`); entrar({ tipo: 'evento', nick: nomeDoacao(texto) || 'você que apoiou', texto: `alerta de doação: ${texto}` }); return; }
-      if (tags.bits) { anotar('s', `${esc(nick)} mandou ${tags.bits} bits`); entrar({ tipo: 'evento', nick, texto: `${nick} mandou ${tags.bits} bits com a mensagem "${texto.replace(/cheer\d+/gi, '').trim()}"` }); return; }
+      if (alertas.includes(login)) { anotar('s', `Doação: ${esc(texto)}`); entrar({ tipo: 'evento', leve: 1, nick: nomeDoacao(texto) || 'você que apoiou', texto: `alerta de doação: ${texto}` }); return; }
+      if (tags.bits) { anotar('s', `${esc(nick)} mandou ${tags.bits} bits`); entrar({ tipo: 'evento', leve: 1, nick, texto: `${nick} mandou ${tags.bits} bits com a mensagem "${texto.replace(/cheer\d+/gi, '').trim()}"` }); return; }
       if (BOTS.includes(login)) return;
       if (tw && login === sem(tw.login) && foiEu(texto)) return; // mensagem que o próprio Vigia mandou
       if (/^!(jogar|corrida|salao|sal\u00e3o|como)/i.test(texto)) { comando('jogar', nick, PASSO_A_PASSO()); return; }
@@ -440,7 +442,7 @@ ${conhecimento(pergunta)}`;
     } else if (cmd === 'USERNOTICE') {
       const id = tags['msg-id'], sys = tags['system-msg'] || '';
       if (['sub', 'resub', 'subgift', 'submysterygift', 'raid', 'giftpaidupgrade', 'primepaidupgrade'].includes(id)) {
-        anotar('s', esc(sys || id)); entrar({ tipo: 'evento', nick: tags['msg-param-displayName'] || nick, texto: `${sys}${texto ? ' Mensagem: ' + texto : ''}` });
+        anotar('s', esc(sys || id)); entrar({ tipo: 'evento', leve: 1, nick: tags['msg-param-displayName'] || nick, texto: `${sys}${texto ? ' Mensagem: ' + texto : ''}` });
       }
     }
   }
@@ -524,9 +526,9 @@ ${conhecimento(pergunta)}`;
     if (s.type === 'superChatEvent' || s.type === 'superStickerEvent') {
       const d = s.superChatDetails || s.superStickerDetails || {}, valor = d.amountDisplayString || '';
       anotar('s', `${esc(nick)} mandou um Super Chat de ${esc(valor)} no YouTube`);
-      entrar({ tipo: 'evento', nick, yt: 1, texto: `${nick} mandou um Super Chat de ${valor} no YouTube${d.userComment ? ' com a mensagem "' + d.userComment + '"' : ''}` }); return;
+      entrar({ tipo: 'evento', leve: 1, nick, yt: 1, texto: `${nick} mandou um Super Chat de ${valor} no YouTube${d.userComment ? ' com a mensagem "' + d.userComment + '"' : ''}` }); return;
     }
-    if (s.type === 'newSponsorEvent' || s.type === 'memberMilestoneChatEvent' || s.type === 'membershipGiftingEvent') { anotar('s', `${esc(nick)} virou membro no YouTube`); entrar({ tipo: 'evento', nick, yt: 1, texto: `${nick} virou membro do canal no YouTube` }); return; }
+    if (s.type === 'newSponsorEvent' || s.type === 'memberMilestoneChatEvent' || s.type === 'membershipGiftingEvent') { anotar('s', `${esc(nick)} virou membro no YouTube`); entrar({ tipo: 'evento', leve: 1, nick, yt: 1, texto: `${nick} virou membro do canal no YouTube` }); return; }
     if (s.type !== 'textMessageEvent' || !texto || BOTS.includes(sem(nick).replace(/^@/, ''))) return;
     if (/^!(jogar|corrida|salao|salão|como|links?|site|inscri)/i.test(texto) && Date.now() - (ytCmd[texto.slice(1, 4).toLowerCase()] || 0) < 60000) return;
     if (/^!/.test(texto)) ytCmd[texto.slice(1, 4).toLowerCase()] = Date.now();
@@ -571,7 +573,7 @@ ${conhecimento(pergunta)}`;
     if (ev === 'gift') {
       // presentes em sequência (combo) chegam várias vezes: agradece uma vez, quando a sequência termina
       const nome = d.giftName || (d.giftDetails && d.giftDetails.giftName) || 'um presente', qtd = +d.repeatCount || 1, chave = nick + '|' + nome;
-      const fechar = () => { delete tkCombos[chave]; anotar('s', `${esc(nick)} mandou ${qtd > 1 ? qtd + 'x ' : ''}${esc(nome)} no TikTok`); entrar({ tipo: 'evento', nick, tk: 1, texto: `${nick} mandou ${qtd > 1 ? qtd + ' ' : ''}${nome} de presente na live do TikTok` }); };
+      const fechar = () => { delete tkCombos[chave]; anotar('s', `${esc(nick)} mandou ${qtd > 1 ? qtd + 'x ' : ''}${esc(nome)} no TikTok`); entrar({ tipo: 'evento', leve: 1, nick, tk: 1, texto: `${nick} mandou ${qtd > 1 ? qtd + ' ' : ''}${nome} de presente na live do TikTok` }); };
       clearTimeout(tkCombos[chave]);
       if (+d.giftType === 1 && !d.repeatEnd) { tkCombos[chave] = setTimeout(fechar, 4000); return; }
       fechar(); return;
@@ -579,14 +581,67 @@ ${conhecimento(pergunta)}`;
     if (ev === 'follow' || (ev === 'social' && /follow/i.test(String(d.displayType || d.label || '')))) {
       // vários follows juntos viram um agradecimento só
       if (!tkSeguidores.includes(nick)) tkSeguidores.push(nick);
-      if (!tkSeguiTimer) tkSeguiTimer = setTimeout(() => { const n = tkSeguidores.splice(0); tkSeguiTimer = 0; if (!n.length) return; anotar('s', `Novos seguidores no TikTok: ${esc(n.join(', '))}`); entrar({ tipo: 'evento', nick: n.slice(0, 3).join(', '), tk: 1, texto: `${n.length === 1 ? n[0] + ' começou' : n.slice(0, 3).join(', ') + (n.length > 3 ? ' e mais ' + (n.length - 3) + ' pessoas começaram' : ' começaram')} a seguir o perfil no TikTok` }); }, 45000);
+      if (!tkSeguiTimer) tkSeguiTimer = setTimeout(() => { const n = tkSeguidores.splice(0); tkSeguiTimer = 0; if (!n.length) return; anotar('s', `Novos seguidores no TikTok: ${esc(n.join(', '))}`); entrar({ tipo: 'evento', leve: 1, nick: n.slice(0, 3).join(', '), tk: 1, texto: `${n.length === 1 ? n[0] + ' começou' : n.slice(0, 3).join(', ') + (n.length > 3 ? ' e mais ' + (n.length - 3) + ' pessoas começaram' : ' começaram')} a seguir o perfil no TikTok` }); }, 45000);
       return;
     }
-    if (ev === 'share') anotar('s', `${esc(nick)} compartilhou a live`);
+    if (ev === 'share') { anotar('s', `${esc(nick)} compartilhou a live`); if (!tkShares.includes(nick)) tkShares.push(nick); return; }
+    if (ev === 'like') { tkCurtidas[nick] = (tkCurtidas[nick] || 0) + (+d.likeCount || 1); return; }
+    if (ev === 'member') { const k = sem(nick); if (cfg.boasvindas === 'sim' && nick !== 'alguém' && !tkSaudados.has(k)) { tkSaudados.add(k); tkChegou.push(nick); } return; }
   }
+  // junta quem chegou, quem curtiu e quem compartilhou, e fala de tempos em tempos (sem atropelar a conversa)
+  const tkChegou = [], tkSaudados = new Set(), tkShares = []; let tkCurtidas = {}, ultBoasVindas = 0, ultCurtidas = 0, ultShares = 0, iBV = 0;
+  const lista = n => n.length === 1 ? n[0] : n.length <= 3 ? n.slice(0, -1).join(', ') + ' e ' + n[n.length - 1] : n.slice(0, 3).join(', ') + ' e mais ' + (n.length - 3) + ' pessoas';
+  const BOAS_VINDAS = [
+    l => `Boas-vindas, ${l}! Aqui é Ashem Vow, um jogo dark fantasy feito do zero. Fiquem à vontade e perguntem o que quiserem no chat.`,
+    l => `Chegou gente nova na vigília: ${l}! Sejam bem-vindos. Se curtirem, sigam o perfil para não perder as próximas lives.`,
+    l => `Olá, ${l}! Que bom ter vocês aqui. Dá para jogar a Corrida das Cinzas pelo celular junto com a live: o link está na tela.`,
+    l => `${l}, sejam bem-vindos à live de Ashem Vow! Contem no chat de onde vocês estão assistindo.`,
+    l => `A lua vermelha trouxe mais gente: ${l}! Bem-vindos. Qual herói vocês acham que combina com vocês?`,
+  ];
+  setInterval(() => {
+    if (!tkAoVivo || falando || apresentando || ocupado || fila.length) return;
+    const pode = ausente || cfg.presente === 'agradecer', agora = Date.now(), calma = ausente ? 1 : 3; // com você na live, bem menos vezes
+    if (!pode) { tkChegou.length = 0; tkShares.length = 0; tkCurtidas = {}; return; }
+    if (tkChegou.length && agora - ultBoasVindas > 35000 * calma) { ultBoasVindas = agora; const n = tkChegou.splice(0); entrar({ tipo: 'aviso', leve: 1, nick: '', texto: BOAS_VINDAS[iBV++ % BOAS_VINDAS.length](lista(n)) }); return; }
+    if (tkShares.length && agora - ultShares > 60000 * calma) { ultShares = agora; const n = tkShares.splice(0); entrar({ tipo: 'aviso', leve: 1, nick: '', texto: `${lista(n)} ${n.length > 1 ? 'compartilharam' : 'compartilhou'} a live! Valeu demais, assim mais gente conhece Ashem Vow.` }); return; }
+    const quem = Object.entries(tkCurtidas).sort((a, b) => b[1] - a[1]);
+    if (quem.length && agora - ultCurtidas > 180000 * calma) { ultCurtidas = agora; tkCurtidas = {}; const n = quem.slice(0, 3).map(q => q[0]); entrar({ tipo: 'aviso', leve: 1, nick: '', texto: `Valeu pelas curtidas, ${lista(n)}! Cada toque na tela ajuda a live a aparecer para mais gente.` }); }
+  }, 4000);
   // comandos falados (TikTok não deixa o Vigia escrever): no máximo uma vez por minuto cada
   const cmdFalado = {};
   function comandoFalado(qual, nick, texto, link) { if (Date.now() - (cmdFalado[qual] || 0) < 60000) return; cmdFalado[qual] = Date.now(); entrar({ tipo: 'aviso', nick: '', l: link, texto }); }
+
+  // ---------- puxar assunto quando o chat fica quieto (só com você fora) ----------
+  let iTema = Math.floor(Math.random() * 6);
+  async function puxarAssunto() {
+    const P = S.personagens || [], F = S.criaturas || [], h = P[Math.floor(Math.random() * P.length)] || {}, f = F[Math.floor(Math.random() * F.length)] || { criaturas: [] };
+    const chefes = f.criaturas.filter(c => c.chefe), c = chefes[Math.floor(Math.random() * chefes.length)] || {};
+    const temas = [
+      [`apresente o herói ${h.nome}, ${h.titulo}, e a habilidade ${h.habilidade}, com empolgação, e pergunte ao chat se jogariam com ele`, `Vocês já conhecem ${h.nome}, ${h.titulo}? A habilidade dele é ${h.habilidade}. Quem aqui jogaria com ele primeiro?`],
+      [`fale do chefe ${c.nome}, da fase ${f.fase}, de um jeito sombrio e divertido, usando só o que você sabe do jogo, e pergunte quem teria coragem de enfrentá-lo`, `Na fase ${f.fase} mora um chefe chamado ${c.nome}. Quem aqui teria coragem de enfrentar ele sozinho?`],
+      ['faça uma pergunta divertida para o chat sobre jogos, como qual o jogo favorito de cada um, se preferem magia ou espada, ou se jogam mais no celular ou no PC', 'Pergunta rápida para o chat: vocês preferem magia ou espada? Respondam aí que eu leio tudo.'],
+      ['desafie o chat a jogar a Corrida das Cinzas pelo celular junto com a live, com o link na tela, e a tentar bater o recorde', 'Quem topa um desafio? A Corrida das Cinzas está aberta: pelo celular, todo mundo corre junto e o último de pé aparece aqui na live. O link está na tela.'],
+      [tkAoVivo ? 'peça com simpatia para quem está assistindo seguir o perfil, curtir tocando na tela e compartilhar a live' : 'convide quem está assistindo para o teste fechado do jogo no site, que dá para jogar antes de todo mundo', tkAoVivo ? 'Se você está curtindo a live, segue o perfil e toca na tela para curtir. Isso ajuda Ashem Vow a chegar em mais gente!' : 'Sabia que dá para jogar Ashem Vow antes de todo mundo? As inscrições para o teste fechado estão abertas no site.'],
+      ['conte por que Ashem Vow é diferente: partidas de até 15 minutos, armas que evoluem, doze heróis e dezoito chefes, e pergunte o que o chat mais gosta nesse tipo de jogo', 'Em Ashem Vow cada partida dura até 15 minutos, com armas que evoluem e hordas sem fim. O que vocês mais curtem nesse tipo de jogo?'],
+    ];
+    const [tema, pronta] = temas[iTema++ % temas.length];
+    let fala = '', link = '';
+    try {
+      const r = await pensar(`${recentes.length ? 'Conversa recente no chat:\n' + recentes.slice(-6).join('\n') + '\n\n' : ''}[PUXAR ASSUNTO] O chat está quieto há um tempo e você vai animar a live. Fale de 2 a 3 frases curtas (até 300 caracteres): ${tema}. Termine com uma pergunta simples para o chat responder. Não cumprimente como se tivesse acabado de chegar e não repita a apresentação.`);
+      const partes = String(r).split(/\n?\s*CHAT:\s*/i); fala = paraFala(partes[0]); if (partes[1]) link = partes.slice(1).join(' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+    } catch (e) { }
+    if (!fala || fala.length < 30) fala = paraFala(pronta);
+    if (/corrida/i.test(fala) && !link) link = `${SITE_URL}/salao`;
+    anotar('v', `<b>Vigia (puxando assunto):</b> ${esc(fala)}`);
+    if (link && naTwitch()) escrever(link);
+    legenda('f', { n: '', p: '', r: fala, l: link, e: 1 }); await falar(fala);
+  }
+  setInterval(() => {
+    const m = +cfg.assunto || 0;
+    if (!ausente || !m || falando || apresentando || ocupado || fila.length) return;
+    if (performance.now() - ultimaFala < m * 60000 || performance.now() - ultimaApres < 90000) return;
+    entrar({ tipo: 'assunto' });
+  }, 10000);
 
   // ---------- apresentação (toda vez que assume o chat, e de tempos em tempos) ----------
   const LINKS_APRES = () => `Inscrição no teste: ${SITE_URL}/#inscricao · Canal no YouTube: https://www.youtube.com/@ashemvow · Apoie por Pix: https://livepix.gg/teecki · Corrida das Cinzas: ${SITE_URL}/salao`;
@@ -673,7 +728,7 @@ ${conhecimento(pergunta)}`;
   }
 
   // ---------- configuração ----------
-  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive', tiktok: 'c-tiktok' };
+  const CAMPOS = { rodizioMin: 'c-rodmin', codigo: 'c-codigo', autoSalao: 'c-auto', avisarCorrida: 'c-avisar', provedor: 'c-provedor', groq: 'c-groq', cerebro: 'c-cerebro', busca: 'c-busca', lembrete: 'c-lembrete', canal: 'c-canal', nome: 'c-nome', chave: 'c-chave', voz: 'c-voz', vel: 'c-vel', quem: 'c-quem', int: 'c-int', alertas: 'c-alertas', obs: 'c-obs', cenas: 'c-cenas', extra: 'c-extra', cliente: 'c-cliente', ytChave: 'c-ytchave', ytCanal: 'c-ytcanal', ytLive: 'c-ytlive', tiktok: 'c-tiktok', assunto: 'c-assunto', presente: 'c-presente', boasvindas: 'c-boasvindas' };
   for (const [k, id] of Object.entries(CAMPOS)) if (cfg[k] != null && $(id).tagName !== 'SELECT') $(id).value = cfg[k]; else if (cfg[k]) $(id).value = cfg[k];
   $('salvar').onclick = () => {
     const antes = Object.assign({}, cfg);
