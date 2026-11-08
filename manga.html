@@ -75,7 +75,7 @@ body{font-family:var(--f-narr);padding-left:max(16px,env(safe-area-inset-left,0p
   <h1><a href="index.html" style="color:inherit;text-decoration:none">Ashem Vow</a> <span>·</span> A Lua Rubra</h1>
   <div class="vol">Volume 1 · Capítulo 1</div>
 </header>
-<p class="selo">Obra complementar ao jogo <a href="index.html">Ashem Vow</a>. Roteiro e história originais do projeto; ilustrações feitas com auxílio de inteligência artificial.</p>
+<p class="selo">Obra complementar ao jogo <a href="index.html">Ashem Vow</a>: a história é contada aqui, nos mangás, e o jogo traz a ação. Roteiro original; ilustrações feitas com auxílio de inteligência artificial.</p>
 <main id="palco"></main>
 <nav class="nav" aria-label="Páginas">
   <button id="ant" type="button">← Anterior</button>
@@ -135,7 +135,7 @@ function render() {
     palco.innerHTML = '<section class="final"><h2>Fim do Volume 1</h2>' +
       '<p>Vau-Cinzento virou cinza numa única noite. Ren saiu de lá sem casa, sem mãe e com um nome que não é o dele.</p>' +
       '<p>Doze pessoas acordaram com a mesma marca na pele. No Volume 2, o menino que não queima começa a procurar quem fez isso, e por quê.</p>' +
-      '<p>Ashem Vow é um jogo de ação e sobrevivência em pixel art para Android. O mangá é uma obra complementar: a história continua dentro do jogo.</p><a class="btn-final" href="index.html#inscricao">Quero testar o jogo</a></section>';
+      '<p>Ashem Vow também é um jogo de ação e sobrevivência em pixel art para Android. A história de Ashem Vow continua nos próximos volumes do mangá. O jogo é a parte da ação: lutar, sobreviver e evoluir com os heróis.</p><a class="btn-final" href="index.html#inscricao">Quero testar o jogo</a></section>';
   }
   document.getElementById("cont").textContent = (atual + 1) + " / " + total;
   document.getElementById("barra").style.width = ((atual + 1) / total * 100) + "%";
