@@ -31,7 +31,7 @@ window.SITE = {
   },
 
   /* Faixa rotativa abaixo do topo */
-  faixa: ["12 heróis jogáveis", "6 cenários dark fantasy", "18 chefes", "Partidas de até 15 minutos", "Ranking online", "Suporte a controle", "Progresso salvo na nuvem", "Sem pagar para vencer"],
+  faixa: ["12 heróis jogáveis", "6 cenários dark fantasy", "18 chefes", "Partidas de até 15 minutos", "Português, inglês e espanhol", "Tutorial para quem chega", "Ranking geral online", "Suporte a controle", "Progresso salvo na nuvem", "Sem pagar para vencer"],
 
   /* Carrossel "Seis momentos" */
   momentos: [
@@ -56,25 +56,32 @@ window.SITE = {
 
   /* "Além da partida" */
   recursos: [
-    { t: "Ranking online", d: "Compare seu melhor tempo em cada fase com jogadores de todo o Brasil." },
+    { t: "Ranking geral", d: "Seus melhores tempos de todas as fases somados num ranking só, com apelido único." },
     { t: "Missões e Maldição do dia", d: "Missões diárias e semanais, e uma maldição nova por dia que paga mais cinzas a quem aceita o desafio." },
-    { t: "Passe de Catedral", d: "30 níveis com trilha grátis e Premium, títulos, molduras e heróis exclusivos." },
+    { t: "Passe de Catedral", d: "Temporadas de 45 dias com 30 níveis, trilha grátis e Premium, títulos com insígnia própria, molduras e heróis exclusivos. As missões também dão XP do Passe." },
+    { t: "Em três idiomas", d: "Jogue em português, inglês ou espanhol. Troque quando quiser em Opções." },
     { t: "Maestria e insígnias", d: "Cada herói fica mais forte conforme você joga com ele. Desafios liberam banners, e 46 insígnias enfeitam o perfil." },
     { t: "Jogue com controle", d: "Conecte um controle Bluetooth, mude os botões como preferir e veja as dicas na tela." },
+    { t: "Fácil de começar", d: "Quem é novo ganha uma apresentação do menu e um tutorial na primeira partida. Segure qualquer habilidade para ver o que ela faz." },
     { t: "Sem pagar para vencer", d: "O jogo é grátis. Poções têm poder limitado e os anúncios são sempre opcionais." }
   ],
 
   /* Galeria de telas do jogo */
   galeriaJogo: [
-    { img: "assets/print-home.webp", legenda: "Tela inicial" },
+    { img: "assets/print-home.webp", legenda: "Tela inicial com o cartão do jogador" },
+    { img: "assets/print-apresentacao.webp", legenda: "Apresentação do menu para quem é novo" },
+    { img: "assets/print-tutorial.webp", legenda: "Tutorial da primeira partida" },
+    { img: "assets/print-segurar-habilidade.webp", legenda: "Segure a habilidade para ver o que ela faz" },
     { img: "assets/print-maestria.webp", legenda: "Heróis e maestria" },
     { img: "assets/print-preparar.webp", legenda: "Preparar: fase e poções" },
     { img: "assets/print-missoes.webp", legenda: "Missões e Maldição do dia" },
-    { img: "assets/print-passe.webp", legenda: "Passe de Catedral" },
+    { img: "assets/print-passe.webp", legenda: "Passe de Catedral: trilha Premium e grátis" },
     { img: "assets/print-roleta.webp", legenda: "Roleta da Catedral" },
+    { img: "assets/print-perfil.webp", legenda: "Perfil com tudo numa barra só" },
     { img: "assets/print-desafios.webp", legenda: "Desafios do perfil" },
     { img: "assets/print-insignias.webp", legenda: "Insígnias" },
-    { img: "assets/print-loja.webp", legenda: "Loja" }
+    { img: "assets/print-loja.webp", legenda: "Loja" },
+    { img: "assets/print-idioma-en.webp", legenda: "O jogo em inglês" }
   ],
 
   /* Perguntas frequentes */
@@ -84,6 +91,8 @@ window.SITE = {
     { p: "Quando o jogo lança?", r: "Logo depois do teste fechado. Quem se inscreve recebe o aviso por e-mail no dia do lançamento." },
     { p: "Como entro no teste fechado?", r: "Inscreva-se com o e-mail da conta Google que você usa na Play Store. Quando o teste abrir, mandamos o convite com o link para instalar." },
     { p: "Preciso de conta?", r: "Você entra com a sua conta Google. Assim o progresso fica salvo na nuvem e você não perde nada ao trocar de celular." },
+    { p: "Em quais idiomas dá para jogar?", r: "Português, inglês e espanhol. Na primeira vez o jogo usa o idioma do celular, e você troca quando quiser em Opções." },
+    { p: "Posso trocar meu apelido?", r: "O apelido é escolhido uma vez e é único no ranking. Para trocar depois, há uma troca de apelido por R$ 1,99 na própria tela do perfil (às vezes em promoção na Roleta)." },
     { p: "Dá para jogar com controle?", r: "Sim. Funciona com controle Bluetooth, os botões podem ser trocados e as dicas na tela seguem o padrão do controle de PS4." },
     { p: "Posso gravar vídeos e fazer lives?", r: "Pode, e a gente adora ver. Marque @ashemvow nas redes para aparecer no nosso perfil." }
   ],
@@ -95,13 +104,29 @@ window.SITE = {
     ["Plataforma", "Android (Google Play)"],
     ["Partidas", "Até 15 minutos"],
     ["Modelo", "Grátis, com compras opcionais"],
-    ["Idioma", "Português do Brasil"],
+    ["Idiomas", "Português, inglês e espanhol"],
     ["Controles", "Toque na tela ou controle Bluetooth"],
     ["Fase", "Teste fechado"]
   ],
 
   andamento: [
-    { titulo: "Já no jogo (versão 10)", itens: [
+    { titulo: "Já no jogo (versão 11)", itens: [
+      "Jogo em três idiomas: português, inglês e espanhol, com troca em Opções",
+      "Apresentação do menu e tutorial da primeira partida para quem é novo (dá para rever em Opções)",
+      "Segure o botão de uma habilidade para ver o nome, o que ela faz e o tempo de recarga",
+      "Botões da partida reagem ao toque, com brilho e onda",
+      "Passe de Catedral redesenhado, com vitrine do prêmio principal, trilha Premium e grátis e temporadas de 45 dias que começam no lançamento",
+      "Missões diárias e semanais também dão XP do Passe",
+      "Títulos do Passe com insígnia própria, uma para cada título",
+      "Roleta nova: a roda gira inteira e o prêmio aparece com a quantidade",
+      "Promoção surpresa na Roleta: heróis da loja, Passe Premium ou troca de apelido com desconto por 24 horas",
+      "Perfil com todas as abas numa barra só no topo: visão geral, estatísticas, banner, avatar, títulos, desafios e insígnias",
+      "Cartão do jogador na tela inicial com banner, moldura, nível, título e insígnias",
+      "Ranking geral: soma dos melhores tempos em todas as fases",
+      "Apelido escolhido uma vez, com confirmação; trocar depois custa R$ 1,99",
+      "Compras e anúncios reais do Google Play conectados, em teste",
+      "Jogo atualizado para a Godot 4.7, no padrão exigido pela Google Play",
+      "Cenas da história removidas para deixar o jogo mais leve",
       "Missões diárias (3) e semanais (3), com cinzas, fragmentos e XP do Passe, e indicador no menu quando há recompensa para resgatar",
       "Maldição do dia: um efeito novo por dia (horda, inimigos mais fortes, mais rápidos, sem cura ou herói mais frágil) que rende 75% a mais de cinzas, ligado por você em Preparar",
       "Maestria de herói: 5 níveis por herói, com bônus exclusivo de cada um, mostrados na tela de Heróis",
@@ -131,32 +156,35 @@ window.SITE = {
       "6 fases com cenário, 9 criaturas voadoras próprias e 3 chefes cada (18 chefes no total)",
       "Dificuldade reequilibrada: ataques à distância mais lentos e avisos antes dos mergulhos",
       "Habilidades e efeitos (explosões, itens, armas) desenhados por código, mais longos e visíveis até o fim",
-      "História em cutscenes narradas, com final de escolha",
       "8 poções temporárias, escolhidas antes da partida",
       "Recompensa diária de 7 dias (faltar um dia só pausa a sequência)",
-      "Loja, aba de novidades, trilha e vozes em volumes separados",
+      "Loja, aba de novidades, trilha e efeitos em volumes separados",
       "Anúncios opcionais para ganhar recompensas",
       "Login com conta Google, apelido escolhido no primeiro acesso e progresso salvo na nuvem",
       "Opção de sair da conta ou excluir a conta e os dados dentro do jogo"
     ]},
     { titulo: "Em produção", itens: [
       "Recompensas raras do site com login Google opcional (página de conta pronta, em teste), com banners e insígnias exclusivos",
-      "4 heróis novos (Ysolde, Kaelor, Mordrek e Lyra) com visual e animações prontos, a caminho do jogo",
       "Animações novas de correr e atacar do Sombras das Cinzas, do Irmão Brasa e da Vesper, e de parado do Irmão Brasa e da Vesper",
-      "Conectar compras e anúncios reais do Google Play",
+      "Teste fechado na Google Play com 12 testadores",
       "Trilhas próprias para Floresta, Pântano e Geleira",
       "Ajustes de equilíbrio dos chefes e testes em celulares reais",
-      "Legendas completas nas cenas"
+      "Mais idiomas"
     ]},
     { titulo: "Planejado", itens: [
       "Códigos de resgate com recompensas exclusivas, com conta de login",
-      "Ranking global com nick único (em ajuste)",
       "Recompensa por horas jogadas",
             "Lançamento na Google Play (Android)"
     ]}
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "08/11/2026", titulo: "Versão 11: o jogo agora fala inglês e espanhol", texto: "Ashem Vow pode ser jogado em português, inglês ou espanhol. Na primeira vez ele usa o idioma do celular, e dá para trocar quando quiser em Opções. Menus, heróis, habilidades, armas, missões e maldições foram traduzidos." },
+    { data: "08/11/2026", titulo: "Apresentação do menu e tutorial para quem chega", texto: "Quem abre o jogo pela primeira vez vê uma apresentação rápida do menu, com cada parte iluminada e explicada. Depois, a primeira partida ensina a andar, atacar, ligar o ataque automático, subir de nível e usar as habilidades. Tudo pode ser pulado e revisto em Opções." },
+    { data: "08/11/2026", titulo: "Segure a habilidade para saber o que ela faz", texto: "Na partida, um toque rápido usa a habilidade. Segurando o botão aparece o nome, o que ela faz e o tempo de recarga, sem gastar a carga. As 39 habilidades dos 13 heróis têm explicação. Os botões também ganharam um brilho e uma onda ao toque, para mostrar que foram apertados." },
+    { data: "08/11/2026", titulo: "Passe de Catedral redesenhado e com temporadas", texto: "O Passe ganhou uma vitrine com o prêmio principal, trilha Premium em cima e grátis embaixo, e títulos com insígnia própria. As temporadas duram 45 dias e começam a contar no lançamento oficial. As missões diárias e semanais agora também dão XP do Passe." },
+    { data: "08/11/2026", titulo: "Roleta nova com promoções surpresa", texto: "A roda gira inteira e o prêmio aparece na tela com a quantidade. A fatia de promoção agora sorteia um desconto de 24 horas no que você ainda não tem: um herói da loja, o Passe Premium ou a troca de apelido." },
+    { data: "08/11/2026", titulo: "Perfil, cartão do jogador e ranking geral", texto: "O perfil reúne tudo numa barra só no topo. A tela inicial tem um cartão do jogador com o seu banner, moldura, nível, título e insígnias. O ranking virou geral: soma os seus melhores tempos de todas as fases. O apelido é escolhido uma vez, com confirmação, e trocar depois custa R$ 1,99." },
     { data: "27/10/2026", titulo: "Recompensas raras do site, com login opcional", texto: "O site ganhou uma página de conta. Entrando com o mesmo login Google do jogo (opcional), você resgata itens raros que só existem aqui: duas insígnias exclusivas (banners exclusivos chegam em breve). Para liberar cada um é preciso cumprir uma tarefa difícil dentro do jogo, como abater 10 mil inimigos. Depois de resgatar no site, o item cai direto na sua conta no jogo." },
     { data: "27/10/2026", titulo: "Versão 10: missões, maldição do dia e maestria", texto: "Três missões diárias e três semanais renovam sozinhas e pagam cinzas, fragmentos e XP do Passe. Cada dia traz uma Maldição nova (mais inimigos, mais vida, mais dano, mais velocidade, sem cura ou você mais frágil): ligue em Preparar e ganhe 75% a mais de cinzas. Cada herói também tem maestria de 5 níveis, com um bônus só dele, que sobe conforme você abate com ele." },
     { data: "27/10/2026", titulo: "Baú no fim da partida e o aviso Quase lá", texto: "Toda partida termina com um baú de bronze, prata ou ouro, de acordo com o seu desempenho, com cinzas, fragmentos ou XP do Passe. O jogo também mostra a insígnia ou missão que está mais perto de ser concluída, para você saber o que falta." },
@@ -213,6 +241,14 @@ window.SITE = {
   projeto: {
     intro: "Prints do jogo, folhas de arte e conceitos de Ashem Vow. Tudo em andamento e sujeito a mudanças.",
     itens: [
+      {"data": "08/11/2026", "img": "assets/print-apresentacao.webp", "legenda": "Apresentação do menu para jogadores novos"},
+      {"data": "08/11/2026", "img": "assets/print-tutorial.webp", "legenda": "Tutorial da primeira partida"},
+      {"data": "08/11/2026", "img": "assets/print-segurar-habilidade.webp", "legenda": "Segurando a habilidade: nome, efeito e recarga"},
+      {"data": "08/11/2026", "img": "assets/print-idioma-en.webp", "legenda": "Loja em inglês"},
+      {"data": "08/11/2026", "img": "assets/print-passe.webp", "legenda": "Passe de Catedral redesenhado"},
+      {"data": "08/11/2026", "img": "assets/print-roleta.webp", "legenda": "Roleta nova"},
+      {"data": "08/11/2026", "img": "assets/print-home.webp", "legenda": "Tela inicial com o cartão do jogador"},
+      {"data": "08/11/2026", "img": "assets/print-perfil.webp", "legenda": "Perfil com todas as abas no topo"},
       {"data": "27/10/2026", "img": "assets/print-missoes.webp", "legenda": "Missões diárias e semanais, com a Maldição do dia"},
       {"data": "27/10/2026", "img": "assets/print-fim.webp", "legenda": "Fim de partida: Maldição ativa, Quase lá e Baú de Prata"},
       {"data": "27/10/2026", "img": "assets/print-maestria.webp", "legenda": "Maestria do herói na tela de Heróis"},
@@ -248,7 +284,7 @@ window.SITE = {
     ]
   },
   /* Personagens, criaturas e cenários: gerados a partir do jogo. Imagens em assets/ */
-  personagens: [{"nome": "Garrick", "titulo": "Guardião das Cinzas", "habilidade": "Aura de Brasas", "descricao": "Um círculo de fogo queima quem chega perto e explode de tempos em tempos.", "skins": [{"nome": "Guardião das Cinzas", "img": "assets/p-garrick-padrao.webp"}], "banner": "assets/b-garrick.webp", "habilidades": [{"nome": "Aura de Brasas", "img": "assets/s-garrick-1.webp"}, {"nome": "Corte Ígneo", "img": "assets/s-garrick-2.webp"}, {"nome": "Eclipse de Cinzas", "img": "assets/s-garrick-3.webp"}]}, {"nome": "Yurinn", "titulo": "Tecelã de Brasas", "habilidade": "Fios de Brasa", "descricao": "Tece fios de fogo que perseguem os inimigos mais próximos.", "skins": [{"nome": "Tecelã de Brasas", "img": "assets/p-yurinn-padrao.webp"}], "banner": "assets/b-yurinn.webp", "habilidades": [{"nome": "Fios de Brasa", "img": "assets/s-yurinn-1.webp"}, {"nome": "Casulo", "img": "assets/s-yurinn-2.webp"}, {"nome": "Teia Ardente", "img": "assets/s-yurinn-3.webp"}]}, {"nome": "Brann", "titulo": "Sentinela da Luz Pálida", "habilidade": "Pilares de Luz", "descricao": "Chama colunas de luz sobre os inimigos. Muita vida, passos lentos.", "skins": [{"nome": "Sentinela da Luz Pálida", "img": "assets/p-brann-padrao.webp"}], "banner": "assets/b-brann.webp", "habilidades": [{"nome": "Pilares de Luz", "img": "assets/s-brann-1.webp"}, {"nome": "Selo Sagrado", "img": "assets/s-brann-2.webp"}, {"nome": "Julgamento", "img": "assets/s-brann-3.webp"}]}, {"nome": "Selka", "titulo": "Dançarina das Sombras", "habilidade": "Tempestade de Lâminas", "descricao": "Lâminas giram ao redor dela e cortam tudo no caminho. Rápida e frágil.", "skins": [{"nome": "Dançarina das Sombras", "img": "assets/p-selka-padrao.webp"}], "banner": "assets/b-selka.webp", "habilidades": [{"nome": "Tempestade de Lâminas", "img": "assets/s-selka-1.webp"}, {"nome": "Corrente Voadora", "img": "assets/s-selka-2.webp"}, {"nome": "Ceifa Sombria", "img": "assets/s-selka-3.webp"}]}, {"nome": "Orun", "titulo": "Coveiro das Almas", "habilidade": "Almas Ligadas", "descricao": "Almas libertas caçam os inimigos. Cada abate pode libertar mais uma.", "skins": [{"nome": "Coveiro das Almas", "img": "assets/p-orun-padrao.webp"}], "banner": "assets/b-orun.webp", "habilidades": [{"nome": "Almas Ligadas", "img": "assets/s-orun-1.webp"}, {"nome": "Mão do Coveiro", "img": "assets/s-orun-2.webp"}, {"nome": "Procissão dos Mortos", "img": "assets/s-orun-3.webp"}]}, {"nome": "Sombras das Cinzas", "titulo": "Mago das Sombras", "habilidade": "Bola de Fogo", "descricao": "Herói premium, à venda na loja por R$ 3,99 (às vezes em promoção na roleta). Feito de sombra e cinza, lança bolas de fogo, chuva de cinzas e explosões de sombras.", "skins": [{"nome": "Mago das Sombras", "img": "assets/p-sombras-padrao.webp"}], "banner": "assets/b-sombras.webp", "habilidades": [{"nome": "Bola de Fogo", "img": "assets/s-sombras-1.webp"}, {"nome": "Chuva de Cinzas", "img": "assets/s-sombras-2.webp"}, {"nome": "Explosão de Sombras", "img": "assets/s-sombras-3.webp"}]}, {"nome": "Ysolde", "titulo": "Bruxa da Geleira", "habilidade": "Estilhaços de Gelo", "descricao": "Herói da loja, R$ 6,99. Dispara dardos de gelo que atrasam quem acertam, congela o chão em volta dela e termina numa nevasca.", "skins": [{"nome": "Bruxa da Geleira", "img": "assets/p-ysolde-padrao.webp"}], "banner": "assets/b-ysolde.webp", "habilidades": [{"nome": "Estilhaços de Gelo", "img": "assets/s-ysolde-1.webp"}, {"nome": "Zona Congelante", "img": "assets/s-ysolde-2.webp"}, {"nome": "Nevasca", "img": "assets/s-ysolde-3.webp"}]}, {"nome": "Kaelor", "titulo": "Caçador de Espinhos", "habilidade": "Espinhos Brotando", "descricao": "Herói da loja, R$ 6,99. Espinhos negros rasgam o chão à frente dele e atordoam quem está no caminho. Cipós prendem os inimigos e uma roseira negra cobre a área.", "skins": [{"nome": "Caçador de Espinhos", "img": "assets/p-kaelor-padrao.webp"}], "banner": "assets/b-kaelor.webp", "habilidades": [{"nome": "Espinhos Brotando", "img": "assets/s-kaelor-1.webp"}, {"nome": "Cipó Prendedor", "img": "assets/s-kaelor-2.webp"}, {"nome": "Roseira Negra", "img": "assets/s-kaelor-3.webp"}]}, {"nome": "Mordrek", "titulo": "Alquimista da Peste", "habilidade": "Frasco Tóxico", "descricao": "Herói da loja, R$ 6,99. Arremessa frascos que deixam poças de veneno, solta uma nuvem pútrida e faz brotar uma flor da peste.", "skins": [{"nome": "Alquimista da Peste", "img": "assets/p-mordrek-padrao.webp"}], "banner": "assets/b-mordrek.webp", "habilidades": [{"nome": "Frasco Tóxico", "img": "assets/s-mordrek-1.webp"}, {"nome": "Nuvem Pútrida", "img": "assets/s-mordrek-2.webp"}, {"nome": "Flor da Peste", "img": "assets/s-mordrek-3.webp"}]}, {"nome": "Lyra", "titulo": "Arqueira Lunar", "habilidade": "Flecha Perfurante", "descricao": "Herói da loja, R$ 6,99. Uma flecha prateada atravessa a fila inteira de inimigos, chove flechas sobre a horda e a Marca da Lua cai sobre o mais forte.", "skins": [{"nome": "Arqueira Lunar", "img": "assets/p-lyra-padrao.webp"}], "banner": "assets/b-lyra.webp", "habilidades": [{"nome": "Flecha Perfurante", "img": "assets/s-lyra-1.webp"}, {"nome": "Chuva de Flechas", "img": "assets/s-lyra-2.webp"}, {"nome": "Marca da Lua", "img": "assets/s-lyra-3.webp"}]}, {"nome": "Irmão Brasa", "titulo": "Monge do Machado", "habilidade": "Giro Ardente", "descricao": "Exclusivo do Passe Premium, nível 15. Gira o machado e um círculo de brasas queima e atrasa os inimigos em volta.", "skins": [{"nome": "Monge do Machado", "img": "assets/p-monge-padrao.webp"}], "banner": "assets/b-monge.webp", "habilidades": [{"nome": "Giro Ardente", "img": "assets/s-monge-1.webp"}, {"nome": "Machados Voadores", "img": "assets/s-monge-2.webp"}, {"nome": "Golpe do Penitente", "img": "assets/s-monge-3.webp"}]}, {"nome": "Vesper", "titulo": "Cantora do Sino Negro", "habilidade": "Badalada", "descricao": "Exclusiva do Passe Premium, nível 30. O sino rachado ressoa em volta dela e fere quem chega perto.", "skins": [{"nome": "Cantora do Sino Negro", "img": "assets/p-vesper-padrao.webp"}], "banner": "assets/b-vesper.webp", "habilidades": [{"nome": "Badalada", "img": "assets/s-vesper-1.webp"}, {"nome": "Coro Sombrio", "img": "assets/s-vesper-2.webp"}, {"nome": "Réquiem", "img": "assets/s-vesper-3.webp"}]}, {"nome": "Dravik", "titulo": "Penitente da Tinta", "habilidade": "Selo de Tinta", "descricao": "Exclusivo do próximo Passe de Catedral. Tanque veloz que luta com os punhos e tem dano alto. Grava selos de tinta no chão, prende a horda com correntes e faz chover tinta sobre a tela inteira.", "skins": [{"nome": "Penitente da Tinta", "img": "assets/p-dravik-padrao.webp"}], "banner": "assets/b-dravik.webp", "habilidades": [{"nome": "Selo de Tinta", "img": "assets/s-dravik-1.webp"}, {"nome": "Correntes de Tinta", "img": "assets/s-dravik-2.webp"}, {"nome": "Chuva de Tinta", "img": "assets/s-dravik-3.webp"}], "tag": "Em breve · Passe da próxima temporada"}],
+  personagens: [{"nome": "Garrick", "titulo": "Guardião das Cinzas", "habilidade": "Aura de Brasas", "descricao": "Um círculo de fogo queima quem chega perto e explode de tempos em tempos.", "skins": [{"nome": "Guardião das Cinzas", "img": "assets/p-garrick-padrao.webp"}], "banner": "assets/b-garrick.webp", "habilidades": [{"nome": "Aura de Brasas", "img": "assets/s-garrick-1.webp"}, {"nome": "Corte Ígneo", "img": "assets/s-garrick-2.webp"}, {"nome": "Eclipse de Cinzas", "img": "assets/s-garrick-3.webp"}]}, {"nome": "Yurinn", "titulo": "Tecelã de Brasas", "habilidade": "Fios de Brasa", "descricao": "Tece fios de fogo que perseguem os inimigos mais próximos.", "skins": [{"nome": "Tecelã de Brasas", "img": "assets/p-yurinn-padrao.webp"}], "banner": "assets/b-yurinn.webp", "habilidades": [{"nome": "Fios de Brasa", "img": "assets/s-yurinn-1.webp"}, {"nome": "Casulo", "img": "assets/s-yurinn-2.webp"}, {"nome": "Teia Ardente", "img": "assets/s-yurinn-3.webp"}]}, {"nome": "Brann", "titulo": "Sentinela da Luz Pálida", "habilidade": "Pilares de Luz", "descricao": "Chama colunas de luz sobre os inimigos. Muita vida, passos lentos.", "skins": [{"nome": "Sentinela da Luz Pálida", "img": "assets/p-brann-padrao.webp"}], "banner": "assets/b-brann.webp", "habilidades": [{"nome": "Pilares de Luz", "img": "assets/s-brann-1.webp"}, {"nome": "Selo Sagrado", "img": "assets/s-brann-2.webp"}, {"nome": "Julgamento", "img": "assets/s-brann-3.webp"}]}, {"nome": "Selka", "titulo": "Dançarina das Sombras", "habilidade": "Tempestade de Lâminas", "descricao": "Lâminas giram ao redor dela e cortam tudo no caminho. Rápida e frágil.", "skins": [{"nome": "Dançarina das Sombras", "img": "assets/p-selka-padrao.webp"}], "banner": "assets/b-selka.webp", "habilidades": [{"nome": "Tempestade de Lâminas", "img": "assets/s-selka-1.webp"}, {"nome": "Corrente Voadora", "img": "assets/s-selka-2.webp"}, {"nome": "Ceifa Sombria", "img": "assets/s-selka-3.webp"}]}, {"nome": "Orun", "titulo": "Coveiro das Almas", "habilidade": "Almas Ligadas", "descricao": "Almas libertas caçam os inimigos. Cada abate pode libertar mais uma.", "skins": [{"nome": "Coveiro das Almas", "img": "assets/p-orun-padrao.webp"}], "banner": "assets/b-orun.webp", "habilidades": [{"nome": "Almas Ligadas", "img": "assets/s-orun-1.webp"}, {"nome": "Mão do Coveiro", "img": "assets/s-orun-2.webp"}, {"nome": "Procissão dos Mortos", "img": "assets/s-orun-3.webp"}]}, {"nome": "Sombras das Cinzas", "titulo": "Mago das Sombras", "habilidade": "Bola de Fogo", "descricao": "Herói premium, à venda na loja por R$ 3,99 (às vezes em promoção na roleta). Feito de sombra e cinza, lança bolas de fogo, rajadas de chamas e uma chuva de meteoros.", "skins": [{"nome": "Mago das Sombras", "img": "assets/p-sombras-padrao.webp"}], "banner": "assets/b-sombras.webp", "habilidades": [{"nome": "Bola de Fogo", "img": "assets/s-sombras-1.webp"}, {"nome": "Rajada de Chamas", "img": "assets/s-sombras-2.webp"}, {"nome": "Chuva de Meteoros", "img": "assets/s-sombras-3.webp"}]}, {"nome": "Ysolde", "titulo": "Bruxa da Geleira", "habilidade": "Estilhaços de Gelo", "descricao": "Herói da loja, R$ 6,99 (às vezes em promoção na roleta). Dispara dardos de gelo que atrasam quem acertam, congela o chão em volta dela e termina numa nevasca.", "skins": [{"nome": "Bruxa da Geleira", "img": "assets/p-ysolde-padrao.webp"}], "banner": "assets/b-ysolde.webp", "habilidades": [{"nome": "Estilhaços de Gelo", "img": "assets/s-ysolde-1.webp"}, {"nome": "Zona Congelante", "img": "assets/s-ysolde-2.webp"}, {"nome": "Nevasca", "img": "assets/s-ysolde-3.webp"}]}, {"nome": "Kaelor", "titulo": "Caçador de Espinhos", "habilidade": "Espinhos Brotando", "descricao": "Herói da loja, R$ 6,99 (às vezes em promoção na roleta). Espinhos negros rasgam o chão à frente dele e atordoam quem está no caminho. Cipós prendem os inimigos e uma roseira negra cobre a área.", "skins": [{"nome": "Caçador de Espinhos", "img": "assets/p-kaelor-padrao.webp"}], "banner": "assets/b-kaelor.webp", "habilidades": [{"nome": "Espinhos Brotando", "img": "assets/s-kaelor-1.webp"}, {"nome": "Cipó Prendedor", "img": "assets/s-kaelor-2.webp"}, {"nome": "Roseira Negra", "img": "assets/s-kaelor-3.webp"}]}, {"nome": "Mordrek", "titulo": "Alquimista da Peste", "habilidade": "Frasco Tóxico", "descricao": "Herói da loja, R$ 6,99 (às vezes em promoção na roleta). Arremessa frascos que deixam poças de veneno, solta uma nuvem pútrida e faz brotar uma flor da peste.", "skins": [{"nome": "Alquimista da Peste", "img": "assets/p-mordrek-padrao.webp"}], "banner": "assets/b-mordrek.webp", "habilidades": [{"nome": "Frasco Tóxico", "img": "assets/s-mordrek-1.webp"}, {"nome": "Nuvem Pútrida", "img": "assets/s-mordrek-2.webp"}, {"nome": "Flor da Peste", "img": "assets/s-mordrek-3.webp"}]}, {"nome": "Lyra", "titulo": "Arqueira Lunar", "habilidade": "Flecha Perfurante", "descricao": "Herói da loja, R$ 6,99 (às vezes em promoção na roleta). Uma flecha prateada atravessa a fila inteira de inimigos, chove flechas sobre a horda e a Marca da Lua cai sobre o mais forte.", "skins": [{"nome": "Arqueira Lunar", "img": "assets/p-lyra-padrao.webp"}], "banner": "assets/b-lyra.webp", "habilidades": [{"nome": "Flecha Perfurante", "img": "assets/s-lyra-1.webp"}, {"nome": "Chuva de Flechas", "img": "assets/s-lyra-2.webp"}, {"nome": "Marca da Lua", "img": "assets/s-lyra-3.webp"}]}, {"nome": "Irmão Brasa", "titulo": "Monge do Machado", "habilidade": "Giro Ardente", "descricao": "Exclusivo do Passe Premium, nível 15. Gira o machado e um círculo de brasas queima e atrasa os inimigos em volta.", "skins": [{"nome": "Monge do Machado", "img": "assets/p-monge-padrao.webp"}], "banner": "assets/b-monge.webp", "habilidades": [{"nome": "Giro Ardente", "img": "assets/s-monge-1.webp"}, {"nome": "Machados Voadores", "img": "assets/s-monge-2.webp"}, {"nome": "Golpe do Penitente", "img": "assets/s-monge-3.webp"}]}, {"nome": "Vesper", "titulo": "Cantora do Sino Negro", "habilidade": "Badalada", "descricao": "Exclusiva do Passe Premium, nível 30. O sino rachado ressoa em volta dela e fere quem chega perto.", "skins": [{"nome": "Cantora do Sino Negro", "img": "assets/p-vesper-padrao.webp"}], "banner": "assets/b-vesper.webp", "habilidades": [{"nome": "Badalada", "img": "assets/s-vesper-1.webp"}, {"nome": "Coro Sombrio", "img": "assets/s-vesper-2.webp"}, {"nome": "Réquiem", "img": "assets/s-vesper-3.webp"}]}, {"nome": "Dravik", "titulo": "Penitente da Tinta", "habilidade": "Selo de Tinta", "descricao": "Exclusivo do próximo Passe de Catedral. Tanque veloz que luta com os punhos e tem dano alto. Grava selos de tinta no chão, prende a horda com correntes e faz chover tinta sobre a tela inteira.", "skins": [{"nome": "Penitente da Tinta", "img": "assets/p-dravik-padrao.webp"}], "banner": "assets/b-dravik.webp", "habilidades": [{"nome": "Selo de Tinta", "img": "assets/s-dravik-1.webp"}, {"nome": "Correntes de Tinta", "img": "assets/s-dravik-2.webp"}, {"nome": "Chuva de Tinta", "img": "assets/s-dravik-3.webp"}], "tag": "Em breve · Passe da próxima temporada"}],
   vigiliaHerois: [
     {"nome": "Hálvar", "titulo": "o Lanterneiro", "img": "assets/v-halvar.webp", "arma": "aura", "cor": "#ffb04a", "txt": "A lanterna queima quem chega perto"},
     {"nome": "Nerys", "titulo": "a Caçadora", "img": "assets/v-nerys.webp", "arma": "bolt", "cor": "#dfe8ff", "pierce": 3, "speed": 1.5, "txt": "Flechas que atravessam a fila inteira"},

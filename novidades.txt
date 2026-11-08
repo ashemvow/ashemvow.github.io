@@ -1,3 +1,29 @@
+VERSÃO 11 · IDIOMAS, TUTORIAL E PASSE NOVO
+
+NOVO: INGLÊS E ESPANHOL
+O jogo agora pode ser jogado em português, inglês ou espanhol. Troque em Opções, no botão Idioma.
+
+NOVO: APRESENTAÇÃO E TUTORIAL
+Quem é novo vê uma apresentação do menu e aprende a jogar na primeira partida. Para ver de novo, toque em Opções e depois em Rever tutorial.
+
+NOVO: SEGURE A HABILIDADE
+Na partida, segure o botão de uma habilidade para ver o nome, o que ela faz e a recarga. Um toque rápido continua usando a habilidade.
+
+NOVO: PASSE DE CATEDRAL REDESENHADO
+Vitrine do prêmio principal, trilha Premium e grátis, títulos com insígnia própria e temporadas de 45 dias. As missões também dão XP do Passe.
+
+NOVO: ROLETA E PROMOÇÕES
+A roda gira inteira e o prêmio aparece com a quantidade. A fatia de promoção sorteia 24 horas de desconto num herói da loja, no Passe Premium ou na troca de apelido.
+
+NOVO: PERFIL, CARTÃO E RANKING GERAL
+O perfil reúne tudo numa barra no topo, a tela inicial tem o seu cartão de jogador e o ranking soma os seus melhores tempos de todas as fases.
+
+MUDANÇA: APELIDO
+O apelido é escolhido uma vez, com confirmação. Para trocar depois, compre uma troca de apelido no perfil.
+
+MUDANÇA: JOGO MAIS LEVE
+As cenas da história foram removidas para o jogo ficar mais leve.
+
 VERSÃO 10 · MISSÕES, MALDIÇÃO E MAESTRIA
 
 NOVO: MISSÕES DIÁRIAS E SEMANAIS
