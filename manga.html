@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Ashem Vow · Mangá Volume 1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Mangá oficial de Ashem Vow. Volume 1: A Lua Rubra. Obra complementar ao jogo, conta a origem de Ren na noite em que Vau-Cinzento queimou.">
+<meta property="og:title" content="Ashem Vow · Mangá Volume 1: A Lua Rubra">
+<meta property="og:description" content="Obra complementar ao jogo Ashem Vow. Leia grátis.">
+<meta property="og:image" content="https://ashemvow.github.io/assets/manga/capa.jpg">
+<meta property="og:type" content="book">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Spectral:ital,wght@0,500;1,500&family=Comic+Neue:wght@700&display=swap">
+<style>
+/* Layout: a single paper manga page centered on a dark reading desk; one page at a time, rows of panels with black gutters. Single deliberate look (paper on ink). */
+:root{
+  --desk:#0d0c0c; --desk-2:#1a1817; --paper:#f4f2ee; --ink:#0b0b0b; --muted:#8d8780; --ember:#b8332c;
+  --f-title:"Pirata One","UnifrakturCook",Georgia,serif;
+  --f-narr:"Spectral",Georgia,"Times New Roman",serif;
+  --f-talk:"Comic Neue","Comic Sans MS","Trebuchet MS",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--desk);color:var(--paper)}
+body{font-family:var(--f-narr);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 28px}
+.topo{max-width:780px;margin:0 auto 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.topo h1{font-family:var(--f-title);font-weight:400;font-size:clamp(24px,5vw,34px);margin:0;letter-spacing:.02em}
+.topo h1 span{color:var(--ember)}
+.topo .vol{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.folha{max-width:780px;margin:0 auto;background:var(--paper);padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.linha{display:flex;gap:10px;margin-bottom:10px}
+.linha:last-child{margin-bottom:0}
+.q{position:relative;flex:1 1 0;min-width:0;background:var(--ink);border:3px solid var(--ink);overflow:hidden;container-type:inline-size}
+.q img{display:block;width:100%;height:100%;object-fit:cover;max-width:100%}
+.caixas{position:absolute;inset:8px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;pointer-events:none}
+.top,.bot{display:flex;flex-direction:column;gap:6px}
+.top{align-items:flex-start}.bot{align-items:flex-end}
+.narr{background:var(--paper);color:var(--ink);border:2px solid var(--ink);font-family:var(--f-narr);font-style:italic;font-size:clamp(12px,3.4cqw,17px);line-height:1.35;padding:.45em .7em;max-width:78%;box-shadow:3px 3px 0 var(--ink)}
+.bal{position:relative;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:50%/42%;font-family:var(--f-talk);font-weight:700;font-size:clamp(12px,3.6cqw,18px);line-height:1.2;padding:.8em 1.2em;max-width:72%;text-align:center;text-transform:uppercase}
+.bal small{display:block;font-size:.62em;letter-spacing:.12em;color:#6a6560;margin-bottom:.15em}
+.bal::after{content:"";position:absolute;bottom:-12px;right:24%;border:7px solid transparent;border-top:12px solid var(--ink);border-bottom:0}
+.bal::before{content:"";position:absolute;bottom:-8px;right:calc(24% + 2px);border:5px solid transparent;border-top:9px solid #fff;border-bottom:0;z-index:1}
+.bal.sus{border-style:dashed;background:rgba(255,255,255,.88);font-style:italic}
+.bal.sus::after,.bal.sus::before{display:none}
+.capa{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:7% 7% 9%;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.85) 100%)}
+.capa .marca{position:absolute;top:6%;left:7%;right:7%;font-family:var(--f-title);font-size:clamp(44px,15cqw,110px);line-height:.9;color:#fff;text-align:center;text-shadow:0 4px 0 #000}
+.capa .t{font-family:var(--f-title);font-size:clamp(26px,8cqw,60px);color:#fff;line-height:1}
+.capa .s{font-size:clamp(13px,3.6cqw,18px);color:#d9d4cc;letter-spacing:.16em;text-transform:uppercase;margin-top:.5em}
+.capa .aviso{margin-top:1.2em;font-size:clamp(11px,2.8cqw,13px);color:#bdb6ad;border:1px solid #5d5853;display:inline-block;padding:.3em .6em;align-self:flex-start}
+.fimtag{position:absolute;right:8px;bottom:8px;font-family:var(--f-title);font-size:clamp(18px,6cqw,30px);color:#fff;background:#000;padding:.1em .5em}
+.nav{max-width:780px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav button{font-family:var(--f-narr);font-size:15px;background:var(--desk-2);color:var(--paper);border:1px solid #3a3633;padding:.7em 1.1em;cursor:pointer;min-width:110px}
+.nav button:hover:not(:disabled){border-color:var(--ember)}
+.nav button:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+.nav button:disabled{opacity:.35;cursor:default}
+.cont{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;text-align:center}
+.barra{height:3px;background:var(--desk-2);max-width:780px;margin:10px auto 0}
+.barra i{display:block;height:100%;background:var(--ember);width:0;transition:width .3s}
+.final{max-width:780px;margin:0 auto;background:var(--paper);color:var(--ink);padding:clamp(28px,7vw,64px);text-align:center}
+.final h2{font-family:var(--f-title);font-weight:400;font-size:clamp(34px,8vw,56px);margin:0 0 .2em;text-wrap:balance}
+.final p{max-width:52ch;margin:0 auto 1em;font-size:17px;line-height:1.6}
+.final a{color:var(--ember)}
+.selo{max-width:780px;margin:0 auto 12px;font-size:13px;line-height:1.5;color:var(--muted);border-left:2px solid var(--ember);padding:.4em .8em}
+.selo a{color:var(--paper)}
+.btn-final{display:inline-block;margin-top:.6em;background:var(--ember);color:#fff!important;text-decoration:none;font-family:var(--f-title);font-size:24px;padding:.35em 1.1em}
+.dica{max-width:780px;margin:10px auto 0;color:var(--muted);font-size:12px;text-align:center}
+@media (max-width:560px){
+  .folha{padding:8px}
+  .linha{flex-direction:column;gap:8px;margin-bottom:8px}
+  .narr,.bal{max-width:88%}
+}
+@media (prefers-reduced-motion:reduce){.barra i{transition:none}}
+</style>
+</head><body>
+
+<header class="topo">
+  <h1><a href="index.html" style="color:inherit;text-decoration:none">Ashem Vow</a> <span>·</span> A Lua Rubra</h1>
+  <div class="vol">Volume 1 · Capítulo 1</div>
+</header>
+<p class="selo">Obra complementar ao jogo <a href="index.html">Ashem Vow</a>. Roteiro e história originais do projeto; ilustrações feitas com auxílio de inteligência artificial.</p>
+<main id="palco"></main>
+<nav class="nav" aria-label="Páginas">
+  <button id="ant" type="button">← Anterior</button>
+  <div class="cont" id="cont">1 / 25</div>
+  <button id="prox" type="button">Próxima →</button>
+</nav>
+<div class="barra"><i id="barra"></i></div>
+<p class="dica">Use as setas do teclado ou toque nos botões para virar a página.</p>
+
+<script>
+const PAGINAS = [{"l": [1], "q": [{"i": "assets/manga/capa.jpg", "r": "2/3", "capa": true}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q02.webp", "r": "16/9", "n": "Havia uma vila no fim do mundo. Não tinha nome nos mapas. Os poucos que passavam chamavam de Vau-Cinzento."}, {"i": "assets/manga/q03.webp", "r": "1/1", "f": [["Ren", "Tá frio hoje, né?"]]}, {"i": "assets/manga/q04.webp", "r": "1/1", "f": [["Tomé", "Ren! Solta isso! Isso tá em brasa!"]]}]}, {"l": [2, 1], "q": [{"i": "assets/manga/q05.webp", "r": "1/1", "f": [["Ilsa", "Quantas vezes eu vou ter que dizer? Longe da forja."], ["Ren", "Mas não dói, mãe."]]}, {"i": "assets/manga/q06.webp", "r": "1/1", "f": [["Ilsa", "É isso que me assusta."]]}, {"i": "assets/manga/q07.webp", "r": "16/9", "f": [["Ilsa", "Que música é essa?"], ["Ren", "A menina do gelo canta toda noite. Você não escuta?"]]}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q08.webp", "r": "16/9", "n": "Desde que se lembrava, ele sonhava com a mesma menina. Ela cantava do outro lado de uma parede de gelo."}, {"i": "assets/manga/q09.webp", "r": "16/9", "f": [["Menina", "...irmão..."]]}]}, {"l": [2, 1], "q": [{"i": "assets/manga/q10.webp", "r": "1/1", "n": "Três dias antes, os cães começaram a uivar. E não pararam mais."}, {"i": "assets/manga/q11.webp", "r": "1/1", "f": [["Mascate", "Vi soldados no vale. Armadura escura. Nenhuma bandeira."]]}, {"i": "assets/manga/q12.webp", "r": "16/9"}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q13.webp", "r": "16/9", "n": "No fundo do baú, ela guardava um pergaminho que nunca tinha mostrado a ninguém."}, {"i": "assets/manga/q14.webp", "r": "1/1", "f": [["Sacerdote", "Crie como se fosse seu."]]}, {"i": "assets/manga/q15.webp", "r": "1/1", "n": "Ela criou. E amou de verdade."}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q16.webp", "r": "16/9", "f": [["Ilsa", "Não pergunta nada. Só anda."]]}, {"i": "assets/manga/q17.webp", "r": "1/1"}, {"i": "assets/manga/q18.webp", "r": "1/1", "n": "A estrada estava vigiada. Eles voltaram para casa antes que o sol nascesse."}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q19.webp", "r": "16/9", "n": "Naquela noite, a lua subiu vermelha."}, {"i": "assets/manga/q20.webp", "r": "1/1", "f": [["Velha", "Lua de sangue... isso nunca é bom sinal."]]}, {"i": "assets/manga/q21.webp", "r": "1/1"}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q22.webp", "r": "16/9", "n": "Vieram em silêncio. Carregavam tochas como quem carrega uma sentença."}, {"i": "assets/manga/q23.webp", "r": "16/9", "f": [["Vorn", "Cada um sabe a sua casa. Ninguém sai do vale."]]}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q24.webp", "r": "2/1", "n": "Ninguém gritou ordem alguma."}, {"i": "assets/manga/q25.webp", "r": "16/9", "n": "O fogo caiu sobre os telhados como se já estivesse escrito."}]}, {"l": [2, 1], "q": [{"i": "assets/manga/q26.webp", "r": "1/1"}, {"i": "assets/manga/q27.webp", "r": "1/1", "f": [["Ferreiro", "Na minha forja, não!"]]}, {"i": "assets/manga/q28.webp", "r": "16/9"}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q29.webp", "r": "16/9", "n": "Na ponte, uma batedora fechava a saída do vale."}, {"i": "assets/manga/q30.webp", "r": "1/1", "f": [["Tomé", "Ren! Corre!"]]}, {"i": "assets/manga/q31.webp", "r": "1/1", "n": "Ren nunca mais viu Tomé."}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q32.webp", "r": "16/9"}, {"i": "assets/manga/q33.webp", "r": "1/1", "f": [["Marek", "Eu... eu não consigo."]]}, {"i": "assets/manga/q34.webp", "r": "1/1"}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q35.webp", "r": "16/9", "f": [["Vorn", "Fraco."]]}, {"i": "assets/manga/q36.webp", "r": "1/1"}, {"i": "assets/manga/q37.webp", "r": "1/1", "n": "Marek nunca esqueceu aquela cena. Nem o menino que viu logo depois."}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q38.webp", "r": "16/9", "f": [["Ilsa", "Fica aqui. Não sai por nada."]]}, {"i": "assets/manga/q39.webp", "r": "1/1", "f": [["Ilsa", "Você não é o que eles acham que você é."]]}, {"i": "assets/manga/q40.webp", "r": "1/1", "f": [["Ilsa", "Você é meu."]]}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q41.webp", "r": "16/9"}, {"i": "assets/manga/q42.webp", "r": "16/9", "n": "Ela foi morta na porta de casa. E a casa veio abaixo."}]}, {"l": [2, 1], "q": [{"i": "assets/manga/q43.webp", "r": "1/1"}, {"i": "assets/manga/q44.webp", "r": "1/1"}, {"i": "assets/manga/q45.webp", "r": "16/9", "f": [["Ren", "Mãe...?"]]}]}, {"l": [1], "q": [{"i": "assets/manga/q46.webp", "r": "2/3", "n": "Ele caminhou para dentro das chamas. E as chamas se abriram, como quem reconhece alguém."}]}, {"l": [2, 1], "q": [{"i": "assets/manga/q47.webp", "r": "1/1", "f": [["Soldado", "Ele... ele não queima."]]}, {"i": "assets/manga/q48.webp", "r": "1/1"}, {"i": "assets/manga/q49.webp", "r": "16/9", "n": "Ele não queimou. Nem uma vez."}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q50.webp", "r": "2/1", "f": [["Vorn", "A Chave está colhida."]]}, {"i": "assets/manga/q51.webp", "r": "16/9", "f": [["Vorn", "Ninguém toca nele. Até a próxima lua."]]}]}, {"l": [1, 1], "q": [{"i": "assets/manga/q52.webp", "r": "16/9", "n": "Quando tudo acabou, só restava ele."}, {"i": "assets/manga/q53.webp", "r": "16/9"}]}, {"l": [1], "q": [{"i": "assets/manga/q54.webp", "r": "2/3", "n": "As cinzas se ergueram. Giraram em volta dele. E sussurraram um nome que ele não lembrava ter.", "f": [["Cinzas", "Garrick..."]]}]}, {"l": [1, 2], "q": [{"i": "assets/manga/q55.webp", "r": "2/1", "f": [["Ren", "Garrick...? Esse não é o meu nome..."]]}, {"i": "assets/manga/q56.webp", "r": "1/1", "f": [["Ren", "Mãe... qual era o seu rosto?"]]}, {"i": "assets/manga/q57.webp", "r": "1/1", "n": "Foi o primeiro fio cortado."}]}, {"l": [2, 2], "q": [{"i": "assets/manga/q58.webp", "r": "1/1", "n": "Na mesma madrugada, em lugares diferentes do mundo..."}, {"i": "assets/manga/q59.webp", "r": "1/1"}, {"i": "assets/manga/q60.webp", "r": "1/1", "n": "...doze pessoas acordaram com um símbolo ardendo na pele."}, {"i": "assets/manga/q61.webp", "r": "1/1", "n": "E um menino sem nome saiu de Vau-Cinzento com uma única pergunta. Por quê?", "fim": true}]}];
+const SUSSURRO = new Set(["Menina","Cinzas"]);
+const total = PAGINAS.length + 1;
+let atual = 0;
+const palco = document.getElementById("palco");
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function quadro(q, linhaN) {
+  const el = document.createElement("div");
+  el.className = "q";
+  el.style.aspectRatio = q.r;
+  const img = new Image();
+  img.src = q.i; img.alt = q.n || (q.f ? q.f.map(f => f[1]).join(" ") : "Quadro do mangá");
+  img.decoding = "async";
+  el.appendChild(img);
+  if (q.capa) {
+    el.insertAdjacentHTML("beforeend",
+      '<div class="capa"><div class="marca">Ashem Vow</div><div class="t">A Lua Rubra</div><div class="s">Volume 1 · Capítulo 1</div><div class="aviso">Conteúdo adulto · violência</div></div>');
+    return el;
+  }
+  const cx = document.createElement("div"); cx.className = "caixas";
+  const top = document.createElement("div"); top.className = "top";
+  const bot = document.createElement("div"); bot.className = "bot";
+  if (q.n) top.insertAdjacentHTML("beforeend", '<div class="narr">' + esc(q.n) + "</div>");
+  (q.f || []).forEach((f, k) => {
+    const html = '<div class="bal' + (SUSSURRO.has(f[0]) ? " sus" : "") + '"><small>' + esc(f[0]) + "</small>" + esc(f[1]) + "</div>";
+    (q.n || k > 0 ? bot : top).insertAdjacentHTML("beforeend", html);
+  });
+  cx.append(top, bot); el.appendChild(cx);
+  if (q.fim) el.insertAdjacentHTML("beforeend", '<div class="fimtag">Fim</div>');
+  return el;
+}
+
+function render() {
+  palco.innerHTML = "";
+  if (atual < PAGINAS.length) {
+    const p = PAGINAS[atual];
+    const folha = document.createElement("div"); folha.className = "folha";
+    let k = 0;
+    p.l.forEach(n => {
+      const linha = document.createElement("div"); linha.className = "linha";
+      for (let j = 0; j < n; j++) linha.appendChild(quadro(p.q[k++], n));
+      folha.appendChild(linha);
+    });
+    palco.appendChild(folha);
+  } else {
+    palco.innerHTML = '<section class="final"><h2>Fim do Volume 1</h2>' +
+      '<p>Vau-Cinzento virou cinza numa única noite. Ren saiu de lá sem casa, sem mãe e com um nome que não é o dele.</p>' +
+      '<p>Doze pessoas acordaram com a mesma marca na pele. No Volume 2, o menino que não queima começa a procurar quem fez isso, e por quê.</p>' +
+      '<p>Ashem Vow é um jogo de ação e sobrevivência em pixel art para Android. O mangá é uma obra complementar: a história continua dentro do jogo.</p><a class="btn-final" href="index.html#inscricao">Quero testar o jogo</a></section>';
+  }
+  document.getElementById("cont").textContent = (atual + 1) + " / " + total;
+  document.getElementById("barra").style.width = ((atual + 1) / total * 100) + "%";
+  document.getElementById("ant").disabled = atual === 0;
+  document.getElementById("prox").disabled = atual === total - 1;
+  const h = "#p" + (atual + 1);
+  if (location.hash !== h) history.replaceState(null, "", h);
+  // pré-carrega a próxima página
+  const prox = PAGINAS[atual + 1];
+  if (prox) prox.q.forEach(q => { const i = new Image(); i.src = q.i; });
+}
+function ir(n) {
+  n = Math.max(0, Math.min(total - 1, n));
+  if (n === atual && palco.childElementCount) return;
+  atual = n; render(); window.scrollTo({ top: 0 });
+}
+document.getElementById("ant").onclick = () => ir(atual - 1);
+document.getElementById("prox").onclick = () => ir(atual + 1);
+addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") ir(atual + 1);
+  if (e.key === "ArrowLeft") ir(atual - 1);
+});
+function doHash() { const m = /^#p(\d+)$/.exec(location.hash); return m ? +m[1] - 1 : 0; }
+addEventListener("hashchange", () => ir(doHash()));
+atual = Math.max(0, Math.min(total - 1, doHash()));
+render();
+</script>
+</body></html>
