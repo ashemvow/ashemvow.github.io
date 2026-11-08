@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /vigia.html
+Disallow: /vigia-cam.html
+Disallow: /vigia-overlay.html
+Disallow: /arena.html
+Disallow: /salao-admin.html
+Disallow: /overlay-salao.html
+Disallow: /tiktok.html

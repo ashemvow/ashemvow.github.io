@@ -124,7 +124,7 @@ form.addEventListener("submit", async e => {
     try { localStorage.setItem(JA, "1"); } catch (e) {}
     atualizarMeta(r.total); concluir(d, r.novo); fmsg.textContent = "";
   } catch (err) {
-    fmsg.textContent = "Não foi possível enviar agora. Confira a internet e tente de novo.";
+    fmsg.textContent = /muitas_inscricoes/.test(String(err && err.message)) ? "Muitas inscrições ao mesmo tempo agora. Tente de novo em alguns minutos." : "Não foi possível enviar agora. Confira a internet e tente de novo.";
   } finally { enviar.disabled = false; }
 });
 
