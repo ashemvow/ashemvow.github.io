@@ -34,7 +34,8 @@
     jogo: /miss|maldi|passe|ins[ií]gnia|ranking|maestria|desafio|novidade|vers[aã]o|atualiza|update|ba[uú]|recompensa|evolu|arma|po[cç][aã]o|item|como (se )?joga|jogabilidade|gameplay|partida/i,
     faq: /pre[cç]o|cust|gr[aá]tis|pag|celular|android|iphone|ios|\bpc\b|controle|conta|login|lan[cç]|quando|teste|inscri|beta|baix|download|play ?store|requisit|roda/i,
     salao: /sal[aã]o|corrida|mini ?game|vig[ií]lia|quiz|jogar (aqui|agora|com)/i,
-    criador: /quem (fez|faz|criou|desenvolve)|\bdev\b|desenvolvedor|sozinho|criador|teecki|godot|engine/i
+    criador: /quem (fez|faz|criou|desenvolve)|\bdev\b|desenvolvedor|sozinho|criador|teecki|godot|engine/i,
+    saga: /hist[oó]ria|saga|lore|enredo|narrativa|juramento|cap[ií]tulo|lua rubra|lua vermelha|marca|fome|chave|marek|escriba|tecel|selo|vila|passado|origem|quem [eé]|mundo|final|fim do jogo|cinzas/i
   };
   function conhecimento(pergunta) {
     const S2 = [], txt = v => String(v || '').trim(), add = (tema, t) => S2.push([tema, t]);
@@ -50,6 +51,7 @@
     add('jogo', 'NOVIDADES:\n' + (S.novidades || []).map(n => `- ${n.data} · ${n.titulo}: ${n.texto}`).join('\n'));
     add('faq', 'TESTE FECHADO: inscrição com o e-mail da conta Google da Play Store. Quem se inscreve ganha: ' + ((S.inscricao && S.inscricao.vantagens) || []).join('; ') + '.');
     add('faq', 'PERGUNTAS FREQUENTES:\n' + (S.perguntas || []).map(q => `P: ${q.p} R: ${q.r}`).join('\n'));
+    add('saga', 'A HISTÓRIA DE ASHEM VOW (saga oficial em 11 capítulos, é o vídeo da saga no YouTube; conte com suas palavras, sem inventar nada além disto):\n' + (S.saga || []).map(c => `${c.titulo}: ${c.texto}`).join('\n'));
     add('criador', `CRIADOR: ${(S.criador && S.criador.nome) || cfg.nome}. ${txt(S.criador && S.criador.bio)}`);
     add('salao', 'SALÃO DO JURAMENTO (abre durante as lives, no site /salao): Corrida das Cinzas (multiplayer: todos correm a mesma pista, toque para pular, segure para pular mais alto, o último de pé vence e aparece na live), Vigília das Cinzas (mini game solo de sobrevivência com ranking da live), quiz "Qual herói é você?" e o desafio "Que chefe é esse?" com silhuetas dos chefes.');
     add('base', 'LINKS OFICIAIS:\n' + LINKS.map(l => `- ${l[0]}: ${l[1]}`).join('\n'));
@@ -57,6 +59,7 @@
     if (pergunta == null) return S2.map(s => s[1]).join('\n\n');
     let temas = Object.keys(TEMAS).filter(t => TEMAS[t].test(pergunta));
     if (!temas.length) temas = ['faq', 'salao'];
+    if (temas.includes('herois') && !temas.includes('saga')) temas.push('saga'); // a história de cada herói está na saga
     return S2.filter(s => s[0] === 'base' || temas.includes(s[0])).map(s => s[1]).join('\n\n');
   }
   function sistema(pergunta) {
