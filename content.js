@@ -24,7 +24,7 @@ window.SITE = {
   /* Redes. Deixe "" para esconder o botão. */
   redes: {
     instagram: "https://www.instagram.com/ashemvow",
-    youtube: "https://youtu.be/F1bEoAYxMx4",
+    youtube: "https://www.youtube.com/@ashemvow2d",
     tiktok: "",
     twitch: "",
     discord: ""
@@ -309,6 +309,7 @@ window.SITE = {
     email: "ashemvow@gmail.com"
   },
   instagram: "https://www.instagram.com/ashemvow",
+  sagaVideo: "https://www.youtube.com/watch?v=7UhEcFNO2N4",
   pix: { chave: "b8cbf0f8-07a7-4ac1-b5cc-1da4d78b6cd6", tipo: "Chave aleatória" },
   /* Anúncios: preencha com os dados do Google AdSense quando aprovado. Vazio = espaço reservado. */
   anuncios: { client: "ca-pub-4655197030235579", slot: "" }
