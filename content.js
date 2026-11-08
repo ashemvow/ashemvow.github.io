@@ -12,7 +12,7 @@ window.SITE = {
   inscricao: {
     supabaseUrl: "https://vokffayvytyoojsysqyq.supabase.co",
     supabaseKey: "sb_publishable_oBEi0zH9jANY1WYMamRmSg_C4Wm7BHo", // chave pública, pode ficar no site
-    meta: 100,               // meta mostrada na barra de progresso
+    meta: 12,                // meta da barra: o Google Play pede 12 testadores no teste fechado
     mostrarAPartirDe: 10,    // o contador só aparece quando houver pelo menos este número de inscritos
     vantagens: [
       "Convite para o teste fechado no Android antes de todo mundo",

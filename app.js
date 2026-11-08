@@ -93,9 +93,9 @@ const rpc = async (nome, corpo) => {
 };
 const atualizarMeta = n => {
   if (typeof n !== "number" || n < I.mostrarAPartirDe) return;
-  const alvo = n >= I.meta ? Math.ceil((n + 1) / 100) * 100 : I.meta;
+  const alvo = I.meta, batida = n >= alvo;
   $("meta").hidden = false; $("meta-n").textContent = n.toLocaleString("pt-BR");
-  $("meta-alvo").textContent = `· meta: ${alvo.toLocaleString("pt-BR")}`;
+  $("meta-alvo").textContent = batida ? `· meta de ${alvo} testadores batida!` : `· meta: ${alvo} testadores`;
   $("meta-barra").style.width = Math.min(100, n / alvo * 100) + "%";
 };
 rpc("total_inscritos").then(atualizarMeta).catch(() => {});
