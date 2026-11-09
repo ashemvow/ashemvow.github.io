@@ -1,5 +1,7 @@
 {
-  "coop": false,
+  "coop": true,
   "coop_msg": "",
-  "coop_testers": ["Luam"]
+  "coop_testers": [
+    "Luam"
+  ]
 }
