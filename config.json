@@ -4,7 +4,7 @@
   "coop_testers": [
     "Luam"
   ],
-  "abismo": false,
+  "abismo": true,
   "abismo_msg": "",
   "abismo_testers": [
     "Luam"
