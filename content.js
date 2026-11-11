@@ -68,6 +68,11 @@ window.SITE = {
 
   /* Galeria de telas do jogo */
   galeriaJogo: [
+    { img: "assets/print-deserto.webp", legenda: "Areias do Juramento: o deserto do Modo Cooperativo" },
+    { img: "assets/print-coop-sala.webp", legenda: "Sala do cooperativo com o perfil de cada jogador" },
+    { img: "assets/print-bazar.webp", legenda: "Bazar das Areias: recompensas trocadas por Selos de Areia" },
+    { img: "assets/print-ofertas.webp", legenda: "Loja: aba Ofertas, com pacotes e Oferta da Semana" },
+    { img: "assets/print-banners-loja.webp", legenda: "Loja: 8 banners novos para o perfil" },
     { img: "assets/print-home.webp", legenda: "Tela inicial com o cartão do jogador" },
     { img: "assets/print-apresentacao.webp", legenda: "Apresentação do menu para quem é novo" },
     { img: "assets/print-tutorial.webp", legenda: "Tutorial da primeira partida" },
@@ -179,6 +184,10 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "10/11/2026", titulo: "Versão 12: Modo Cooperativo nas Areias do Juramento", texto: "Jogue com até 4 amigos no mesmo mapa, cada um com sua câmera, seu herói e seus upgrades. Se um aliado cair, fique perto dele por 3 segundos para levantá-lo. O deserto tem inimigos novos, 3 chefes (o Faraó Sem Rosto, a Rainha Escorpião e a Esfinge do Último Juramento) e é o modo mais difícil do jogo. O cooperativo abre num evento especial: fique de olho aqui." },
+    { data: "10/11/2026", titulo: "Bazar das Areias e Selos de Areia", texto: "Partidas no deserto e missões cooperativas (3 diárias e 3 semanais) dão Selos de Areia. Troque no Bazar das Areias por 6 avatares, 4 títulos com insígnia, o banner do deserto e skins do deserto para Garrick, Selka, Brann e Orun. Os títulos mais raros pedem vitórias no deserto." },
+    { data: "10/11/2026", titulo: "Amigos, conversa e sala com o seu perfil", texto: "Adicione amigos, converse dentro do jogo e chame quem quiser para a sua sala. Na sala, cada jogador aparece com o banner, o avatar, o nível e o título do perfil, e o personagem escolhido logo abaixo." },
+    { data: "10/11/2026", titulo: "Loja nova: ofertas, relicários e banners", texto: "A loja ganhou a aba Ofertas (Pacote do Iniciante, Oferta da Semana, Pacote do Peregrino e Tesouro do Campeão), Relicários com prêmios sorteados e as chances de cada prêmio à mostra, caixas de poções e 8 banners novos para o perfil." },
     { data: "08/11/2026", titulo: "Versão 11: o jogo agora fala inglês e espanhol", texto: "Ashem Vow pode ser jogado em português, inglês ou espanhol. Na primeira vez ele usa o idioma do celular, e dá para trocar quando quiser em Opções. Menus, heróis, habilidades, armas, missões e maldições foram traduzidos." },
     { data: "08/11/2026", titulo: "Apresentação do menu e tutorial para quem chega", texto: "Quem abre o jogo pela primeira vez vê uma apresentação rápida do menu, com cada parte iluminada e explicada. Depois, a primeira partida ensina a andar, atacar, ligar o ataque automático, subir de nível e usar as habilidades. Tudo pode ser pulado e revisto em Opções." },
     { data: "08/11/2026", titulo: "Segure a habilidade para saber o que ela faz", texto: "Na partida, um toque rápido usa a habilidade. Segurando o botão aparece o nome, o que ela faz e o tempo de recarga, sem gastar a carga. As 39 habilidades dos 13 heróis têm explicação. Os botões também ganharam um brilho e uma onda ao toque, para mostrar que foram apertados." },

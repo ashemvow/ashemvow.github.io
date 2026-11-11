@@ -1,3 +1,26 @@
+VERSÃO 12 · MODO COOPERATIVO E LOJA NOVA
+
+NOVO: MODO COOPERATIVO
+Jogue com até 4 amigos no mesmo mapa, cada um com sua câmera, seu herói e seus upgrades. Se um aliado cair, fique perto dele por 3 segundos para levantá-lo. O cooperativo abre num evento especial.
+
+NOVO: AREIAS DO JURAMENTO
+Um deserto só do cooperativo, com inimigos novos e 3 chefes: o Faraó Sem Rosto, a Rainha Escorpião e a Esfinge do Último Juramento. É o modo mais difícil do jogo.
+
+NOVO: SELOS DE AREIA E BAZAR DAS AREIAS
+Partidas no deserto e missões cooperativas dão Selos de Areia. Troque no Bazar das Areias por avatares, títulos, o banner do deserto e skins do deserto para Garrick, Selka, Brann e Orun.
+
+NOVO: MISSÕES COOPERATIVAS
+Três missões por dia e três por semana, numa aba própria em Missões. Só contam jogando no deserto em grupo.
+
+NOVO: AMIGOS E CONVERSA
+Adicione amigos, converse dentro do jogo e chame quem quiser para a sua sala. Na sala, cada jogador aparece com o perfil dele e o personagem escolhido.
+
+NOVO: LOJA COM OFERTAS, RELICÁRIOS E BANNERS
+Pacotes com cinzas, fragmentos e poções, a Oferta da Semana, relicários com prêmios sorteados (com as chances à mostra), caixas de poções e 8 banners novos para o perfil.
+
+MUDANÇA: ARMAS DURANTE A PARTIDA
+Os heróis começam só com as próprias habilidades. As armas aparecem nas escolhas de nível ao longo da partida.
+
 VERSÃO 11 · IDIOMAS, TUTORIAL E PASSE NOVO
 
 NOVO: INGLÊS E ESPANHOL
