@@ -1,8 +1,0 @@
-<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>relay</title>
-<p>Enviando imagem...</p>
-<script>
-(async()=>{const u=new URLSearchParams(location.search).get('img')||'assets/manga/ref-herois.png';
-if(!/^assets\/[\w\/.-]+$/.test(u))return;
-const b=await (await fetch(u)).blob();
-if(window.opener){window.opener.postMessage({relay:1,name:u.split('/').pop(),type:b.type,buf:await b.arrayBuffer()},'https://chatgpt.com');document.body.textContent='ok';setTimeout(()=>close(),800);}else document.body.textContent='sem opener';})();
-</script>
