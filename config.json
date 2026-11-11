@@ -3,5 +3,10 @@
   "coop_msg": "",
   "coop_testers": [
     "Luam"
+  ],
+  "abismo": false,
+  "abismo_msg": "",
+  "abismo_testers": [
+    "Luam"
   ]
 }
