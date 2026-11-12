@@ -68,6 +68,11 @@ window.SITE = {
 
   /* Galeria de telas do jogo */
   galeriaJogo: [
+    { img: "assets/print-abismo-menu.webp", legenda: "Modo Abismo: a tela do evento, com recorde e as 6 camadas" },
+    { img: "assets/print-abismo-forja.webp", legenda: "Modo Abismo: a Forja Negra, com o herói e dois aliados" },
+    { img: "assets/print-abismo-guardiao.webp", legenda: "Guardião do Abismo: o Bibliotecário Afogado" },
+    { img: "assets/print-abismo-bencao.webp", legenda: "Escolha de bênção ou pacto ao vencer um andar" },
+    { img: "assets/print-ressonancia.webp", legenda: "Ressonância: combos entre heróis no cooperativo" },
     { img: "assets/print-deserto.webp", legenda: "Areias do Juramento: o deserto do Modo Cooperativo" },
     { img: "assets/print-coop-sala.webp", legenda: "Sala do cooperativo com o perfil de cada jogador" },
     { img: "assets/print-bazar.webp", legenda: "Bazar das Areias: recompensas trocadas por Selos de Areia" },
@@ -184,6 +189,12 @@ window.SITE = {
   ],
   /* Novas novidades: copie um bloco e coloque no TOPO da lista */
   novidades: [
+    { data: "12/11/2026", titulo: "Versão 13: Modo Abismo, uma descida sem fim", texto: "Um evento novo com a câmera de lado: você desce andar por andar com o seu herói e dois aliados sorteados. Cada andar dura pouco mais de um minuto e meio e termina num guardião. São 6 camadas com cenário próprio (Andar das Correntes, Biblioteca Afogada, Jardim de Ossos, Forja Negra, Catedral Invertida e Coração do Abismo) e 3 guardiões: o Carcereiro das Correntes, o Bibliotecário Afogado e o Coração do Abismo. Depois da sexta camada, o ciclo recomeça mais forte." },
+    { data: "12/11/2026", titulo: "Bênçãos e pactos a cada andar", texto: "Ao vencer o guardião, escolha 1 entre 3 bênçãos para descer mais fundo: mais dano, velocidade, armadura, experiência, velocidade de ataque ou vida cheia. Também podem aparecer pactos, que dão um bônus grande em troca de um preço, como o Pacto de Sangue (+35% de dano, mas os inimigos ganham +25% de vida)." },
+    { data: "12/11/2026", titulo: "Relicário do Abismo e Estilhaços", texto: "Cada descida rende Estilhaços do Abismo, conforme os andares e guardiões vencidos. Troque no Relicário do Abismo por 6 avatares, 4 títulos com insígnia, o banner O Abismo das Marcas, a Moldura do Abismo e Velas do Abismo, que te fazem voltar à vida uma vez na descida (até 3). Os itens mais raros pedem recorde de andar 10, 15, 20, 25 e 50." },
+    { data: "12/11/2026", titulo: "Tela do evento, ícone e música própria", texto: "O Abismo ganhou uma tela de evento nova, com a arte inteira, o seu recorde e as 6 camadas da descida. Quando o evento está aberto, um ícone aparece no topo da tela inicial. O modo também tem uma música exclusiva, com coro, sinos e tambores, que toca no menu do evento e durante a descida." },
+    { data: "12/11/2026", titulo: "Ressonância: combos entre heróis no cooperativo", texto: "No cooperativo, quando dois jogadores usam uma habilidade quase ao mesmo tempo e perto um do outro, os poderes se combinam numa explosão com nome próprio. São 66 combinações, uma para cada dupla de heróis, como Explosão de Vapor, Lâminas do Luar e Sino da Peste." },
+    { data: "12/11/2026", titulo: "Correção: missões do dia na tela inicial", texto: "O quadro de missões do dia aparecia como um bloco vermelho vazio quando havia recompensa para pegar. Agora as missões aparecem inteiras e o aviso de recompensa é só uma bolinha no canto." },
     { data: "10/11/2026", titulo: "Versão 12: Modo Cooperativo nas Areias do Juramento", texto: "Jogue com até 4 amigos no mesmo mapa, cada um com sua câmera, seu herói e seus upgrades. Se um aliado cair, fique perto dele por 3 segundos para levantá-lo. O deserto tem inimigos novos, 3 chefes (o Faraó Sem Rosto, a Rainha Escorpião e a Esfinge do Último Juramento) e é o modo mais difícil do jogo. O cooperativo abre num evento especial: fique de olho aqui." },
     { data: "10/11/2026", titulo: "Bazar das Areias e Selos de Areia", texto: "Partidas no deserto e missões cooperativas (3 diárias e 3 semanais) dão Selos de Areia. Troque no Bazar das Areias por 6 avatares, 4 títulos com insígnia, o banner do deserto e skins do deserto para Garrick, Selka, Brann e Orun. Os títulos mais raros pedem vitórias no deserto." },
     { data: "10/11/2026", titulo: "Amigos, conversa e sala com o seu perfil", texto: "Adicione amigos, converse dentro do jogo e chame quem quiser para a sua sala. Na sala, cada jogador aparece com o banner, o avatar, o nível e o título do perfil, e o personagem escolhido logo abaixo." },

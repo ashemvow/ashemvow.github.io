@@ -1,3 +1,23 @@
+VERSÃO 13 · MODO ABISMO
+
+NOVO: MODO ABISMO
+Um evento com a câmera de lado. Desça andar por andar com o seu herói e dois aliados sorteados. Cada andar termina num guardião, e são 6 camadas com cenário próprio, do Andar das Correntes ao Coração do Abismo.
+
+NOVO: BÊNÇÃOS E PACTOS
+Ao vencer o guardião, escolha 1 entre 3 bênçãos para descer mais fundo. Os pactos dão um bônus grande em troca de um preço.
+
+NOVO: RELICÁRIO DO ABISMO
+As descidas dão Estilhaços do Abismo. Troque por 6 avatares, 4 títulos, o banner do Abismo, a Moldura do Abismo e Velas do Abismo, que te fazem voltar à vida uma vez na descida.
+
+NOVO: TELA DO EVENTO E MÚSICA PRÓPRIA
+O Abismo tem uma tela de evento nova, um ícone no topo da tela inicial quando está aberto e uma música exclusiva.
+
+NOVO: RESSONÂNCIA NO COOPERATIVO
+Dois jogadores que usam habilidades juntos e perto um do outro combinam os poderes. São 66 combos, um para cada dupla de heróis.
+
+CORREÇÃO: MISSÕES DO DIA
+O quadro de missões da tela inicial não aparece mais como um bloco vermelho vazio.
+
 VERSÃO 12 · MODO COOPERATIVO E LOJA NOVA
 
 NOVO: MODO COOPERATIVO
